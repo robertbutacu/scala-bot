@@ -1,0 +1,21 @@
+The ScalaBot will be able to :
+    1. return responds to messages
+        Will use a trie/map to keep in memory a client/bot message exchange.
+        No regexes at this stage.
+
+    2. provide continuity of conversation
+        For a certain bot answer, the bot might want to expect a certain response
+        Or send a "disapproval" message otherwise, while still answering to the client's question/wtv.
+
+    3. provide regexes in messages and memory
+        For a given response, the bot might want to remember certain details of a particular object.
+
+    4. customized responses depending on memory ( consider also including intervals )
+
+    5. previous sessions' memory
+        Separate xml files will be held on to after the ending of each session: people and their details.
+
+    6. topics
+        The bot might categorise different topics and have an honest opinion about any of them, or learn more.
+        For example:
+            Might know that scala is FP language, that it's awesome, and it's current version is 2.12.
