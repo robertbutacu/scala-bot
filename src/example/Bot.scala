@@ -7,6 +7,7 @@ import util.control.Breaks._
 
 trait Bot extends Manager with MessageHandler {
   def startDemo(): Unit = {
+    disapprovalMessage = "Changed the subject..."
     breakable {
       while (true) {
         val message = scala.io.StdIn.readLine()
