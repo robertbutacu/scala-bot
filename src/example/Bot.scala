@@ -1,5 +1,7 @@
 package example
 
-trait Bot {
+import example.brain.Manager
+
+trait Bot extends Manager{
 
 }
