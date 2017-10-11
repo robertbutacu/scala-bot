@@ -1,5 +1,7 @@
 package example.brain
 
-trait Manager {
+import example.brain.modules.MasterModule
+
+trait Manager extends MasterModule{
 
 }

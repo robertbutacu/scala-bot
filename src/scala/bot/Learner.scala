@@ -1,6 +1,7 @@
 package scala.bot
 
 trait Learner {
-  def learn(old: Map[String, List[String]], acquired: Map[String, List[String]]): Map[String, List[String]] =
+  type Templates = Map[String, List[String]]
+  def learn(old: Map[String, List[String]], acquired: Map[String, List[String]]): Templates =
     old ++ acquired
 }
