@@ -5,7 +5,7 @@ Stages of development for ScalaBot:
 
 
     2. provide continuity of conversation
-        For a certain bot answer, the bot might want to expect a certain response
+        Done :  For a certain bot answer, the bot might want to expect a certain response
         Or send a "disapproval" message otherwise, while still answering to the client's question/wtv.
 
     3. provide regexes in messages and memory
