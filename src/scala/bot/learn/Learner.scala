@@ -3,7 +3,9 @@ package scala.bot.learn
 import scala.annotation.tailrec
 
 trait Learner {
-  type Templates = Map[(Option[String], String), List[String]]
+  type Templates = Map[Message, Responses]
+  type Message   = (Option[String], String)
+  type Responses = List[String]
 
   def learn(old: Templates, acquired: Templates): Templates =
     old ++ acquired
