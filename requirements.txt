@@ -1,7 +1,8 @@
 Stages of development for ScalaBot:
-    1. return responds to messages
-        Will use a trie/map to keep in memory a client/bot message exchange.
-        No regexes at this stage.
+    Done :  1. return responds to messages
+                 Will use a trie/map to keep in memory a client/bot message exchange.
+                 No regexes at this stage.
+
 
     2. provide continuity of conversation
         For a certain bot answer, the bot might want to expect a certain response
