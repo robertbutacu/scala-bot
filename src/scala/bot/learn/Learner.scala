@@ -1,4 +1,4 @@
-package scala.bot
+package scala.bot.learn
 
 import scala.annotation.tailrec
 

@@ -1,5 +1,6 @@
-package scala.bot
+package scala.bot.handler
 
+import scala.bot.learn.Learner
 import scala.util.Random
 
 trait MessageHandler extends Learner {

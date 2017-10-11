@@ -2,7 +2,7 @@ package example
 
 import example.brain.Manager
 
-import scala.bot.MessageHandler
+import scala.bot.handler.MessageHandler
 import util.control.Breaks._
 
 trait Bot extends Manager with MessageHandler {

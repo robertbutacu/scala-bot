@@ -1,6 +1,6 @@
 package example.brain.modules
 
-import scala.bot.Learner
+import scala.bot.learn.Learner
 
 trait Job extends Learner {
   val jobs: Templates = learn(Map[(Option[String], String), List[String]]().empty,

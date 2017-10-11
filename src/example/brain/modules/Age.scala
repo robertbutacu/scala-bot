@@ -1,6 +1,6 @@
 package example.brain.modules
 
-import scala.bot.Learner
+import scala.bot.learn.Learner
 
 trait Age extends Learner {
   val ages: Templates = learn(Map[(Option[String], String), List[String]]().empty,
