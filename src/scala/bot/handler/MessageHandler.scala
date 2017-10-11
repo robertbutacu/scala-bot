@@ -4,8 +4,8 @@ import scala.bot.learn.Learner
 import scala.util.Random
 
 trait MessageHandler extends Learner {
-  var disapprovalMessage: String = ""
-  var unknownHumanMessage: String = "Speechless"
+  var disapprovalMessage: List[String] = List("")
+  var unknownHumanMessage: List[String] = List("Speechless", "I do not know")
 
   def provideReply(replies: List[String]): String =
     Random.shuffle(replies).head
@@ -26,7 +26,7 @@ trait MessageHandler extends Learner {
 
     possibleReplies.get(responseWithHistory) match {
       case None          => possibleReplies.get((None, message)) match {
-        case None          => unknownHumanMessage
+        case None          => provideReply(unknownHumanMessage)
         case Some(replies) => provideReply(replies)
       }
       case Some(replies) => provideReply(replies)
