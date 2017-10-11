@@ -1,4 +1,4 @@
-The ScalaBot will be able to :
+Stages of development for ScalaBot:
     1. return responds to messages
         Will use a trie/map to keep in memory a client/bot message exchange.
         No regexes at this stage.
@@ -14,8 +14,12 @@ The ScalaBot will be able to :
 
     5. previous sessions' memory
         Separate xml files will be held on to after the ending of each session: people and their details.
+        Files will be given as an argument and will be searched in a project folder.
+        Akka actors will be used to learn every file and return the result.
 
     6. topics
         The bot might categorise different topics and have an honest opinion about any of them, or learn more.
         For example:
             Might know that scala is FP language, that it's awesome, and it's current version is 2.12.
+
+    7. maybe implement a whole actor system to make everything concurrent.
