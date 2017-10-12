@@ -11,8 +11,20 @@ Stages of development for ScalaBot:
     3. provide regexes in messages and memory
         For a given response, the bot might want to remember certain details of a particular object.
 
-    4. customized responses depending on memory ( consider also including intervals )
+        This will be done using a trie whose nodes are occupied by regexes OR words.
+        And the final node is a list of possible replies.
 
+    4. customized responses depending on memory ( consider also including intervals )
+       The data structure holding the brain will be a Trie composed of
+        partOfReply will be words - better for scaling rather than having a part of sentence
+         Example: "This is a sentence" will be trie-rized as this -> is -> a -> sentence, rather than
+         "this is a sentence" -> .
+
+        Node((partOfReply: String, attribName = Option[String]), children: set[Node], leafs: set[Leaf])
+        Leaf(possibleReplies: List[String])
+
+       In order to have customized replies depending on arguments, there will exist a method called
+        get(attribNames: List
     5. previous sessions' memory
         Separate xml files will be held on to after the ending of each session: people and their details.
         Files will be given as an argument and will be searched in a project folder.
