@@ -15,6 +15,11 @@ Stages of development for ScalaBot:
         And the final node is a list of possible replies.
 
     4. customized responses depending on memory ( consider also including intervals )
+        A template will be composed of
+        List[(partOfSentence, attribNameIfNecessary: Option[Attribute])]
+        Attribute will be a trait which will be extended to create new attributes.
+        attribNameIfNecessary will be a regex if set and will become part of the memory.
+
        The data structure holding the brain will be a Trie composed of
         partOfReply will be words - better for scaling rather than having a part of sentence
          Example: "This is a sentence" will be trie-rized as this -> is -> a -> sentence, rather than
@@ -24,7 +29,10 @@ Stages of development for ScalaBot:
         Leaf(possibleReplies: List[String])
 
        In order to have customized replies depending on arguments, there will exist a method called
-        get(attribNames: List
+        get(attribNames: List[String])
+
+
+        FOR NOW, IT WILL RECALL EVENTS FROM THE CURRENT SESSION.
     5. previous sessions' memory
         Separate xml files will be held on to after the ending of each session: people and their details.
         Files will be given as an argument and will be searched in a project folder.
