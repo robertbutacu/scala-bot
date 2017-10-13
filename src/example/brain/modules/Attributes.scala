@@ -2,7 +2,7 @@ package example.brain.modules
 
 trait Attributes
 
-case object Name extends    Attributes
-case object Age extends     Attributes
-case object Job extends     Attributes
-case object Passion extends Attributes
+case object NameAttr extends    Attributes
+case object AgeAttr extends     Attributes
+case object JobAttr extends     Attributes
+case object PassionAttr extends Attributes
