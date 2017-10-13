@@ -13,8 +13,8 @@ trait TrieOperations {
       else {
         var updatedCurr = curr
         curr.children.find(n  => isMatching(n.curr, words.head)) match {
-          case None           => updatedCurr = go(curr.addValue(createNode(words.head)), words)
-          case Some(next)     => go(next, words.tail)
+          case None           => println("adding " + words.head); updatedCurr = go(curr.addValue(createNode(words.head)), words)
+          case Some(next)     => println("going to " + next.curr); updatedCurr = Node(curr.curr, curr.children - next ++ Set(go(next, words.tail)), curr.leafs)
         }
         updatedCurr
       }
