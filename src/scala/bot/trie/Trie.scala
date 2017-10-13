@@ -3,9 +3,9 @@ package scala.bot.trie
 import scala.bot.handler.Attribute
 import scala.util.matching.Regex
 
-case class Leaf(possibleReplies: Set[String])
+case class Leaf(replies: Set[String])
 
-case class Node(current: (Regex, Option[Attribute]), children: Set[Node], leafs: Leaf) {
+case class Node(curr: (Regex, Option[Attribute]), next: Set[Node], leafs: Leaf) {
   def addValue(node: Node): Node =
-    Node(current, children ++ Set(node), leafs)
+    Node(curr, next ++ Set(node), leafs)
 }
