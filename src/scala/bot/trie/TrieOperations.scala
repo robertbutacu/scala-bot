@@ -12,8 +12,8 @@ trait TrieOperations {
         Node(curr.current, curr.children, Leaf(curr.leafs.possibleReplies ++ possibleReplies))
       else {
         var updatedCurr = curr
-        curr.children.find(n => isMatching(n.current, sentence.head)) match {
-          case None           => println("Adding " + sentence.head); updatedCurr = go(curr.addValue(createNode(sentence.head)), remainingSentence)
+        curr.children.find(n  => isMatching(n.current, remainingSentence.head)) match {
+          case None           => updatedCurr = go(curr.addValue(createNode(remainingSentence.head)), remainingSentence)
           case Some(next)     => go(next, remainingSentence.tail)
         }
         updatedCurr
@@ -21,6 +21,10 @@ trait TrieOperations {
     }
 
     go(trie, sentence)
+  }
+
+  def printTrie(trie: Node): Unit = {
+    trie
   }
 
   private def createNode(word: Word): Node = Node(word, Set[Node]().empty, Leaf(Set[String]().empty))
