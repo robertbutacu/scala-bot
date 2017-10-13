@@ -9,11 +9,14 @@ trait TrieOperations {
 
   final def add(sentence: List[Word], replies: Set[String], trie: Trie): Trie = {
     def go(curr: Trie, words: List[Word]): Trie = {
-      if (words.isEmpty)
-        Trie(curr.curr, curr.children, curr.replies ++ replies)
+      if (words.isEmpty) //went through all the list
+        Trie(curr.curr, curr.children, curr.replies ++ replies) // adding the replies to the Set
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
+            // current word isn't in the set => add it, and call the function with the same node
           case None => go(curr.addValue(createNode(words.head)), words)
+            // next node has been found => remove it from the Set, since its gonna be different
+            //it would double stack otherwise
           case Some(next) => Trie(curr.curr, curr.children - next ++ Set(go(next, words.tail)), curr.replies)
         }
       }
@@ -45,13 +48,13 @@ trait TrieOperations {
     t.curr match {
       case (tRex, None)        =>
         w match {
-          case (wRex, None) => tRex.regex == wRex.regex
-          case (_, Some(_)) => false
+          case (wRex, None) => tRex.regex == wRex.regex //both are not attributes
+          case (_, Some(_)) => false //word is an attribute, but the node isnt
         }
       case (tRex, Some(tAttr)) =>
         w match {
-          case (_, None)           => false
-          case (wRex, Some(wAttr)) =>
+          case (_, None)           => false //trie node is attribute, but the word isn't
+          case (wRex, Some(wAttr)) => //both are attributes
             tRex.pattern.matcher(wRex.regex).matches() && tAttr == wAttr
         }
     }
