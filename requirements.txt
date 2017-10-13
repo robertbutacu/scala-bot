@@ -35,8 +35,8 @@ Stages of development for ScalaBot:
         get(f: (a: Atrib) => Boolean): String
 
         Steps:
-            1. Trie data structure
-            2. Add/Find methods. No need for remove/edit for now.
+            DONE - 1. Trie data structure
+            PARTIALLY DONE , NEEDS FIND - 2. Add/Find methods. No need for remove/edit for now.
             3. Connect it with the handler.
 
 
