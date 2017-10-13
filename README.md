@@ -1,6 +1,6 @@
 # ScalaBot
 
-ScalaBot is a light-weight Scala Library used to easily create ChatBots.
+ScalaBot is a light-weight Scala Library that can be used to easily create ChatBots.
 
 Among its features, it includes:
 - custom replies for input
