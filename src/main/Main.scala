@@ -8,12 +8,12 @@ object Main extends App
   with Bot
   with TrieOperations {
   //startDemo()
-  var trie = add(List(("This".r, None), ("is".r, None), ("a".r, None), ("sentence".r, None)), Set("first", "first"),
+  var trie = add(List(("This".r, None), ("is".r, None), ("a".r, None), ("sentence".r, None)), Set("first", "first2"),
     Node(("".r, None), Set[Node]().empty, Leaf(Set[String]("initial", "leafs"))))
 
   println()
 
-  trie = add(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), Set("second", "second"),
+  trie = add(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), Set("second", "second2"),
     trie)
 
   printTrie(trie)

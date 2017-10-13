@@ -22,9 +22,8 @@ trait TrieOperations {
   }
 
   def printTrie(trie: Node): Unit = {
-    println(trie.curr)
-    print("Leafs for current: ")
-    trie.leafs.replies.foreach(r => println(r))
+    print(trie.curr + "   ")
+    trie.leafs.replies.foreach(r => println("Leaf " + r))
     trie.children.foreach(t => printTrie(t))
   }
 
