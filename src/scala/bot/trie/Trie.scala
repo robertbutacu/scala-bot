@@ -4,7 +4,7 @@ import scala.bot.handler.Attribute
 import scala.util.matching.Regex
 
 
-case class Node(curr: (Regex, Option[Attribute]), children: Set[Node], replies: Set[String]) {
-  def addValue(node: Node): Node =
-    Node(curr, children ++ Set(node), replies)
+case class Trie(curr: (Regex, Option[Attribute]), children: Set[Trie], replies: Set[String]) {
+  def addValue(node: Trie): Trie =
+    Trie(curr, children ++ Set(node), replies)
 }
