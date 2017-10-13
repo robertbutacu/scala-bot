@@ -1,13 +1,14 @@
 package scala.bot.learn
 
 import scala.annotation.tailrec
+import scala.bot.handler.Attribute
+import scala.util.matching.Regex
 
 trait Learner {
-  type Templates = Map[Message, Responses]
-  type Message   = (Option[String], String)
+  type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = List[String]
 
-  def learn(old: Templates, acquired: Templates): Templates =
+  def learn(old: Templates , acquired: Templates): Templates =
     old ++ acquired
 
   def learn(old: Templates, acquired: List[Templates]): Templates = {
