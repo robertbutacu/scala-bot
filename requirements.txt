@@ -36,7 +36,7 @@ Stages of development for ScalaBot:
 
         Steps:
             DONE - 1. Trie data structure
-            PARTIALLY DONE , NEEDS FIND - 2. Add/Find methods. No need for remove/edit for now.
+            DONE - 2. Add/Find methods. No need for remove/edit for now.
             3. Connect it with the handler.
 
 

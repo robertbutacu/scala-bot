@@ -14,5 +14,5 @@ object Main extends App
   trie = add(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), Set("second", "second2"),
     trie)
 
-  println(search(List(("This".r, None), ("is".r, None), ("a".r, None), ("sentence".r, None)), trie))
+  println(search(List(("adsfasd".r, None), ("is".r, None), ("a".r, None)), trie))
 }
