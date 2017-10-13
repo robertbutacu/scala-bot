@@ -12,7 +12,9 @@ trait TrieOperations {
         curr
       else {
         curr.children.find(n => isMatching(n.current, sentence.head)) match {
-          case None        => go(Node(sentence.head, Set[Node]().empty, Set[Leaf]().empty), remainingSentence)
+          case None        => go(Node(curr.current,
+            curr.children ++ Set(Node(remainingSentence.head, Set[Node]().empty, Set[Leaf]().empty)),
+            curr.leafs), remainingSentence.tail)
           case Some(_) => curr
         }
       }
