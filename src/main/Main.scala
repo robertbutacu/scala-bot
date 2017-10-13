@@ -16,5 +16,5 @@ object Main extends App
   trie = add(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), Set("good", "job"),
     trie)
 
-  println(trie)
+  printTrie(trie)
 }

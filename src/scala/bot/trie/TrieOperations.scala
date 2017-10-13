@@ -13,8 +13,8 @@ trait TrieOperations {
       else {
         var updatedCurr = curr
         curr.children.find(n  => isMatching(n.curr, words.head)) match {
-          case None           => println("adding " + words.head); updatedCurr = go(curr.addValue(createNode(words.head)), words)
-          case Some(next)     => println("going to " + next.curr); updatedCurr = Node(curr.curr, curr.children - next ++ Set(go(next, words.tail)), curr.leafs)
+          case None           => /*println("adding " + words.head);*/ updatedCurr = go(curr.addValue(createNode(words.head)), words)
+          case Some(next)     => /*println("going to " + next.curr);*/ updatedCurr = Node(curr.curr, curr.children - next ++ Set(go(next, words.tail)), curr.leafs)
         }
         updatedCurr
       }
@@ -30,6 +30,10 @@ trait TrieOperations {
 
   private def createNode(word: Word): Node = Node(word, Set[Node]().empty, Leaf(Set[String]().empty))
 
-  private def isMatching(node: Word, partOfSentence: Word): Boolean =
-    node._1 == partOfSentence._1 && node._2 == partOfSentence._2
+  private def isMatching(node: Word, that: Word): Boolean ={
+    println("comparing " + node._1 + " to " + that._1 + " and " + node._2 + " " + that._2 +
+    " and returning " + (node._1.regex == that._1.regex && node._2 == that._2))
+
+    node._1.regex == that._1.regex && node._2 == that._2
+  }
 }
