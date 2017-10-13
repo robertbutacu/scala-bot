@@ -1,5 +1,3 @@
 package scala.bot.handler
 
-trait Attribute {
-
-}
+trait Attribute
