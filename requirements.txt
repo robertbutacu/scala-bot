@@ -25,7 +25,7 @@ Stages of development for ScalaBot:
          Example: "This is a sentence" will be trie-rized as this -> is -> a -> sentence, rather than
          "this is a sentence" -> .
 
-        Node((partOfReply: String, attribName = Option[String]), children: set[Node], leafs: set[Leaf])
+        Node((partOfReply: Regex, attribName = Option[String]), children: Set[Node], leafs: set[Leaf])
         Leaf(possibleReplies: List[String])
 
        In order to have customized replies depending on arguments, there will exist a method called
@@ -33,6 +33,11 @@ Stages of development for ScalaBot:
         returning a string in case of true.
 
         get(f: (a: Atrib) => Boolean): String
+
+        Steps:
+            1. Trie data structure
+            2. Add/Find methods. No need for remove/edit for now.
+            3. Connect it with the handler.
 
 
         FOR NOW, IT WILL RECALL EVENTS FROM THE CURRENT SESSION.
