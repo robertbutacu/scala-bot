@@ -2,6 +2,14 @@ package main
 
 import example.Bot
 
-object Main extends App with Bot {
-  startDemo()
+import scala.bot.trie.{Leaf, Node, TrieOperations}
+
+object Main extends App
+  with Bot
+  with TrieOperations {
+  //startDemo()
+  var trie = add(List(("This".r, None), ("is".r, None), ("a".r, None), ("sentence".r, None)), Set("good", "job"),
+    Node(("".r, None), Set[Node]().empty, Leaf(Set[String]("good", "job"))))
+
+  println(trie)
 }

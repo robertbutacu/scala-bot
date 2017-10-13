@@ -11,11 +11,12 @@ trait TrieOperations {
       if (remainingSentence.isEmpty)
         Node(curr.current, curr.children, Leaf(curr.leafs.possibleReplies ++ possibleReplies))
       else {
+        var updatedCurr = curr
         curr.children.find(n => isMatching(n.current, sentence.head)) match {
-          case None           => go(curr.addValue(createNode(sentence.head)), remainingSentence)
+          case None           => println("Adding " + sentence.head); updatedCurr = go(curr.addValue(createNode(sentence.head)), remainingSentence)
           case Some(next)     => go(next, remainingSentence.tail)
         }
-        curr
+        updatedCurr
       }
     }
 
