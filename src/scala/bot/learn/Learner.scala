@@ -21,5 +21,4 @@ trait Learner {
 
     startLearning(old, acquired)
   }
-
 }
