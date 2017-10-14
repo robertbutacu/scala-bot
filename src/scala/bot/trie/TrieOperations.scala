@@ -90,21 +90,8 @@ trait TrieOperations {
     * @param w - message word
     * @return
     */
-  private def isMatching(t: Trie, w: Word): Boolean = {
-    t.curr match {
-      case (tRex, None)        =>
-        w match {
-          case (wRex, None) => tRex.regex == wRex.regex //neither are attributes
-          case (_, Some(_)) => false //word is an attribute, but the node isn't
-        }
-      case (tRex, Some(tAttr)) =>
-        w match {
-          case (_, None)           => false //trie node is attribute, but the word isn't
-          case (wRex, Some(wAttr)) => //both are attributes
-            tRex.pattern.matcher(wRex.regex).matches() && tAttr == wAttr
-        }
-    }
-  }
+  private def isMatching(t: Trie, w: Word): Boolean =
+    t.curr._1.pattern.matcher(w._1.regex).matches() && t.curr._2 == w._2
 
   private def createNode(word: Word): Trie = Trie(word, Set[Trie]().empty, Set((None, Set[String]().empty)))
 
