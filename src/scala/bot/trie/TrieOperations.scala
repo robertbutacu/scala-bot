@@ -10,12 +10,12 @@ trait TrieOperations {
   /**
     * For a current Trie, the algorithm returns another trie with the message added.
     *
-    * @param words - list of words to be added into the trie
+    * @param message - list of words to be added into the trie
     * @param replies - possible replies to the current message
     * @param trie    - trie where the message will be stored
     * @return
     */
-  final def add(words: List[Word], replies: (Option[String], Set[String]), trie: Trie): Trie = {
+  final def add(message: List[Word], replies: (Option[String], Set[String]), trie: Trie): Trie = {
     def go(curr: Trie, words: List[Word]): Trie = {
       if (words.isEmpty) //went through all the list
         addReplies(curr, replies) // adding the replies to the Set
@@ -30,27 +30,27 @@ trait TrieOperations {
       }
     }
 
-    go(trie, words)
+    go(trie, message)
   }
 
   /**
     * The algorithm describes the search of a message in a trie, by parsing every word and matching it,
     * thus returning a Set of possible replies depending on bot's previous replies.
     *
-    * @param words - the sentence that is to be found, or not
+    * @param message - the sentence that is to be found, or not
     * @param trie  - the trie in which it will be searched
     * @return      - returns a Set of (previousMessageFromBot, Set[possible replies]),
     *              from which another algorithm will pick the best choice.
     */
   @tailrec
-  final def search(words: List[Word], trie: Trie): Set[(Option[String], Set[String])] = {
-    if (words.isEmpty)
+  final def search(message: List[Word], trie: Trie): Set[(Option[String], Set[String])] = {
+    if (message.isEmpty)
       trie.replies //completely ran over all the words
     else {
-      val next = trie.children.find(t => isMatching(t, words.head))
+      val next = trie.children.find(t => isMatching(t, message.head))
       next match {
         case None            => Set() //word wasn't found in the trie
-        case Some(otherTrie) => search(words.tail, otherTrie) //going deeper
+        case Some(otherTrie) => search(message.tail, otherTrie) //going deeper
       }
     }
   }
