@@ -79,16 +79,9 @@ trait TrieOperations {
     }
 
   /**
-    *There are 4 cases:
-    *   1. for when t is not a regex ( plain message):
-    *       a. word is also a message => check for equality
-    *       b. word is an attribute        => they don't match
-    *   2. t is a regex:
-    *       a. word is not an attribute => they don't match
-    *       b. word is an attribute     => check if it matches the regex
     * @param t - trie word
     * @param w - message word
-    * @return
+    * @return whether the message matches the trie node, both word-wise and attribute-wise
     */
   private def isMatching(t: Trie, w: Word): Boolean =
     t.curr._1.pattern.matcher(w._1.regex).matches() && t.curr._2 == w._2
