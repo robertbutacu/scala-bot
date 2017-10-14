@@ -8,11 +8,17 @@ object Main extends App
   with Bot
   with TrieOperations {
   //startDemo()
-  var trie = add(List(("This".r, None), ("is".r, None), ("a".r, None), ("sentence".r, None)), Set("first", "first2"),
-    Trie(("".r, None), Set[Trie]().empty, Set[String]("initial", "leafs")))
+  var trie = add(List(("This".r, None), ("is".r, None), ("a".r, None), ("sentence".r, None)),
+    (None, Set("first", "first2")),
+    Trie(("".r, None), Set[Trie]().empty, Set[(Option[String], Set[String])]((None, Set("initial", "leafs")))))
 
-  trie = add(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), Set("second", "second2"),
+  trie = add(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)),
+    (None, Set("second", "second2")),
     trie)
 
-  println(search(List(("adsfasd".r, None), ("is".r, None), ("a".r, None)), trie))
+  trie = add(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)),
+    (Some("previous"), Set("second3", "second4")),
+    trie)
+
+  println(search(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), trie))
 }

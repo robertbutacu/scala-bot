@@ -26,9 +26,9 @@ trait TrieOperations {
   }
 
   @tailrec
-  final def search(words: List[Word], trie: Trie): Set[String] = {
+  final def search(words: List[Word], trie: Trie): Set[(Option[String], Set[String])] = {
     if (words.isEmpty)
-      trie.replies.head._2 //completely ran over all the words
+      trie.replies //completely ran over all the words
     else {
       val next = trie.children.find(t => isMatching(t, words.head))
       next match {
@@ -46,7 +46,7 @@ trait TrieOperations {
 
   private def addReplies(t: Trie, replies: (Option[String], Set[String])): Trie =
     t.replies.find(l => l._1 == replies._1) match {
-      case None      => t
+      case None      => Trie(t.curr, t.children, t.replies ++ Set(replies))
       case Some(rep) => Trie(t.curr, t.children, t.replies -- Set(rep) ++ Set((rep._1, rep._2 ++ replies._2)))
     }
 
