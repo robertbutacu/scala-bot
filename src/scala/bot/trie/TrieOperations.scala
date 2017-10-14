@@ -7,10 +7,10 @@ import scala.util.matching.Regex
 trait TrieOperations {
   type Word = (Regex, Option[Attribute])
 
-  final def add(sentence: List[Word], replies: Set[String], trie: Trie): Trie = {
+  final def add(words: List[Word], previousBotMessage: Option[String], replies: Set[String], trie: Trie): Trie = {
     def go(curr: Trie, words: List[Word]): Trie = {
       if (words.isEmpty) //went through all the list
-        Trie(curr.curr, curr.children, curr.replies ++ replies) // adding the replies to the Set
+        trie // adding the replies to the Set
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
             // current word isn't in the set => add it, and call the function with the same node
@@ -22,13 +22,13 @@ trait TrieOperations {
       }
     }
 
-    go(trie, sentence)
+    go(trie, words)
   }
 
   @tailrec
   final def search(words: List[Word], trie: Trie): Set[String] = {
     if (words.isEmpty)
-      trie.replies //completely ran over all the words
+      trie.replies.head._2 //completely ran over all the words
     else {
       val next = trie.children.find(t => isMatching(t, words.head))
       next match {
@@ -60,7 +60,7 @@ trait TrieOperations {
     }
   }
 
-  private def createNode(word: Word): Trie = Trie(word, Set[Trie]().empty, Set[String]().empty)
+  private def createNode(word: Word): Trie = Trie(word, Set[Trie]().empty, Set((None, Set[String]().empty)))
 
   private def isMatching(node: Word, that: Word): Boolean =
     node._1.regex == that._1.regex && node._2 == that._2
