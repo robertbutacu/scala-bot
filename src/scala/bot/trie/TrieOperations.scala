@@ -7,10 +7,10 @@ import scala.util.matching.Regex
 trait TrieOperations {
   type Word = (Regex, Option[Attribute])
 
-  final def add(words: List[Word], previousBotMessage: Option[String], replies: Set[String], trie: Trie): Trie = {
+  final def add(words: List[Word], replies: (Option[String], Set[String]), trie: Trie): Trie = {
     def go(curr: Trie, words: List[Word]): Trie = {
       if (words.isEmpty) //went through all the list
-        trie // adding the replies to the Set
+        addReplies(curr, replies) // adding the replies to the Set
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
             // current word isn't in the set => add it, and call the function with the same node
@@ -43,6 +43,12 @@ trait TrieOperations {
     trie.replies.foreach(r => println("Leaf " + r))
     trie.children.foreach(t => printTrie(t))
   }
+
+  private def addReplies(t: Trie, replies: (Option[String], Set[String])): Trie =
+    t.replies.find(l => l._1 == replies._1) match {
+      case None      => t
+      case Some(rep) => Trie(t.curr, t.children, t.replies -- Set(rep) ++ Set((rep._1, rep._2 ++ replies._2)))
+    }
 
   private def isMatching(t: Trie, w: Word): Boolean = {
     t.curr match {
