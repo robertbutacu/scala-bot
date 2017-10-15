@@ -1,6 +1,7 @@
 package main
 
 import example.Bot
+import example.brain.modules.AgeAttr
 
 import scala.bot.trie.{Trie, TrieOperations}
 
@@ -22,4 +23,7 @@ object Main extends App
 
   //println(search(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), trie))
   println(search("previous", trie))
+  println(toWords(List(Left("Im "),
+    Right("[0-9]+".r, AgeAttr),
+    Left(" years old"))))
 }
