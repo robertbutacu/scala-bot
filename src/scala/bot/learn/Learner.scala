@@ -2,26 +2,33 @@ package scala.bot.learn
 
 import scala.annotation.tailrec
 import scala.bot.handler.Attribute
-import scala.bot.trie.TrieOperations
+import scala.bot.trie.{Trie, TrieOperations}
 import scala.util.matching.Regex
 
 trait Learner extends TrieOperations{
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
-  type Responses = List[String]
+  type Responses = Set[String]
 
-  def learn(old: Templates , acquired: Templates): Templates =
-    old ++ acquired
+  def learn(old: Trie , acquired: Templates): Trie ={
+    /*def learnMessage(trie: Trie, message: List[Word], replies: (Option[String], Set[String])): Trie =
+      add(message, replies, trie)
 
-  def learn(old: Templates, acquired: List[Templates]): Templates = {
-    @tailrec
-    def startLearning(curr: Templates, toBeLearned: List[Templates]): Templates = {
-      toBeLearned match {
-        case h :: tail => startLearning(learn(curr, h), tail)
-        case Nil       => curr
-      }
+    acquired.toList match {
+      case h::tail => add(toWords(add(h._1._2)), (h._1._1, h._2), old)
+    }*/
+    Trie()
+
+  }
+
+
+  def learn(old: Templates, acquired: List[Templates]): Trie = {
+    //@tailrec
+    def startLearning(curr: Templates, toBeLearned: List[Templates]): Unit = {
+
     }
 
     startLearning(old, acquired)
+    Trie()
   }
 
   /**
