@@ -14,8 +14,8 @@ import scala.util.matching.Regex
   *                 Option[String] - last bot message
   *                 Set[String]    - possible replies
   */
-case class Trie(curr: (Regex, Option[Attribute]), children: Set[Trie],
-                replies: Set[(Option[String], Set[String])]) {
+case class Trie(curr: (Regex, Option[Attribute]) = ("".r, None), children: Set[Trie] = Set[Trie]().empty,
+                replies: Set[(Option[String], Set[String])] = Set((None, Set("")))) {
   def addValue(node: Trie): Trie =
     Trie(curr, children ++ Set(node), replies)
 }
