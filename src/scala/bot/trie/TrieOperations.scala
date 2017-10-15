@@ -53,8 +53,8 @@ trait TrieOperations {
         val next = trie.children.find(t => isMatching(t, head))
         next match {
           case None => (attributes, Set()) //word wasn't found in the trie
-          case Some(otherTrie) => go(message.tail, otherTrie,
-            trie.curr._2 match {
+          case Some(nextNode) => go(message.tail, nextNode,
+            nextNode.curr._2 match {
               case None       => attributes
               case Some(attr) => attributes + (attr -> head._1.regex)
             })
