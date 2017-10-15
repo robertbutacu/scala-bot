@@ -7,7 +7,6 @@ import scala.util.Random
 trait MessageHandler extends Learner {
   var disapprovalMessages: List[String] = List("")
   var unknownHumanMessages: List[String] = List("Speechless", "I do not know")
-  var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
 
 
   def provideReply(replies: List[String]): String =

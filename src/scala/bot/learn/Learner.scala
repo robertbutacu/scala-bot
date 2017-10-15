@@ -9,6 +9,9 @@ trait Learner extends TrieOperations {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[String]
 
+  var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
+
+
   /**
     * @param old - previous trie to which new templates are to be added
     * @param acquired - templates to be added
@@ -38,6 +41,12 @@ trait Learner extends TrieOperations {
 
     startLearning(old, acquired)
   }
+
+  def getAttribute(f: Option[String] => String, attribute: Attribute): String ={
+    println(currentSessionInformation.get(attribute))
+    f(currentSessionInformation.get(attribute))
+  }
+
 
   /**
     * The anonymous function creates a List of Lists of (Regex, Some(Attribute)),

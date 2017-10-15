@@ -13,7 +13,6 @@ trait Bot extends Manager with MessageHandler {
         val message = scala.io.StdIn.readLine()
         if (message == "QUIT") break()
         else println(handle(masterBrain, message))
-        println(currentSessionInformation)
       }
     }
   }
