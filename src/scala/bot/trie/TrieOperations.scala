@@ -52,7 +52,7 @@ trait TrieOperations {
         val head = message.head
         val next = trie.children.find(t => isMatching(t, head))
         next match {
-          case None => (attributes, Set()) //word wasn't found in the trie
+          case None           => (attributes, Set()) //word wasn't found in the trie
           case Some(nextNode) => go(message.tail, nextNode,
             nextNode.curr._2 match {
               case None       => attributes
