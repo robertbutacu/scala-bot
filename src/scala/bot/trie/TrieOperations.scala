@@ -55,9 +55,14 @@ trait TrieOperations {
     }
   }
 
-  //@tailrec
   final def search(lastBotMessage: String, trie: Trie): Set[(Option[String], Set[String])] = {
-      Set()
+      def getAllReplies(curr: Trie): Set[Set[(Option[String], Set[String])]] =
+        Set(curr.replies) ++ curr.children.flatMap(c => getAllReplies(c))
+
+    getAllReplies(trie).flatten.filter(n => n._1 match {
+      case None => false
+      case Some(msg) => msg == lastBotMessage
+    })
   }
 
   def printTrie(trie: Trie): Unit = {
