@@ -24,11 +24,19 @@ trait Learner extends TrieOperations{
     startLearning(old, acquired)
   }
 
-  def toWords(message: List[Either[String, (Regex, Attribute)]]): List[Word] = {
+  /**
+    * The anonymous function creates a List of Lists of (Regex, Some(Attribute)),
+    * which will be flattened. The list is then filtered to not contain any
+    * empty words ( "" ).
+    *
+    * @param message - message to be added in the trie that needs to be split
+    * @return a list of words that could be either a string with no attr set,
+    *         or a regex with an attribute
+    */
+  def toWords(message: List[Either[String, (Regex, Attribute)]]): List[Word] =
     message flatMap{w =>
     w match {
       case Left(words) => words.split(' ').toList.map(w => (w.r, None))
       case Right((r, attr)) => List((r, Some(attr)))
     }} filterNot ( _._1.toString() == "")
-  }
 }
