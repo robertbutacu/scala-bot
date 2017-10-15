@@ -55,6 +55,9 @@ trait TrieOperations {
     }
   }
 
+  /**
+    * @return - all the possible messages where the last bot message is equal to the one given.
+    */
   final def search(lastBotMessage: String, trie: Trie): Set[(Option[String], Set[String])] = {
       def getAllReplies(curr: Trie): Set[(Option[String], Set[String])] =
         curr.replies ++ curr.children.flatMap(c => getAllReplies(c))
