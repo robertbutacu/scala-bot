@@ -9,7 +9,8 @@ trait Learner extends TrieOperations {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[String]
 
-  def learn(old: Trie, acquired: Templates): Trie =
+  @tailrec
+  final def learn(old: Trie, acquired: Templates): Trie =
     acquired.toList match {
       case h :: tail => learn(add(toWords(h._1._2), (h._1._1, h._2), old), tail.toMap)
       case Nil       => old
@@ -18,11 +19,11 @@ trait Learner extends TrieOperations {
 
   def learn(old: Templates, acquired: List[Templates]): Trie = {
     //@tailrec
-    def startLearning(curr: Templates, toBeLearned: List[Templates]): Unit = {
+    def startLearning(curr: Trie, toBeLearned: List[Templates]): Unit = {
 
     }
 
-    startLearning(old, acquired)
+    //startLearning(old, acquired)
     Trie()
   }
 
