@@ -9,6 +9,11 @@ trait Learner extends TrieOperations {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[String]
 
+  /**
+    * @param old - previous trie to which new templates are to be added
+    * @param acquired - templates to be added
+    * @return - a new trie with the acquired templates in memory
+    */
   @tailrec
   final def learn(old: Trie, acquired: Templates): Trie =
     acquired.toList match {
@@ -17,6 +22,11 @@ trait Learner extends TrieOperations {
     }
 
 
+  /**
+    * @param old - previous trie to which new templates are to be added
+    * @param acquired - a list of templates to be added
+    * @return - a new trie with the list of acquired templates in memory
+    */
   def learn(old: Trie, acquired: List[Templates]): Trie = {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[Templates]): Trie = {
@@ -31,7 +41,7 @@ trait Learner extends TrieOperations {
 
   /**
     * The anonymous function creates a List of Lists of (Regex, Some(Attribute)),
-    * which will be flattened. The list is then filtered to not contain any
+    * which will be flattened => a list of words. The list is then filtered to not contain any
     * empty words ( "" ).
     *
     * @param message - message to be added in the trie that needs to be split
