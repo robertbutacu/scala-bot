@@ -20,5 +20,6 @@ object Main extends App
     (Some("previous"), Set("second3", "second4")),
     trie)
 
-  println(search(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), trie))
+  //println(search(List(("This".r, None), ("is".r, None), ("another".r, None), ("sentence".r, None)), trie))
+  println(search("previous", trie))
 }
