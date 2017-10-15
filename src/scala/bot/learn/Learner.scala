@@ -42,10 +42,8 @@ trait Learner extends TrieOperations {
     startLearning(old, acquired)
   }
 
-  def getAttribute(f: Option[String] => String, attribute: Attribute): String ={
-    println(currentSessionInformation.get(attribute))
+  def getAttribute(f: Option[String] => String, attribute: Attribute): String =
     f(currentSessionInformation.get(attribute))
-  }
 
 
   /**

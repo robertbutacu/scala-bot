@@ -2,13 +2,11 @@ package example.brain
 
 object BrainFunctions {
 
-  def ageReply(string: Option[String]): String ={
-    println(string)
+  def ageReply(string: Option[String]): String =
     string match {
       case None      => "You've never told me your age"
       case Some(age) => provideAge(age)
     }
-  }
 
 
   def provideAge(age: String): String =
