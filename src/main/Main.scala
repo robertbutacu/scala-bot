@@ -8,5 +8,6 @@ object Main extends App
   with Bot
   with TrieOperations {
 
-  printTrie(masterBrain)
+  //printTrie(masterBrain)
+  startDemo()
 }

@@ -58,7 +58,7 @@ trait TrieOperations {
   /**
     * @return - all the possible messages where the last bot message is equal to the one given.
     */
-  final def search(lastBotMessage: String, trie: Trie): Set[(Option[String], Set[String])] = {
+  final def search2(lastBotMessage: String, trie: Trie): Set[(Option[String], Set[String])] = {
       def getAllReplies(curr: Trie): Set[(Option[String], Set[String])] =
         curr.replies ++ curr.children.flatMap(c => getAllReplies(c))
 
@@ -97,7 +97,7 @@ trait TrieOperations {
     * @return whether the message matches the trie node, both word-wise and attribute-wise
     */
   private def isMatching(t: Trie, w: Word): Boolean =
-    t.curr._1.pattern.matcher(w._1.regex).matches() && t.curr._2 == w._2
+    t.curr._1.pattern.matcher(w._1.regex).matches()
 
   private def createNode(word: Word): Trie = Trie(word, Set[Trie]().empty, Set((None, Set[String]().empty)))
 
