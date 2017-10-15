@@ -5,7 +5,7 @@ import scala.bot.learn.Learner
 import scala.util.matching.Regex
 
 trait Age extends Learner {
-  val ages = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses](
+  val ages: Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses](
       (None, List(Left("Im "),
         Right("[0-9]+".r, AgeAttr),
         Left(" years old"))) -> Set("Young", "Im 0 yo", "Im a bot"),
