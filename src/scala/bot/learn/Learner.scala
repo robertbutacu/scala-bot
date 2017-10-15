@@ -17,14 +17,16 @@ trait Learner extends TrieOperations {
     }
 
 
-  def learn(old: Templates, acquired: List[Templates]): Trie = {
-    //@tailrec
-    def startLearning(curr: Trie, toBeLearned: List[Templates]): Unit = {
-
+  def learn(old: Trie, acquired: List[Templates]): Trie = {
+    @tailrec
+    def startLearning(curr: Trie, toBeLearned: List[Templates]): Trie = {
+      toBeLearned match {
+        case Nil     => curr
+        case h::tail => startLearning(learn(curr, h), tail)
+      }
     }
 
-    //startLearning(old, acquired)
-    Trie()
+    startLearning(old, acquired)
   }
 
   /**
