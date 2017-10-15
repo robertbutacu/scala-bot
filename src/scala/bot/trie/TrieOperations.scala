@@ -13,7 +13,7 @@ trait TrieOperations {
     * @param message - list of words to be added into the trie
     * @param replies - possible replies to the current message
     * @param trie    - trie where the message will be stored
-    * @return
+    * @return        - a new trie with the new message included
     */
   final def add(message: List[Word], replies: (Option[String], Set[String]), trie: Trie): Trie = {
     def go(curr: Trie, words: List[Word]): Trie = {
@@ -53,6 +53,11 @@ trait TrieOperations {
         case Some(otherTrie) => search(message.tail, otherTrie) //going deeper
       }
     }
+  }
+
+  //@tailrec
+  final def search(lastBotMessage: String, trie: Trie): Set[(Option[String], Set[String])] = {
+      Set()
   }
 
   def printTrie(trie: Trie): Unit = {
