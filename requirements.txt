@@ -8,6 +8,7 @@ Stages of development for ScalaBot:
         Done :  For a certain bot answer, the bot might want to expect a certain response
         Done :  Or send a "disapproval" message otherwise, while still answering to the client's question/wtv.
 
+    DONE -
     3. provide regexes in messages and memory
         For a given response, the bot might want to remember certain details of a particular object.
 
@@ -37,7 +38,10 @@ Stages of development for ScalaBot:
         Steps:
             DONE - 1. Trie data structure
             DONE - 2. Add/Find methods. No need for remove/edit for now.
-            3. Connect it with the handler.
+            DONE - 3. Connect it with the learner.
+            4. Provide method to memories attributes.
+            5. Connect it with the handler.
+            6. Provide methods to provide customised messages.
 
 
         FOR NOW, IT WILL RECALL EVENTS FROM THE CURRENT SESSION.
