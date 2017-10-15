@@ -9,7 +9,6 @@ trait Age extends Learner {
       (None, List(Left("Im "),
         Right("[0-9]+".r, AgeAttr),
         Left(" years old"))) -> Set("Young", "Im 0 yo", "Im a bot"),
-      (None, List(Left("Im 40 years old"))) -> Set("Old boiii", "CAN YOU HEAR ME?", "I love retro"),
       (Some("How old are you?"), List(Left("Im 30 years old"))) -> Set("It works")
     )
 }

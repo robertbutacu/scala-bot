@@ -5,7 +5,8 @@ import scala.bot.handler.Attribute
 import scala.util.matching.Regex
 
 trait TrieOperations {
-  type Word = (Regex, Option[Attribute])
+  type Word           = (Regex, Option[Attribute])
+  type SearchResponse =  (Map[Attribute, String], Set[(Option[String], Set[String])])
 
   /**
     * For a current Trie, the algorithm returns another trie with the message added.
@@ -42,17 +43,26 @@ trait TrieOperations {
     * @return      - returns a Set of (previousMessageFromBot, Set[possible replies]),
     *              from which another algorithm will pick the best choice.
     */
-  @tailrec
-  final def search(message: List[Word], trie: Trie): Set[(Option[String], Set[String])] = {
-    if (message.isEmpty)
-      trie.replies //completely ran over all the words
-    else {
-      val next = trie.children.find(t => isMatching(t, message.head))
-      next match {
-        case None            => Set() //word wasn't found in the trie
-        case Some(otherTrie) => search(message.tail, otherTrie) //going deeper
+  final def search(message: List[Word], trie: Trie): SearchResponse = {
+    @tailrec
+    def go(message: List[Word], trie: Trie, attributes: Map[Attribute, String]): SearchResponse = {
+      if (message.isEmpty)
+        (attributes, trie.replies) //completely ran over all the words
+      else {
+        val head = message.head
+        val next = trie.children.find(t => isMatching(t, head))
+        next match {
+          case None => (attributes, Set()) //word wasn't found in the trie
+          case Some(otherTrie) => go(message.tail, otherTrie,
+            trie.curr._2 match {
+              case None       => attributes
+              case Some(attr) => attributes + (attr -> head._1.regex)
+            })
+        }
       }
     }
+
+    go(message, trie, Map[Attribute, String]().empty)
   }
 
   /**

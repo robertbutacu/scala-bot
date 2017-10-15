@@ -5,8 +5,8 @@ import scala.bot.trie.Trie
 import scala.util.Random
 
 trait MessageHandler extends Learner {
-  var disapprovalMessage: List[String] = List("")
-  var unknownHumanMessage: List[String] = List("Speechless", "I do not know")
+  var disapprovalMessages: List[String] = List("")
+  var unknownHumanMessages: List[String] = List("Speechless", "I do not know")
   var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
 
 
@@ -14,7 +14,13 @@ trait MessageHandler extends Learner {
     Random.shuffle(replies).head
 
   def handle(trie: Trie, msg: String): String = {
-    provideResponse(search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie), msg)
+    val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
+    if(response._2.isEmpty)
+      provideReply(disapprovalMessages)
+    else{
+      currentSessionInformation = currentSessionInformation ++ response._1
+      provideResponse(response._2, msg)
+    }
   }
 
   def isDisapproved(brain: Trie, msg: String): String = {

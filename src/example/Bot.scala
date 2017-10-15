@@ -7,12 +7,13 @@ import util.control.Breaks._
 
 trait Bot extends Manager with MessageHandler {
   def startDemo(): Unit = {
-    disapprovalMessage = List("", "", "Changed the subject...")
+    disapprovalMessages = List("", "", "Changed the subject...")
     breakable {
       while (true) {
         val message = scala.io.StdIn.readLine()
         if (message == "QUIT") break()
         else println(handle(masterBrain, message))
+        println(currentSessionInformation)
       }
     }
   }
