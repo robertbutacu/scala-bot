@@ -1,8 +1,8 @@
 package example.brain.modules
 
-trait Attributes
+import scala.bot.handler.Attribute
 
-case object NameAttr    extends Attributes
-case object AgeAttr     extends Attributes
-case object PassionAttr extends Attributes
-case object JobAttr     extends Attributes
+case object NameAttr    extends Attribute
+case object AgeAttr     extends Attribute
+case object PassionAttr extends Attribute
+case object JobAttr     extends Attribute
