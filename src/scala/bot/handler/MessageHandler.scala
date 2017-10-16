@@ -27,7 +27,7 @@ trait MessageHandler extends Learner {
   }
 
 
-  def provideResponse(possibleReplies: Set[(Option[String], Set[String])]): String = {
+  def provideResponse(possibleReplies: Set[(Option[String], Set[String])]): String =
     provideReply(possibleReplies.toList.flatMap(e => e._2.toList))
-  }
+
 }
