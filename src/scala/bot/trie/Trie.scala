@@ -13,6 +13,8 @@ import scala.util.matching.Regex
   * @param replies  - replies to the message starting from the top of the trie all the way down to curr.
   *                 Option[String]             - last bot message
   *                 Set[f: Any => Set[String] ] - a set of functions returning a set of possible replies
+  *                 => It is done that way so that the replies are generated dynamically,
+  *                   depending on the already existing/non-existing attributes.
   */
 case class Trie(curr: (Regex, Option[Attribute]) = ("".r, None), children: Set[Trie] = Set[Trie]().empty,
                 replies: Set[(Option[String], Set[Any => Set[String]])] = Set((None, Set(_ => Set(""))))) {

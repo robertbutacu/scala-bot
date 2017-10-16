@@ -12,7 +12,7 @@ trait TrieOperations {
     * For a current Trie, the algorithm returns another trie with the message added.
     *
     * @param message - list of words to be added into the trie
-    * @param replies - possible replies to the current message
+    * @param replies - a set of functions which return a set of possible replies
     * @param trie    - trie where the message will be stored
     * @return        - a new trie with the new message included
     */
@@ -40,7 +40,7 @@ trait TrieOperations {
     *
     * @param message - the sentence that is to be found, or not
     * @param trie  - the trie in which it will be searched
-    * @return      - returns a Set of (previousMessageFromBot, Set[possible replies]),
+    * @return      - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
     *              from which another algorithm will pick the best choice.
     */
   final def search(message: List[Word], trie: Trie): SearchResponse = {
@@ -91,7 +91,7 @@ trait TrieOperations {
   /**
     * @param t - trie word
     * @param w - message word
-    * @return whether the message matches the trie node, both word-wise and attribute-wise
+    * @return whether the message matches the trie node
     */
   private def isMatching(t: Trie, w: Word): Boolean =
     t.curr._1.pattern.matcher(w._1.regex).matches()
