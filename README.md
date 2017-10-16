@@ -10,6 +10,4 @@ Among its features, it includes:
 - previous sessions memory (TBI)
 - ability to recognize certain topics (TBI).
 
-It was inspired by AIML
-
 *TBI - to be implemented
