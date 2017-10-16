@@ -17,7 +17,7 @@ import scala.util.matching.Regex
   *                   depending on the already existing/non-existing attributes.
   */
 case class Trie(curr: (Regex, Option[Attribute]) = ("".r, None), children: Set[Trie] = Set[Trie]().empty,
-                replies: Set[(Option[String], Set[Any => Set[String]])] = Set((None, Set(_ => Set(""))))) {
+                replies: Set[(Option[String], Set[() => Set[String]])] = Set((None, Set(() => Set(""))))) {
   def addValue(node: Trie): Trie =
     Trie(curr, children ++ Set(node), replies)
 }

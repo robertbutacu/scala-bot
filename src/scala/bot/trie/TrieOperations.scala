@@ -6,7 +6,7 @@ import scala.util.matching.Regex
 
 trait TrieOperations {
   type Word           = (Regex, Option[Attribute])
-  type SearchResponse =  (Map[Attribute, String], Set[(Option[String], Set[Any => Set[String]])])
+  type SearchResponse =  (Map[Attribute, String], Set[(Option[String], Set[() => Set[String]])])
 
   /**
     * For a current Trie, the algorithm returns another trie with the message added.
@@ -16,7 +16,7 @@ trait TrieOperations {
     * @param trie    - trie where the message will be stored
     * @return        - a new trie with the new message included
     */
-  final def add(message: List[Word], replies: (Option[String], Set[Any => Set[String]]), trie: Trie): Trie = {
+  final def add(message: List[Word], replies: (Option[String], Set[() => Set[String]]), trie: Trie): Trie = {
     def go(curr: Trie, words: List[Word]): Trie = {
       if (words.isEmpty) //went through all the list
         addReplies(curr, replies) // adding the replies to the Set
@@ -82,7 +82,7 @@ trait TrieOperations {
     *             2. when they aren't stored at all:
     *                 they are registered as new replies with their attribute.
     */
-  private def addReplies(t: Trie, replies: (Option[String], Set[Any => Set[String]])): Trie =
+  private def addReplies(t: Trie, replies: (Option[String], Set[() => Set[String]])): Trie =
     t.replies.find(l => l._1 == replies._1) match {
       case None      => Trie(t.curr, t.children, t.replies ++ Set(replies))
       case Some(rep) => Trie(t.curr, t.children, t.replies -- Set(rep) ++ Set((rep._1, rep._2 ++ replies._2)))
@@ -96,7 +96,7 @@ trait TrieOperations {
   private def isMatching(t: Trie, w: Word): Boolean =
     t.curr._1.pattern.matcher(w._1.regex).matches()
 
-  private def createNode(word: Word): Trie = Trie(word, Set[Trie]().empty, Set((None,Set(_ => Set[String]().empty))))
+  private def createNode(word: Word): Trie = Trie(word, Set[Trie]().empty, Set((None,Set(() => Set[String]().empty))))
 
   private def isMatching(node: Word, that: Word): Boolean =
     node._1.regex == that._1.regex && node._2 == that._2
