@@ -10,6 +10,6 @@ trait Age extends Learner{
   val ages: Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses](
       (None, List(Left("Im "),
         Right("[0-9]+".r, AgeAttr),
-        Left(" years old"))) -> Set(ageReply)
+        Left(" years old"))) -> Set(ageReply _)
     )
 }

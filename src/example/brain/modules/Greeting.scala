@@ -8,8 +8,8 @@ import example.brain.BrainFunctions._
 
 trait Greeting extends Learner {
   val greetings: Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses](
-      (None, List(Left("Hi"))) -> Set(ageReply),
-      (None, List(Left("Test"))) -> Set(ageReply),
-      (None, List(Left("Greetings"))) -> Set(ageReply)
+      (None, List(Left("Hi"))) -> Set(ageReply _),
+      (None, List(Left("Test"))) -> Set(ageReply _),
+      (None, List(Left("Greetings"))) -> Set(ageReply _)
     )
 }
