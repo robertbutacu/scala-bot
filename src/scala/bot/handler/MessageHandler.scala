@@ -15,10 +15,10 @@ trait MessageHandler extends Learner {
   def handle(trie: Trie, msg: String): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
     if(response._2.isEmpty)
-      provideReply(disapprovalMessages)
+      provideReply(unknownHumanMessages)
     else{
       currentSessionInformation = currentSessionInformation ++ response._1
-      provideResponse(response._2, msg)
+      provideResponse(response._2)
     }
   }
 
@@ -27,7 +27,7 @@ trait MessageHandler extends Learner {
   }
 
 
-  def provideResponse(possibleReplies: Set[(Option[String], Set[String])], message: String): String = {
+  def provideResponse(possibleReplies: Set[(Option[String], Set[String])]): String = {
     provideReply(possibleReplies.toList.flatMap(e => e._2.toList))
   }
 }

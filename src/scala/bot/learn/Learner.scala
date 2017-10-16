@@ -48,7 +48,7 @@ trait Learner extends TrieOperations {
       case Some(a) => f(currentSessionInformation.get(a))
     }
 
-  def replies(f: Unit => Set[String]): Set[String] = f()
+  def replies(f: Any => Set[String]): Set[String] = f()
 
   /**
     * The anonymous function creates a List of Lists of (Regex, Some(Attribute)),
