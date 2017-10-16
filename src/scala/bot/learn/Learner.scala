@@ -7,7 +7,7 @@ import scala.util.matching.Regex
 
 trait Learner extends TrieOperations {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
-  type Responses = Set[String]
+  type Responses = Set[Any => Set[String]]
 
   var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
 

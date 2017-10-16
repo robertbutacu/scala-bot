@@ -11,11 +11,11 @@ import scala.util.matching.Regex
   *             Option[Attribute] - in case it is something to be remembered
   * @param children - next parts of a possible message from a client.
   * @param replies  - replies to the message starting from the top of the trie all the way down to curr.
-  *                 Option[String] - last bot message
-  *                 Set[String]    - possible replies
+  *                 Option[String]             - last bot message
+  *                 Set[f: Any => Set[String] ] - a set of functions returning a set of possible replies
   */
 case class Trie(curr: (Regex, Option[Attribute]) = ("".r, None), children: Set[Trie] = Set[Trie]().empty,
-                replies: Set[(Option[String], Set[String])] = Set((None, Set("")))) {
+                replies: Set[(Option[String], Set[Any => Set[String]])] = Set((None, Set(_ => Set(""))))) {
   def addValue(node: Trie): Trie =
     Trie(curr, children ++ Set(node), replies)
 }
