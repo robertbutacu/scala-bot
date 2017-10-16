@@ -42,9 +42,13 @@ trait Learner extends TrieOperations {
     startLearning(old, acquired)
   }
 
-  def getAttribute(f: Option[String] => String, attribute: Attribute): String =
-    f(currentSessionInformation.get(attribute))
+  def replies(f: Option[String] => Set[String], attribute: Option[Attribute] = None): Set[String] =
+    attribute match {
+      case None    => f(None)
+      case Some(a) => f(currentSessionInformation.get(a))
+    }
 
+  def replies(f: Unit => Set[String]): Set[String] = f()
 
   /**
     * The anonymous function creates a List of Lists of (Regex, Some(Attribute)),
