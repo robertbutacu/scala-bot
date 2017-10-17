@@ -1,9 +1,8 @@
 package example.brain
 
-import example.brain.modules.AgeAttr
+import example.brain.modules.{AgeAttr, PassionAttr}
 
 import scala.bot.handler.MessageHandler
-import scala.bot.learn.Learner
 
 object BrainFunctions extends MessageHandler {
 
@@ -25,5 +24,12 @@ object BrainFunctions extends MessageHandler {
       case _ if age > 50 => Set("quite old", "old afff")
       case _             => Set("got me there", "lost")
     }
+
+  def passionReply(): Set[String] = {
+    getAttribute(PassionAttr) match {
+      case None => Set("No passions")
+      case Some(pas) => Set(s"""Passionate about $pas""")
+    }
+  }
 
 }

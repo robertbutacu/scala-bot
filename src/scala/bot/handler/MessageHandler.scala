@@ -2,13 +2,14 @@ package scala.bot.handler
 
 import scala.bot.learn.Learner
 import scala.bot.trie.Trie
+import scala.collection.mutable
 import scala.util.Random
 
 trait MessageHandler extends Learner {
   var disapprovalMessages: Set[String] = Set("")
   var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
 
-  var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
+  var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]().empty
 
   def handle(trie: Trie, msg: String): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
@@ -16,7 +17,6 @@ trait MessageHandler extends Learner {
       provideReply(unknownHumanMessages)
     else{
       currentSessionInformation = currentSessionInformation ++ response._1
-      println(currentSessionInformation)
       provideResponse(response._2)
     }
   }
@@ -34,7 +34,6 @@ trait MessageHandler extends Learner {
   }
 
   def getAttribute(attribute: Attribute): Option[String] = {
-    println(currentSessionInformation)
     currentSessionInformation.get(attribute)
   }
 
