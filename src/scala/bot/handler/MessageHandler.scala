@@ -10,7 +10,7 @@ trait MessageHandler extends Learner {
 
   var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
 
-  def handle(trie: Trie, msg: String, knowledge: Map[Attribute, String]): String = {
+  def handle(trie: Trie, msg: String): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
     if(response._2.isEmpty)
       provideReply(unknownHumanMessages)
