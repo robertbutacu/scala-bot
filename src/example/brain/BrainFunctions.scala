@@ -28,4 +28,10 @@ trait BrainFunctions extends MessageHandler {
     }
   }
 
+  def passionReplies(): Set[String] =
+    getAttribute(PassionAttr) match {
+      case None          => Set("You're not passionate about anything")
+      case Some(passion) => Set(s"""You're passionate about $passion""")
+    }
+
 }

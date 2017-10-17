@@ -42,8 +42,8 @@ Stages of development for ScalaBot:
             DONE - 4. Provide method to memories attributes.
             DONE - 5. Connect it with the handler.
             DONE - 6. Provide methods to provide customised messages.
-            [Logic Bug] 7. Change trie so it remembers the previous message
-            and a function that receives an Option[String] and return a String.
+            DONE - [Logic Bug] 7. Change trie so it remembers the previous message
+                   and a function that receives an Option[String] and return a String.
 
         FOR NOW, IT WILL RECALL EVENTS FROM THE CURRENT SESSION.
     5. previous sessions' memory
