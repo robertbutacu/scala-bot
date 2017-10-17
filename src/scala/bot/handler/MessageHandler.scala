@@ -8,11 +8,9 @@ trait MessageHandler extends Learner {
   var disapprovalMessages: Set[String] = Set("")
   var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
 
+  var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
 
-  def provideReply(replies: Set[String]): String =
-    Random.shuffle(replies).head
-
-  def handle(trie: Trie, msg: String): String = {
+  def handle(trie: Trie, msg: String, knowledge: Map[Attribute, String]): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
     if(response._2.isEmpty)
       provideReply(unknownHumanMessages)
@@ -34,4 +32,13 @@ trait MessageHandler extends Learner {
       case Some(reply) => provideReply(reply._2)
     }
   }
+
+  def getAttribute(attribute: Attribute): Option[String] = {
+    println(currentSessionInformation)
+    currentSessionInformation.get(attribute)
+  }
+
+  def provideReply(replies: Set[String]): String =
+    Random.shuffle(replies).head
+
 }

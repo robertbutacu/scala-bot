@@ -2,15 +2,19 @@ package example.brain
 
 import example.brain.modules.AgeAttr
 
+import scala.bot.handler.MessageHandler
 import scala.bot.learn.Learner
 
-object BrainFunctions extends Learner {
+object BrainFunctions extends MessageHandler {
 
-  def ageReply(): Set[String] =
-    getAttribute(AgeAttr) match {
+  def ageReply(): Set[String] = {
+    val response = getAttribute(AgeAttr)
+    response match {
       case None      => Set("Unknown age", "You havent told me your age")
       case Some(age) => provideReplies(age.toInt)
     }
+  }
+
 
   private def provideReplies(age: Int): Set[String] =
     age match {

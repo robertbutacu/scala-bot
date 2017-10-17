@@ -9,9 +9,6 @@ trait Learner extends TrieOperations {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[() => Set[String]]
 
-  protected var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
-
-
   /**
     * @param old - previous trie to which new templates are to be added
     * @param acquired - templates to be added
@@ -23,7 +20,6 @@ trait Learner extends TrieOperations {
       case h :: tail => learn(add(toWords(h._1._2), (h._1._1, h._2), old), tail.toMap)
       case Nil       => old
     }
-
 
   /**
     * @param old - previous trie to which new templates are to be added
@@ -42,14 +38,6 @@ trait Learner extends TrieOperations {
     startLearning(old, acquired)
   }
 
-  def replies(f: Option[String] => Set[String], attribute: Option[Attribute] = None): Set[String] =
-    attribute match {
-      case None    => f(None)
-      case Some(a) => f(currentSessionInformation.get(a))
-    }
-
-  def replies(f: () => Set[String]): Set[String] = f()
-
   /**
     * The anonymous function creates a List of Lists of (Regex, Some(Attribute)),
     * which will be flattened => a list of words. The list is then filtered to not contain any
@@ -66,8 +54,4 @@ trait Learner extends TrieOperations {
         case Right((r, attr)) => List((r, Some(attr)))
       }
     } filterNot (_._1.toString() == "")
-
-
-  def getAttribute(attribute: Attribute): Option[String] =
-    currentSessionInformation.get(attribute)
 }
