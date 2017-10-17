@@ -9,7 +9,7 @@ trait Learner extends TrieOperations {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[() => Set[String]]
 
-  var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
+  protected var currentSessionInformation: Map[Attribute, String] = Map[Attribute, String]().empty
 
 
   /**
@@ -66,4 +66,8 @@ trait Learner extends TrieOperations {
         case Right((r, attr)) => List((r, Some(attr)))
       }
     } filterNot (_._1.toString() == "")
+
+
+  def getAttribute(attribute: Attribute): Option[String] =
+    currentSessionInformation.get(attribute)
 }

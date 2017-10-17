@@ -18,6 +18,7 @@ trait MessageHandler extends Learner {
       provideReply(unknownHumanMessages)
     else{
       currentSessionInformation = currentSessionInformation ++ response._1
+      println(currentSessionInformation)
       provideResponse(response._2)
     }
   }
