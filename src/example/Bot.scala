@@ -1,6 +1,6 @@
 package example
 
-import example.brain.{BrainFunctions, Manager}
+import example.brain.Manager
 
 import scala.bot.handler.MessageHandler
 import scala.util.control.Breaks._
