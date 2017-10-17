@@ -5,11 +5,11 @@ import scala.bot.trie.Trie
 import scala.util.Random
 
 trait MessageHandler extends Learner {
-  var disapprovalMessages: List[String] = List("")
-  var unknownHumanMessages: List[String] = List("Speechless", "I do not know")
+  var disapprovalMessages: Set[String] = Set("")
+  var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
 
 
-  def provideReply(replies: List[String]): String =
+  def provideReply(replies: Set[String]): String =
     Random.shuffle(replies).head
 
   def handle(trie: Trie, msg: String): String = {
@@ -18,7 +18,7 @@ trait MessageHandler extends Learner {
       provideReply(unknownHumanMessages)
     else{
       currentSessionInformation = currentSessionInformation ++ response._1
-      ""
+      provideResponse(response._2)
     }
   }
 
@@ -26,8 +26,11 @@ trait MessageHandler extends Learner {
     ""
   }
 
-
-  def provideResponse(possibleReplies: Set[(Option[String], Set[String])]): String =
-    provideReply(possibleReplies.toList.flatMap(e => e._2.toList))
-
+  def provideResponse(possibleReplies: Set[(Option[String], Set[() => Set[String]])]): String = {
+    val appliedFunctions = possibleReplies map (p => (p._1, p._2 flatMap(e => e())))
+    appliedFunctions find (p => p._1.contains(BotLog.botLog.last)) match {
+      case None        => provideReply(appliedFunctions flatMap ( e => e._2))
+      case Some(reply) => provideReply(reply._2)
+    }
+  }
 }
