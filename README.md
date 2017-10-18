@@ -6,7 +6,7 @@ Among its features, it includes:
 - custom replies for input
 - chat history
 - details about the person currently talking to
-- session-based memory ( in progress )
+- session-based memory
 - previous sessions memory (TBI)
 - ability to recognize certain topics (TBI).
 
