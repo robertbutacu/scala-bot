@@ -9,7 +9,7 @@ trait MessageHandler extends Learner {
   var disapprovalMessages: Set[String] = Set("")
   var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
 
-  var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
+  private var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
   def handle(trie: Trie, msg: String): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)

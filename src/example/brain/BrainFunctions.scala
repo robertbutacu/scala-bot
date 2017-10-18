@@ -33,5 +33,4 @@ trait BrainFunctions extends MessageHandler {
       case None          => Set("You're not passionate about anything")
       case Some(passion) => Set(s"""You're passionate about $passion""")
     }
-
 }
