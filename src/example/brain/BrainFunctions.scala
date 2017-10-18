@@ -1,6 +1,7 @@
 package example.brain
 
 import example.brain.modules.{AgeAttr, PassionAttr}
+
 import scala.bot.handler.MessageHandler
 
 trait BrainFunctions extends MessageHandler {

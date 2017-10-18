@@ -1,10 +1,9 @@
 package scala.bot.handler
 
-import scala.bot.learn.Learner
 import scala.bot.trie.Trie
+import scala.bot.trie.TrieOperations._
 import scala.collection.mutable
 import scala.util.Random
-import scala.bot.trie.TrieOperations._
 
 trait MessageHandler {
   var disapprovalMessages: Set[String] = Set("")
