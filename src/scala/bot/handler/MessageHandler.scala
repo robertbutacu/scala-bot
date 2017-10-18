@@ -6,7 +6,7 @@ import scala.collection.mutable
 import scala.util.Random
 import scala.bot.trie.TrieOperations._
 
-trait MessageHandler extends Learner {
+trait MessageHandler {
   var disapprovalMessages: Set[String] = Set("")
   var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
 

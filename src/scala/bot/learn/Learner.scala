@@ -6,7 +6,7 @@ import scala.bot.trie.Trie
 import scala.bot.trie.TrieOperations._
 import scala.util.matching.Regex
 
-trait Learner {
+object Learner {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[() => Set[String]]
 
