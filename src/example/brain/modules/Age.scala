@@ -13,6 +13,6 @@ trait Age extends Learner with BrainFunctions {
       Left(" years old"))) -> Set(ageReply _),
     (None, List(Left("Im passionate about"),
       Right("[a-zA-Z]+".r, PassionAttr))) -> Set(passionReply _),
-    (Some("Passionate about guitar"), List(Left("What am i passionate about"))) -> Set(passionReplies _)
+    (Some(passionReply().head), List(Left("What am i passionate about"))) -> Set(passionReplies _)
   )
 }

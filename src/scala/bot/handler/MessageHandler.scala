@@ -4,6 +4,7 @@ import scala.bot.learn.Learner
 import scala.bot.trie.Trie
 import scala.collection.mutable
 import scala.util.Random
+import scala.bot.trie.TrieOperations._
 
 trait MessageHandler extends Learner {
   var disapprovalMessages: Set[String] = Set("")

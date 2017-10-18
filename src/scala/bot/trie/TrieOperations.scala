@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 import scala.bot.handler.Attribute
 import scala.util.matching.Regex
 
-trait TrieOperations {
+object TrieOperations {
   type Word           = (Regex, Option[Attribute])
   type SearchResponse =  (Map[Attribute, String], Set[(Option[String], Set[() => Set[String]])])
 

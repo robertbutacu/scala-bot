@@ -2,10 +2,11 @@ package scala.bot.learn
 
 import scala.annotation.tailrec
 import scala.bot.handler.Attribute
-import scala.bot.trie.{Trie, TrieOperations}
+import scala.bot.trie.Trie
+import scala.bot.trie.TrieOperations._
 import scala.util.matching.Regex
 
-trait Learner extends TrieOperations {
+trait Learner {
   type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[() => Set[String]]
 
