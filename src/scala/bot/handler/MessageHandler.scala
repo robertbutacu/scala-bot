@@ -9,21 +9,23 @@ trait MessageHandler {
   var disapprovalMessages: Set[String] = Set("")
   var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
 
+  private val humanLog = new HumanLog()
+  private val botLog = new BotLog()
   private var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
   def handle(trie: Trie, msg: String): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
     if(response._2.isEmpty){
       val r = provideReply(unknownHumanMessages)
-      HumanLog.humanLog = HumanLog.humanLog :+ msg
-      BotLog.botLog = BotLog.botLog :+ r
+      humanLog.humanLog = humanLog.humanLog :+ msg
+      botLog.botLog = botLog.botLog :+ r
       r
     }
     else{
       currentSessionInformation ++= response._1
       val r = provideResponse(response._2)
-      HumanLog.humanLog = HumanLog.humanLog :+ msg
-      BotLog.botLog = BotLog.botLog :+ r
+      humanLog.humanLog = humanLog.humanLog :+ msg
+      botLog.botLog = botLog.botLog :+ r
       r
     }
   }
@@ -34,8 +36,8 @@ trait MessageHandler {
 
   def provideResponse(possibleReplies: Set[(Option[String], Set[() => Set[String]])]): String = {
     val appliedFunctions = possibleReplies map (p => (p._1, p._2.flatMap(e => e())))
-
-    appliedFunctions find (p => p._1.contains(BotLog.botLog.last)) match {
+    println(botLog.botLog.last)
+    appliedFunctions find (p => p._1.contains(botLog.botLog.last)) match {
       case None        => provideReply(appliedFunctions filter (_._1.isEmpty) flatMap ( e => e._2))
       case Some(reply) => provideReply(reply._2)
     }

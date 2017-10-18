@@ -1,5 +1,5 @@
 package scala.bot.handler
 
-protected object BotLog {
+protected class BotLog {
   var botLog: List[String] = List("")
 }
