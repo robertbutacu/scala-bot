@@ -34,10 +34,10 @@ trait MessageHandler {
     ""
   }
 
-  def provideResponse(possibleReplies: Set[(Option[String], Set[() => Set[String]])]): String = {
+  def provideResponse(possibleReplies: Set[(Option[() => Set[String]], Set[() => Set[String]])]): String = {
     val appliedFunctions = possibleReplies map (p => (p._1, p._2.flatMap(e => e())))
-    println(botLog.botLog.last)
-    appliedFunctions find (p => p._1.contains(botLog.botLog.last)) match {
+
+    appliedFunctions find (p => p._1.exists(p => p().contains(botLog.botLog.last))) match {
       case None        => provideReply(appliedFunctions filter (_._1.isEmpty) flatMap ( e => e._2))
       case Some(reply) => provideReply(reply._2)
     }

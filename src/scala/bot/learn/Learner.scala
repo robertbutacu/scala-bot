@@ -7,7 +7,7 @@ import scala.bot.trie.TrieOperations._
 import scala.util.matching.Regex
 
 object Learner {
-  type Templates = Map[((Option[String]), List[Either[String, (Regex, Attribute)]]), Responses]
+  type Templates = Map[(Option[() => Set[String]], List[Either[String, (Regex, Attribute)]]), Responses]
   type Responses = Set[() => Set[String]]
 
   /**
