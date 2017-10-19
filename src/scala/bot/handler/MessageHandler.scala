@@ -50,6 +50,6 @@ trait MessageHandler {
     if(replies.isEmpty)
       provideReply(unknownHumanMessages)
     else
-      Random.shuffle(replies filterNot (_.isEmpty)).head
+      Random.shuffle(replies).head
   }
 }
