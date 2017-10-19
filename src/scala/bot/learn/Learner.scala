@@ -7,7 +7,22 @@ import scala.bot.trie.TrieOperations._
 import scala.util.matching.Regex
 
 object Learner {
+  /**
+    * Templates are composed of a Map of :
+    *   - a tuple containing:
+    *     1. Option[() => Set[String] ] => an optional previous bot message represented as a function that returns
+    *                                       a set of strings ( so that everything is dynamic ).
+    *     2. List[Either[String, (Regex, Attribute)] ] => the message of the client itself, composed of a list
+    *                                       mixed with both parts of a sentence ( " I am " ), but
+    *                                       regexes and attributes also ( "[A-z][a-z]*", NameAttr ).
+    *   - a response to a particular message:
+    *     1. Responses => a set of functions returning a set of strings.
+    *
+    */
+
   type Templates = Map[(Option[() => Set[String]], List[Either[String, (Regex, Attribute)]]), Responses]
+
+
   type Responses = Set[() => Set[String]]
 
   /**

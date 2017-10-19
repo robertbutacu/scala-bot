@@ -34,6 +34,17 @@ trait MessageHandler {
     ""
   }
 
+  /**
+    * First off, all the functions are being applied so that all the replies are known.
+    * After that, it is tried to find a match for the last bot message. In that case, it is provided a reply for that
+    * specific case. Otherwise, all the possible replies that are dependent on the last message the bot sent are
+    * disregarded and all the other are flatMapped and sent as a parameter to a function which will arbitrarily
+    * choose a reply
+    *
+    * @param possibleReplies = a set of optional functions who return a set of string representing the last message
+    *                       the bot sent, and a set of functions returning a string representing possible replies.
+    * @return a message suitable for the last input the client gave.
+    */
   def provideResponse(possibleReplies: Set[(Option[() => Set[String]], Set[() => Set[String]])]): String = {
     val appliedFunctions = possibleReplies map (p => (p._1, p._2.flatMap(e => e())))
 
