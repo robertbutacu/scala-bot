@@ -2,12 +2,12 @@ package example.brain.modules
 
 import example.brain.BrainFunctions
 
-import scala.bot.handler.Attribute
+import scala.bot.handler.Characteristic
 import scala.bot.learn.RepliesLearner.{Responses, Templates}
 import scala.util.matching.Regex
 
 trait Age extends BrainFunctions {
-  val ages: Templates = Map[(Option[() => Set[String]], List[Either[String, (Regex, Attribute)]]), Responses](
+  val ages: Templates = Map[(Option[() => Set[String]], List[Either[String, (Regex, Characteristic)]]), Responses](
     (None, List(Left("Im "),
       Right("[0-9]+".r, AgeAttr),
       Left(" years old"))) -> Set(ageReply _),

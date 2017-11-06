@@ -11,7 +11,7 @@ trait MessageHandler {
 
   private val humanLog = new HumanLog()
   private val botLog = new BotLog()
-  private var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
+  private var currentSessionInformation: mutable.Map[Characteristic, String] = mutable.Map[Characteristic, String]()
 
   def handle(trie: Trie, msg: String): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
@@ -54,7 +54,7 @@ trait MessageHandler {
     }
   }
 
-  def getAttribute(attribute: Attribute): Option[String] =
+  def getAttribute(attribute: Characteristic): Option[String] =
     currentSessionInformation.get(attribute)
 
   def provideReply(replies: Set[String]): String ={
