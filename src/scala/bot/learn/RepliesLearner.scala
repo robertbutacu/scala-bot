@@ -6,7 +6,7 @@ import scala.bot.trie.Trie
 import scala.bot.trie.TrieOperations._
 import scala.util.matching.Regex
 
-object Learner {
+object RepliesLearner {
   /**
     * Templates are composed of a Map of :
     *   - a tuple containing:

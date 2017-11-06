@@ -2,7 +2,7 @@ package example.brain
 
 import example.brain.modules.MasterModule
 
-import scala.bot.learn.Learner._
+import scala.bot.learn.RepliesLearner._
 import scala.bot.trie.Trie
 
 trait Manager extends MasterModule {

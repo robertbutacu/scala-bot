@@ -3,7 +3,7 @@ package example.brain.modules
 import example.brain.BrainFunctions
 
 import scala.bot.handler.Attribute
-import scala.bot.learn.Learner.{Responses, Templates}
+import scala.bot.learn.RepliesLearner.{Responses, Templates}
 import scala.util.matching.Regex
 
 trait Greeting extends BrainFunctions {
