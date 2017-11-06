@@ -47,9 +47,11 @@ Stages of development for ScalaBot:
 
         FOR NOW, IT WILL RECALL EVENTS FROM THE CURRENT SESSION.
     5. previous sessions' memory
+
         Separate xml files will be held on to after the ending of each session: people and their details.
-        Files will be given as an argument and will be searched in a project folder.
-        Akka actors will be used to learn every file and return the result.
+        One huge file will all the previous conversations' details.
+        If there is to identify one person from the List, its details will be updated at the end of the convo
+        and persisted.
 
     6. topics
         The bot might categorise different topics and have an honest opinion about any of them, or learn more.
