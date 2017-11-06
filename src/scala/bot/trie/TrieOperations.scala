@@ -34,7 +34,7 @@ object TrieOperations {
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
             // current word isn't in the set => add it, and call the function with the same node
-          case None => go(curr.addValue(createNode(words.head)), words)
+          case None => go(curr.addValue(Trie(words.head)), words)
             // next node has been found => remove it from the Set, since its gonna be different
             //it would double stack otherwise
           case Some(next) => Trie(curr.curr, curr.children - next ++ Set(go(next, words.tail)), curr.replies)
@@ -106,8 +106,6 @@ object TrieOperations {
     */
   private def isMatching(t: Trie, w: Word): Boolean =
     t.curr._1.pattern.matcher(w._1.regex).matches()
-
-  private def createNode(word: Word): Trie = Trie(word)
 
   private def isMatching(node: Word, that: Word): Boolean =
     node._1.regex == that._1.regex && node._2 == that._2

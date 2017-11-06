@@ -5,6 +5,8 @@ import scala.bot.trie.TrieOperations._
 import scala.collection.mutable
 import scala.util.Random
 
+//TODO this will be an object, and all the variables will come from outside.
+
 trait MessageHandler {
   var disapprovalMessages: Set[String] = Set("")
   var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
