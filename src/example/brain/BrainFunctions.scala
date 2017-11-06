@@ -3,10 +3,11 @@ package example.brain
 import example.brain.modules.{AgeAttr, PassionAttr}
 
 import scala.bot.handler.MessageHandler
+import scala.bot.trie.Attribute
 
 trait BrainFunctions extends MessageHandler {
   def ageReply(): Set[String] = {
-    getAttribute(AgeAttr) match {
+    getAttribute(Attribute(AgeAttr, 10)) match {
       case None => Set("Unknown age", "You havent told me your age")
       case Some(age) => provideReplies(age.toInt)
     }
@@ -23,14 +24,14 @@ trait BrainFunctions extends MessageHandler {
     }
 
   def passionReply(): Set[String] = {
-    getAttribute(PassionAttr) match {
+    getAttribute(Attribute(PassionAttr, 20)) match {
       case None => Set("No passions")
       case Some(pas) => Set(s"""Passionate about $pas""")
     }
   }
 
   def passionReplies(): Set[String] =
-    getAttribute(PassionAttr) match {
+    getAttribute(Attribute(PassionAttr, 20)) match {
       case None          => Set("You're not passionate about anything")
       case Some(passion) => Set(s"""You're passionate about $passion""")
     }

@@ -5,7 +5,7 @@ import scala.bot.handler.Characteristic
 import scala.util.matching.Regex
 
 object TrieOperations {
-  type Word           = (Regex, Option[Characteristic])
+  type Word           = (Regex, Option[Attribute])
   /**
     * Map[Attribute, String] => represents all the attributes that were found along the way which
     *                           composed the message sent by the user, and that will be later stored by
@@ -17,7 +17,7 @@ object TrieOperations {
     *                           _2 => a set of functions that return a set of strings for a particular set of
     *                               messages the bot sent
     */
-  type SearchResponse =  (Map[Characteristic, String], Set[(Option[() => Set[String]], Set[() => Set[String]])])
+  type SearchResponse =  (Map[Attribute, String], Set[(Option[() => Set[String]], Set[() => Set[String]])])
 
   /**
     * For a current Trie, the algorithm returns another trie with the message added.
@@ -56,7 +56,7 @@ object TrieOperations {
     */
   final def search(message: List[Word], trie: Trie): SearchResponse = {
     @tailrec
-    def go(message: List[Word], trie: Trie, attributes: Map[Characteristic, String]): SearchResponse = {
+    def go(message: List[Word], trie: Trie, attributes: Map[Attribute, String]): SearchResponse = {
       if (message.isEmpty)
         (attributes, trie.replies) //completely ran over all the words
       else {
@@ -73,7 +73,7 @@ object TrieOperations {
       }
     }
 
-    go(message, trie, Map[Characteristic, String]().empty)
+    go(message, trie, Map[Attribute, String]().empty)
   }
 
   def printTrie(trie: Trie): Unit = {

@@ -16,7 +16,7 @@ import scala.util.matching.Regex
   *                 => It is done that way so that the replies are generated dynamically,
   *                   depending on the already existing/non-existing attributes.
   */
-case class Trie(curr: (Regex, Option[Characteristic]) = ("".r, None), children: Set[Trie] = Set[Trie]().empty,
+case class Trie(curr: (Regex, Option[Attribute]) = ("".r, None), children: Set[Trie] = Set[Trie]().empty,
                 replies: Set[(Option[() => Set[String]], Set[() => Set[String]])] = Set((None, Set(() => Set[String]().empty)))) {
   def addValue(node: Trie): Trie =
     Trie(curr, children ++ Set(node), replies)
