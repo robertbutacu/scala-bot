@@ -1,15 +1,14 @@
 package example.brain
 
-import example.brain.modules.{AgeAttr, PassionAttr}
+import example.brain.modules.Attributes
 
 import scala.bot.handler.MessageHandler
-import scala.bot.trie.Attribute
 
-trait BrainFunctions extends MessageHandler {
+trait BrainFunctions extends MessageHandler with Attributes {
   def ageReply(): Set[String] = {
-    getAttribute(Attribute(AgeAttr, 10)) match {
+    getAttribute(age) match {
       case None => Set("Unknown age", "You havent told me your age")
-      case Some(age) => provideReplies(age.toInt)
+      case Some(a) => provideReplies(a.toInt)
     }
   }
 
@@ -24,15 +23,15 @@ trait BrainFunctions extends MessageHandler {
     }
 
   def passionReply(): Set[String] = {
-    getAttribute(Attribute(PassionAttr, 20)) match {
+    getAttribute(passion) match {
       case None => Set("No passions")
       case Some(pas) => Set(s"""Passionate about $pas""")
     }
   }
 
   def passionReplies(): Set[String] =
-    getAttribute(Attribute(PassionAttr, 20)) match {
+    getAttribute(passion) match {
       case None          => Set("You're not passionate about anything")
-      case Some(passion) => Set(s"""You're passionate about $passion""")
+      case Some(p) => Set(s"""You're passionate about $p""")
     }
 }
