@@ -1,8 +1,11 @@
 package example.brain.modules
 
-import scala.bot.handler.Characteristic
+import scala.bot.trie.Attribute
 
-case object NameAttr    extends Characteristic
-case object AgeAttr     extends Characteristic
-case object PassionAttr extends Characteristic
-case object JobAttr     extends Characteristic
+trait Attributes {
+  val age     = Attribute(AgeAttr, 10)
+  val name    = Attribute(NameAttr, 10)
+  val passion = Attribute(PassionAttr, 15)
+  val job     = Attribute(JobAttr, 5)
+
+}
