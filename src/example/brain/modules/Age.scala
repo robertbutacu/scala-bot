@@ -2,20 +2,7 @@ package example.brain.modules
 
 import example.brain.BrainFunctions
 
-import scala.bot.learn.RepliesLearner.Responses
-import scala.bot.trie.{Attribute, HumanMessage, PartOfMessage, Reply}
-import scala.util.matching.Regex
-
-/*
-case class Reply(humanMessage: HumanMessage,
-                 botReplies: Responses)
-
-case class HumanMessage(previousBotReply: Option[() => Set[String]],
-                        message: List[PartOfMessage])
-
-case class PartOfMessage(part: Either[String, (Regex, Attribute)])
-
- */
+import scala.bot.trie.{HumanMessage, PartOfMessage, Reply}
 
 trait Age extends BrainFunctions with Attributes{
   val ages: List[Reply] = List(

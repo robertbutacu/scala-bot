@@ -2,14 +2,12 @@ package example.brain.modules
 
 import example.brain.BrainFunctions
 
-import scala.bot.learn.RepliesLearner.{Responses, Templates}
-import scala.bot.trie.Attribute
-import scala.util.matching.Regex
+import scala.bot.trie.{HumanMessage, PartOfMessage, Reply}
 
 trait Greeting extends BrainFunctions {
-  val greetings: Templates = Map[((Option[() => Set[String]]), List[Either[String, (Regex, Attribute)]]), Responses](
-      (None, List(Left("Hi"))) -> Set(ageReply _),
-      (None, List(Left("Test"))) -> Set(ageReply _),
-      (None, List(Left("Greetings"))) -> Set(ageReply _)
-    )
+  val greetings: List[Reply] = List(
+    Reply(HumanMessage(None, List(PartOfMessage(Left("Hi")))), Set(ageReply _)),
+    Reply(HumanMessage(None, List(PartOfMessage(Left("Test")))), Set(ageReply _)),
+    Reply(HumanMessage(None, List(PartOfMessage(Left("Greetings")))), Set(ageReply _))
+  )
 }
