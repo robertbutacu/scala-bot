@@ -49,8 +49,12 @@ object RepliesLearner {
   def toWords(message: List[Either[String, (Regex, Attribute)]]): List[Word] =
     message flatMap { w =>
       w match {
-        case Left(words) => words.split(' ').toList.map(w => (w.r, None))
-        case Right((r, characteristic)) => List((r, Some(characteristic)))
+        case Left(words)                =>
+          words.split(' ')
+            .toList
+            .map(w => (w.r, None)) // just a word, mapping to a regex, with no characteristic attached to it
+        case Right((r, characteristic)) =>
+          List((r, Some(characteristic)))
       }
     } filterNot (_._1.toString() == "")
 }
