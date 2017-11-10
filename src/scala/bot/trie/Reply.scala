@@ -3,20 +3,13 @@ package scala.bot.trie
 import scala.bot.learn.RepliesLearner.Responses
 import scala.util.matching.Regex
 
-
-/**
-  * Represents a string or a regex (with the appended attribute) from a sentence(message).
- */
-case class PartOfMessage(part: Either[String, (Regex, Attribute)])
-
-
 /**
   * @param previousBotReply - an optional function that returns a set of strings =>
   *                             possible previous messages from the bot
   * @param message          - human's actual message, composed of multiple words/regexes.
   */
 case class HumanMessage(previousBotReply: Option[() => Set[String]],
-                        message: List[PartOfMessage])
+                        message: List[Either[String, (Regex, Attribute)]])
 
 
 /**
