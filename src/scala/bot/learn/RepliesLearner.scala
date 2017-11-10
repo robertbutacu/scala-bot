@@ -21,7 +21,6 @@ object RepliesLearner {
 
   type Templates = Map[(Option[() => Set[String]], List[Either[String, (Regex, Attribute)]]), Responses]
 
-
   type Responses = Set[() => Set[String]]
 
   /**
