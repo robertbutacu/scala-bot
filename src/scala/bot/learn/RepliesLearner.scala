@@ -16,8 +16,8 @@ object RepliesLearner {
     */
   def learn(trie: Trie, acquired: List[Reply]): Trie = {
     /**
-      * @param trie     - previous trie to which new templates are to be added
-      * @param r - reply
+      * @param trie - previous trie to which new templates are to be added
+      * @param r    - reply
       * @return - a new trie with the acquired reply in memory
       */
     def learn(trie: Trie, r: Reply): Trie =
@@ -29,7 +29,7 @@ object RepliesLearner {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
       toBeLearned match {
-        case Nil => curr
+        case Nil       => curr
         case h :: tail => startLearning(learn(curr, h), tail)
       }
     }

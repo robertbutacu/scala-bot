@@ -1,7 +1,6 @@
 package scala.bot.trie
 
 import scala.annotation.tailrec
-import scala.bot.handler.Characteristic
 import scala.util.matching.Regex
 
 object TrieOperations {
@@ -103,7 +102,7 @@ object TrieOperations {
     */
   private def addReplies(t: Trie, replies: (Option[() => Set[String]], Set[() => Set[String]])): Trie =
     t.replies.find(l => l._1 == replies._1) match {
-      case None => Trie(t.curr, t.children, t.replies ++ Set(replies))
+      case None      => Trie(t.curr, t.children, t.replies ++ Set(replies))
       case Some(rep) => Trie(t.curr, t.children, t.replies -- Set(rep) ++ Set((rep._1, rep._2 ++ replies._2)))
     }
 
