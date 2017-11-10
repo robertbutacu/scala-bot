@@ -6,5 +6,5 @@ import scala.bot.learn.RepliesLearner._
 import scala.bot.trie.Trie
 
 trait Manager extends MasterModule {
-  lazy val masterBrain: Trie = learn(Trie(), List(jobs, ages, greetings))
+  lazy val masterBrain: Trie = learn(Trie(), List(jobs, ages, greetings).flatten)
 }

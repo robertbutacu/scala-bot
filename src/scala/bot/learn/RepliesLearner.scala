@@ -7,23 +7,24 @@ import scala.bot.trie.{PartOfMessage, Reply, Trie}
 object RepliesLearner {
   type Responses = Set[() => Set[String]]
 
+
   /**
     * @param trie     - previous trie to which new templates are to be added
-    * @param acquired - templates to be added
-    * @return - a new trie with the acquired templates in memory
+    * @param acquired - a list of replies to be added
+    * @return - a new trie with the list of acquired replies in memory
     */
-  final def learn(trie: Trie, acquired: Reply): Trie =
-    add(toWords(acquired.humanMessage.message),
-      (acquired.humanMessage.previousBotReply, acquired.botReplies),
-      trie)
+  def learn(trie: Trie, acquired: List[Reply]): Trie = {
+    /**
+      * @param trie     - previous trie to which new templates are to be added
+      * @param r - reply
+      * @return - a new trie with the acquired reply in memory
+      */
+    def learn(trie: Trie, r: Reply): Trie =
+      add(toWords(r.humanMessage.message),
+        (r.humanMessage.previousBotReply, r.botReplies),
+        trie)
 
 
-  /**
-    * @param old      - previous trie to which new templates are to be added
-    * @param acquired - a list of templates to be added
-    * @return - a new trie with the list of acquired templates in memory
-    */
-  def learn(old: Trie, acquired: List[Reply]): Trie = {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
       toBeLearned match {
@@ -32,7 +33,7 @@ object RepliesLearner {
       }
     }
 
-    startLearning(old, acquired)
+    startLearning(trie, acquired)
   }
 
   /**
