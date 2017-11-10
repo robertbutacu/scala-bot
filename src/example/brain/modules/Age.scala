@@ -6,16 +6,23 @@ import scala.bot.trie.{HumanMessage, Reply}
 
 trait Age extends BrainFunctions with Attributes {
   val ages: List[Reply] = List(
-    Reply(HumanMessage(None,
-      List(Left("Im "),
-        Right("[0-9]+".r, age),
-        Left(" years old"))), Set(ageReply _)),
-    Reply(HumanMessage(None,
-      List(Left("Im passionate about"),
-        Right("[a-zA-Z]+".r, passion))),
-      Set(passionReply _)),
-    Reply(HumanMessage(Some(passionReply _),
-      List(Left("What am i passionate about"))),
-      Set(passionReplies _))
+    Reply(
+      HumanMessage(None,
+        List(Left("Im "),
+          Right("[0-9]+".r, age),
+          Left(" years old"))),
+      Set(ageReply _)
+    ),
+    Reply(
+      HumanMessage(None,
+        List(Left("Im passionate about"),
+          Right("[a-zA-Z]+".r, passion))),
+      Set(passionReply _)
+    ),
+    Reply(
+      HumanMessage(Some(passionReply _),
+        List(Left("What am i passionate about"))),
+      Set(passionReplies _)
+    )
   )
 }
