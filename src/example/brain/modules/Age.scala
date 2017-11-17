@@ -8,20 +8,20 @@ trait Age extends BrainFunctions with Attributes {
   val ages: List[Reply] = List(
     Reply(
       HumanMessage(None,
-        List(Left("Im "),
-          Right("[0-9]+".r, age),
-          Left(" years old"))),
+        List(("Im ".r, None),
+          ("[0-9]+".r, Some(age)),
+          (" years old".r, None))),
       Set(ageReply _)
     ),
     Reply(
       HumanMessage(None,
-        List(Left("Im passionate about"),
-          Right("[a-zA-Z]+".r, passion))),
+        List(("Im passionate about".r, None),
+          ("[a-zA-Z]+".r, Some(passion)))),
       Set(passionReply _)
     ),
     Reply(
       HumanMessage(Some(passionReply _),
-        List(Left("What am i passionate about"))),
+        List(("What am i passionate about".r, None))),
       Set(passionReplies _)
     )
   )

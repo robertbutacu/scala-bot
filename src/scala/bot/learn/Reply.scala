@@ -13,7 +13,7 @@ import scala.util.matching.Regex
 //TODO change message so its a list of tuples
 // Either used to carry a possible message, bad design
 case class HumanMessage(previousBotReply: Option[() => Set[String]],
-                        message: List[Either[String, (Regex, Attribute)]])
+                        message: List[(Regex, Option[Attribute])])
 
 
 /**
