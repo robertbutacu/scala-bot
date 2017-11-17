@@ -15,6 +15,14 @@ object RepliesLearner {
     * @return - a new trie with the list of acquired replies in memory
     */
   def learn(trie: Trie, acquired: List[Reply]): Trie = {
+    @tailrec
+    def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
+      toBeLearned match {
+        case Nil       => curr
+        case h :: tail => startLearning(learn(curr, h), tail)
+      }
+    }
+
     /**
       * @param trie - previous trie to which new templates are to be added
       * @param r    - reply
@@ -24,15 +32,6 @@ object RepliesLearner {
       add(toWords(r.humanMessage.message),
         (r.humanMessage.previousBotReply, r.botReplies),
         trie)
-
-
-    @tailrec
-    def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
-      toBeLearned match {
-        case Nil => curr
-        case h :: tail => startLearning(learn(curr, h), tail)
-      }
-    }
 
     startLearning(trie, acquired)
   }
