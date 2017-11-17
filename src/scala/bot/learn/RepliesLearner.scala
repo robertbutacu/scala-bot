@@ -29,7 +29,7 @@ object RepliesLearner {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
       toBeLearned match {
-        case Nil       => curr
+        case Nil => curr
         case h :: tail => startLearning(learn(curr, h), tail)
       }
     }
@@ -48,6 +48,6 @@ object RepliesLearner {
     */
   def toWords(message: List[(Regex, Option[Attribute])]): List[Word] =
     message flatMap { w =>
-      w._1.split(" ").toList.map(p => (p.r, w._2))
-    } filterNot(_._1.toString == "")
+      w._1.toString.split(" ").toList.map(p => (p.r, w._2))
+    } filterNot (_._1.toString == "")
 }

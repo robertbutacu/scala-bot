@@ -9,9 +9,6 @@ import scala.util.matching.Regex
   *                             possible previous messages from the bot
   * @param message          - human's actual message, composed of multiple words/regexes.
   */
-
-//TODO change message so its a list of tuples
-// Either used to carry a possible message, bad design
 case class HumanMessage(previousBotReply: Option[() => Set[String]],
                         message: List[(Regex, Option[Attribute])])
 
