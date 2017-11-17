@@ -2,7 +2,7 @@ package scala.bot.learn
 
 import scala.annotation.tailrec
 import scala.bot.trie.TrieOperations._
-import scala.bot.trie.{Attribute, Reply, Trie}
+import scala.bot.trie.{Attribute, Trie}
 import scala.util.matching.Regex
 
 object RepliesLearner {
