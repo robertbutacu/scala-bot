@@ -11,12 +11,14 @@ class Bot extends Manager with MessageHandler with BotMemory {
   def startDemo(): Unit = {
     disapprovalMessages = Set("", "", "Changed the subject...")
 
-    persist(List(new Person(Map(Attribute(AgeAttr, 10) -> "123",
+    /*persist(List(new Person(Map(Attribute(AgeAttr, 10) -> "123",
       Attribute(AgeAttr, 15) -> "12",
       Attribute(AgeAttr, 14) -> "12")),
       new Person(Map(Attribute(AgeAttr, 10) -> "123",
         Attribute(AgeAttr, 15) -> "12",
-        Attribute(AgeAttr, 14) -> "12"))), "out.xml")
+        Attribute(AgeAttr, 14) -> "12"))), "out.xml")*/
+
+    remember("out.xml")
     /*breakable {
       while (true) {
         val message = scala.io.StdIn.readLine()

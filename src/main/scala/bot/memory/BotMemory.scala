@@ -8,7 +8,8 @@ trait BotMemory {
   def persist(people: List[Person], filename: String): Unit = {
     val peopleXml = people map ( _.toXml)
 
-    val serialized = <people>
+    val serialized =
+    <people>
       {peopleXml}
     </people>
 
@@ -16,16 +17,18 @@ trait BotMemory {
   }
 
   def forget(people: List[Map[Attribute, String]],
-             person: Map[Attribute, String]): List[Map[Attribute, String]] =
-    people.filterNot(_ == person)
+             person: Map[Attribute, String]): List[Map[Attribute, String]] = people.filterNot(_ == person)
 
 
   def add(people: List[Map[Attribute, String]],
-          person: Map[Attribute, String]): List[Map[Attribute, String]] =
-    people :+ person
+          person: Map[Attribute, String]): List[Map[Attribute, String]] = people :+ person
 
 
   def remember(filename: String): List[Person] = {
+    val people = XML.loadFile(filename)
+
+    print(people.\\("person").toList)
+
     List.empty
   }
 
