@@ -36,5 +36,10 @@ trait BotMemory {
 
   def tryMatch(people: List[Map[Attribute, String]],
                person: Map[Attribute, String],
-               minThreshold: Int): List[Map[Attribute, String]] = ???
+               minThreshold: Int): List[Map[Attribute, String]] = {
+    val initialMatches = people filter (p => p.toList.exists(e => person.toList.contains(e)))
+
+    initialMatches filter (e =>
+      e.toList.foldLeft(0)((total, curr) => total + curr._1.weigh) >= minThreshold)
+  }
 }
