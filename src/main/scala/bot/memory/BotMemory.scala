@@ -2,9 +2,17 @@ package bot.memory
 
 import bot.trie.Attribute
 
+import scala.xml.XML
+
 trait BotMemory {
   def persist(people: List[Person], filename: String): Unit = {
     val peopleXml = people map ( _.toXml)
+
+    val serialized = <people>
+      {peopleXml}
+    </people>
+
+    XML.save(filename, serialized, "UTF-8", xmlDecl = true, null)
   }
 
   def forget(people: List[Map[Attribute, String]],

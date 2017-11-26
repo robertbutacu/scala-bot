@@ -16,7 +16,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
       Attribute(AgeAttr, 14) -> "12")),
       new Person(Map(Attribute(AgeAttr, 10) -> "123",
         Attribute(AgeAttr, 15) -> "12",
-        Attribute(AgeAttr, 14) -> "12"))), "asdad")
+        Attribute(AgeAttr, 14) -> "12"))), "out.xml")
     /*breakable {
       while (true) {
         val message = scala.io.StdIn.readLine()
