@@ -1,7 +1,8 @@
-package scala.bot.learn
+package bot.learn
 
-import scala.bot.learn.RepliesLearner.Responses
-import scala.bot.trie.Attribute
+import bot.learn.RepliesLearner.Responses
+import bot.trie.Attribute
+
 import scala.util.matching.Regex
 
 /**

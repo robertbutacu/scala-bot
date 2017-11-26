@@ -1,6 +1,7 @@
-package scala.bot.trie
+package bot.trie
 
-import scala.bot.handler.Characteristic
+import bot.handler.Characteristic
+
 import scala.util.matching.Regex
 
 /**

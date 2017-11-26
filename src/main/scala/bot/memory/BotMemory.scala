@@ -1,9 +1,10 @@
-package scala.bot.memory
+package bot.memory
 
-import scala.bot.trie.Attribute
+import bot.trie.Attribute
 
 trait BotMemory {
-  def persist(people: List[Person]): Unit = ???
+  def persist(people: List[Person], filename: String): Unit = {
+  }
 
   def forget(people: List[Map[Attribute, String]],
              person: Map[Attribute, String]): List[Map[Attribute, String]] =
@@ -13,7 +14,9 @@ trait BotMemory {
           person: Map[Attribute, String]): List[Map[Attribute, String]] =
     people :+ person
 
-  def remember(filename: String): List[Person] = ???
+  def remember(filename: String): List[Person] = {
+    List.empty
+  }
 
   def translate(people: List[Person]): List[Map[Attribute, String]] = ???
 

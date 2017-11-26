@@ -1,8 +1,8 @@
-package scala.bot.handler
+package bot.handler
 
-import scala.bot.trie.{Attribute, Trie}
-import scala.bot.trie.TrieOperations._
+import bot.trie.{Attribute, Trie}
 import scala.collection.mutable
+import bot.trie.TrieOperations._
 import scala.util.Random
 
 //TODO this will be an object, and all the variables will come from outside.

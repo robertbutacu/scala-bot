@@ -1,4 +1,4 @@
-package scala.bot.handler
+package bot.handler
 
 protected class HumanLog {
   var humanLog: List[String] = List("")

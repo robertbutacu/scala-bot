@@ -1,6 +1,6 @@
 package example.brain.modules
 
-import scala.bot.trie.Attribute
+import bot.trie.Attribute
 
 trait Attributes {
   val age     = Attribute(AgeAttr, 10)

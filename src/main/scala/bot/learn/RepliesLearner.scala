@@ -1,8 +1,9 @@
-package scala.bot.learn
+package bot.learn
+
+import bot.trie.TrieOperations._
+import bot.trie.{Attribute, Trie}
 
 import scala.annotation.tailrec
-import scala.bot.trie.TrieOperations._
-import scala.bot.trie.{Attribute, Trie}
 import scala.util.matching.Regex
 
 object RepliesLearner {

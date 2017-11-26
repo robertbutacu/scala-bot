@@ -1,8 +1,8 @@
 package example.brain.modules
 
+import bot.learn.{HumanMessage, Reply}
 import example.brain.BrainFunctions
 
-import scala.bot.learn.{HumanMessage, Reply}
 
 trait Age extends BrainFunctions with Attributes {
   val ages: List[Reply] = List(

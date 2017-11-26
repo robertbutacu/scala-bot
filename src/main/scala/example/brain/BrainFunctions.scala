@@ -1,9 +1,7 @@
 package example.brain
 
+import bot.handler.MessageHandler
 import example.brain.modules.Attributes
-
-import scala.bot.handler.MessageHandler
-import scala.bot.memory.BotMemory
 
 trait BrainFunctions extends MessageHandler with Attributes {
   def ageReply(): Set[String] = {

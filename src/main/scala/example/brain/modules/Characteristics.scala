@@ -1,6 +1,6 @@
 package example.brain.modules
 
-import scala.bot.handler.Characteristic
+import bot.handler.Characteristic
 
 case object NameAttr    extends Characteristic
 case object AgeAttr     extends Characteristic
