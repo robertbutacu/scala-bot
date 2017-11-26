@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<people>
+      <person>
+    <attribute type="AgeAttr" weight="10">
+      123
+    </attribute><attribute type="AgeAttr" weight="15">
+      12
+    </attribute><attribute type="AgeAttr" weight="14">
+      12
+    </attribute>
+</person><person>
+    <attribute type="AgeAttr" weight="10">
+      123
+    </attribute><attribute type="AgeAttr" weight="15">
+      12
+    </attribute><attribute type="AgeAttr" weight="14">
+      12
+    </attribute>
+</person>
+    </people>
