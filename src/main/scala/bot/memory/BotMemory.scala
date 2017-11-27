@@ -5,6 +5,12 @@ import bot.trie.Attribute
 import scala.xml.XML
 
 trait BotMemory {
+
+  /**Receiving a list of people traits and a filename, it will store all the information about them in an XML file.
+    *
+    * @param people - all the people from all convo that have been persisted previously +- current session
+    * @param filename - the name of the file where the xml will be stored
+    */
   def persist(people: List[Person], filename: String): Unit = {
     val peopleXml = people map ( _.toXml)
 
@@ -16,14 +22,38 @@ trait BotMemory {
     XML.save(filename, serialized, "UTF-8", xmlDecl = true, null)
   }
 
+  /**
+    * The function is useful when the bot chats with a previously met person and it is discovered, thus it is
+    * required to update the info about that person if necessary ( he/she might disclose new details ).
+    *
+    * @param people - people details from previous convo
+    * @param person - person to forget
+    * @return - a list of people traits excluding the person
+    */
   def forget(people: List[Map[Attribute, String]],
              person: Map[Attribute, String]): List[Map[Attribute, String]] = people.filterNot(_ == person)
 
 
+  /** At the end of a convo, it might be required for the bot to persist the person he/she just talked to.
+    *
+    * @param people - people details from previous convo
+    * @param person - person to remember
+    * @return
+    */
   def add(people: List[Map[Attribute, String]],
           person: Map[Attribute, String]): List[Map[Attribute, String]] = people :+ person
 
 
+  /**
+    *  Since reflection doesn't work on traits, it is required to do all the "translation" manually using the
+    *  translate() method. This function return a triple of Strings, each representing:
+    *   _1 : Attribute Name
+    *   _2 : Attribute weight
+    *   _3 : Attribute value
+    *
+    * @param filename - path to the XML file containing the people details from previous conversations.
+    * @return - a list of lists containing all the information about all the people.
+    */
   def remember(filename: String): List[List[(String, String, String)]] = {
     val peopleXML = XML.loadFile(filename)
 
@@ -33,8 +63,24 @@ trait BotMemory {
         e.toList.map(n => (n.\\("@type").text, n.\\("@weight").text, n.text)))
   }
 
+  /**The triple represents:
+    *  _1 : Attribute name
+    *  _2 : Attribute weight
+    *  _3 : Attribute value
+    *
+    * @param people - a list where every single element represent a person with all their traits
+    * @return - every item from the list converted to a map of Attribute, String
+    */
   def translate(people: List[(String, String, String)]): List[Map[Attribute, String]] = ???
 
+
+  /**
+    *
+    * @param people - people from previous conversations
+    * @param person - current person talking to
+    * @param minThreshold - a minimum amount of attribute weights sum
+    * @return - a list of possible matching people
+    */
   def tryMatch(people: List[Map[Attribute, String]],
                person: List[(Attribute, String)],
                minThreshold: Int): List[Map[Attribute, String]] = {
@@ -42,7 +88,7 @@ trait BotMemory {
       sum(person) >= minThreshold
 
     def sum(person: List[(Attribute, String)]): Int =
-      person.foldLeft(0)((total, curr) => total + curr._1.weigh)
+      person.foldLeft(0)((total, curr) => total + curr._1.weight)
 
     val initialMatches = people filter (p => p.forall(e => person.contains(e)))
 

@@ -26,4 +26,4 @@ case class Trie(curr: (Regex, Option[Attribute]) = ("".r, None),
     Trie(curr, children ++ Set(node), replies)
 }
 
-case class Attribute(characteristic: Characteristic, weigh: Int)
+case class Attribute(characteristic: Characteristic, weight: Int)
