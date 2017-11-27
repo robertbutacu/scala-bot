@@ -35,7 +35,7 @@ trait BotMemory {
   def translate(people: List[Person]): List[Map[Attribute, String]] = ???
 
   def tryMatch(people: List[Map[Attribute, String]],
-               person: Map[Attribute, String],
+               person: List[(Attribute, String)],
                minThreshold: Int): List[Map[Attribute, String]] = {
     def isMatch(person: List[(Attribute, String)]): Boolean =
       sum(person) >= minThreshold
@@ -43,7 +43,7 @@ trait BotMemory {
     def sum(person: List[(Attribute, String)]): Int =
       person.foldLeft(0)((total, curr) => total + curr._1.weigh)
 
-    val initialMatches = people filter (p => p.toList.forall(e => person.toList.contains(e)))
+    val initialMatches = people filter (p => p.forall(e => person.contains(e)))
 
     initialMatches filter (p => isMatch(p.toList)) sortWith ((p1, p2) => sum(p1.toList) > sum(p2.toList))
   }

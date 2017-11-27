@@ -28,7 +28,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
           Attribute(AgeAttr, 15) -> "12",
           Attribute(AgeAttr, 14) -> "13")),
       Map(Attribute(AgeAttr, 15) -> "12",
-        Attribute(AgeAttr, 14) -> "13"),
+        Attribute(AgeAttr, 14) -> "13").toList,
       15
     ))
     /*breakable {
