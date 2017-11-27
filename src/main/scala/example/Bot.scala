@@ -18,9 +18,9 @@ class Bot extends Manager with MessageHandler with BotMemory {
         Attribute(AgeAttr, 15) -> "12",
         Attribute(AgeAttr, 14) -> "12"))), "out.xml")*/
 
-    //remember("out.xml")
+    remember("out.xml").foreach(println)
 
-    println(tryMatch(
+    /*println(tryMatch(
       List(Map(Attribute(AgeAttr, 10) -> "123",
         Attribute(AgeAttr, 15) -> "12",
         Attribute(AgeAttr, 14) -> "14"),
@@ -30,7 +30,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
       Map(Attribute(AgeAttr, 15) -> "12",
         Attribute(AgeAttr, 14) -> "13").toList,
       15
-    ))
+    ))*/
     /*breakable {
       while (true) {
         val message = scala.io.StdIn.readLine()

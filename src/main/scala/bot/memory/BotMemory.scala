@@ -24,15 +24,16 @@ trait BotMemory {
           person: Map[Attribute, String]): List[Map[Attribute, String]] = people :+ person
 
 
-  def remember(filename: String): List[Person] = {
-    val people = XML.loadFile(filename)
+  def remember(filename: String): List[List[(String, String, String)]] = {
+    val peopleXML = XML.loadFile(filename)
 
-    print(people.\\("person").toList)
-
-    List.empty
+    peopleXML.\\("person").toList
+      .map(node => node.\\("attribute"))
+      .map(e =>
+        e.toList.map(n => (n.\\("@type").text, n.\\("@weight").text, n.text)))
   }
 
-  def translate(people: List[Person]): List[Map[Attribute, String]] = ???
+  def translate(people: List[(String, String, String)]): List[Map[Attribute, String]] = ???
 
   def tryMatch(people: List[Map[Attribute, String]],
                person: List[(Attribute, String)],
