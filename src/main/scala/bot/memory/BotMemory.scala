@@ -72,7 +72,7 @@ trait BotMemory {
     * @return - every item from the list converted to a map of Attribute, String
     */
   def translate(people: List[(String, String, String)]): List[Map[Attribute, String]] = ???
-
+  //use partial function to represent the cases
 
   /**
     *
