@@ -71,7 +71,7 @@ trait BotMemory {
     * @param people - a list where every single element represent a person with all their traits
     * @return - every item from the list converted to a map of Attribute, String
     */
-  def translate(people: List[(String, String, String)]): List[Map[Attribute, String]] = ???
+  def translate(people: List[(String, String, String)]): List[Map[Attribute, String]]
   //use partial function to represent the cases
 
   /**
