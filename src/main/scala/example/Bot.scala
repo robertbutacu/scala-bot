@@ -6,6 +6,8 @@ import bot.trie.Attribute
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
 
+import scala.util.{Failure, Success}
+
 
 class Bot extends Manager with MessageHandler with BotMemory {
   def startDemo(): Unit = {
@@ -27,7 +29,10 @@ class Bot extends Manager with MessageHandler with BotMemory {
 
     val peopleXML = remember("out.xml")
 
-    val people = peopleXML map translate map(e => e.flatten.toMap)
+    val people = peopleXML match {
+      case Success(p)   => p map translate map(e => e.flatten.toMap)
+      case Failure(_) => println("There seem to be a problem loading up my memory..."); List.empty
+    }
 
     go(people = people)
   }

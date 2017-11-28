@@ -24,7 +24,10 @@ trait MessageHandler {
     }
     else{
       currentSessionInformation ++= response._1
-      val r = provideResponse(response._2, botLog.last)
+      val r = provideResponse(response._2, botLog.lastOption match {
+        case Some(last) => last
+        case None => ""
+      })
       r
     }
   }

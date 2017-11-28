@@ -1,8 +1,11 @@
 package bot.memory
 
+import java.io.{File, FileNotFoundException}
+
 import bot.trie.Attribute
 
-import scala.xml.XML
+import scala.util.{Failure, Success, Try}
+import scala.xml.{Elem, XML}
 
 trait BotMemory {
 
@@ -12,6 +15,11 @@ trait BotMemory {
     * @param filename - the name of the file where the xml will be stored
     */
   def persist(people: List[Person], filename: String): Unit = {
+    val file = new File(filename)
+
+    if(file.exists())
+      file.delete()
+
     val peopleXml = people map ( _.toXml)
 
     val serialized =
@@ -54,13 +62,19 @@ trait BotMemory {
     * @param filename - path to the XML file containing the people details from previous conversations.
     * @return - a list of lists containing all the information about all the people.
     */
-  def remember(filename: String): List[List[(String, String, String)]] = {
-    val peopleXML = XML.loadFile(filename)
+  def remember(filename: String): Try[List[List[(String, String, String)]]] = {
+    try {
+      if(new File(filename).exists()){
+        val peopleXML = XML.loadFile(filename)
 
-    peopleXML.\\("person").toList
-      .map(node => node.\\("attribute"))
-      .map(e =>
-        e.toList.map(n => (n.\\("@type").text, n.\\("@weight").text, n.text)))
+        Success(peopleXML.\\("person").toList
+          .map(node => node.\\("attribute"))
+          .map(e =>
+            e.toList.map(n => (n.\\("@type").text, n.\\("@weight").text, n.text))))
+      }
+      else
+        Failure(new FileNotFoundException("Inexisting file!"))
+    }
   }
 
   /**The triple represents:
