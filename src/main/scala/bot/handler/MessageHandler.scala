@@ -8,26 +8,22 @@ import scala.util.Random
 //TODO this will be an object, and all the variables will come from outside.
 
 trait MessageHandler {
-  var disapprovalMessages: Set[String] = Set("")
-  var unknownHumanMessages: Set[String] = Set("Speechless", "I do not know")
+  def disapprovalMessages: Set[String]
+  def unknownHumanMessages: Set[String]
 
-  private val humanLog = new HumanLog()
-  private val botLog = new BotLog()
   private var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
-  def handle(trie: Trie, msg: String): String = {
+  def handle(trie: Trie, msg: String,
+             humanLog: List[String],
+             botLog: List[String]): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
     if(response._2.isEmpty){
       val r = provideReply(unknownHumanMessages)
-      humanLog.humanLog = humanLog.humanLog :+ msg
-      botLog.botLog = botLog.botLog :+ r
       r
     }
     else{
       currentSessionInformation ++= response._1
-      val r = provideResponse(response._2)
-      humanLog.humanLog = humanLog.humanLog :+ msg
-      botLog.botLog = botLog.botLog :+ r
+      val r = provideResponse(response._2, botLog.last)
       r
     }
   }
@@ -47,10 +43,11 @@ trait MessageHandler {
     *                       the bot sent, and a set of functions returning a string representing possible replies.
     * @return a message suitable for the last input the client gave.
     */
-  def provideResponse(possibleReplies: Set[(Option[() => Set[String]], Set[() => Set[String]])]): String = {
+  def provideResponse(possibleReplies: Set[(Option[() => Set[String]], Set[() => Set[String]])],
+                      botLog: String): String = {
     val appliedFunctions = possibleReplies map (p => (p._1, p._2.flatMap(e => e())))
 
-    appliedFunctions find (p => p._1.exists(p => p().contains(botLog.botLog.last))) match {
+    appliedFunctions find (p => p._1.exists(p => p().contains(botLog))) match {
       case None        => provideReply(appliedFunctions filter (_._1.isEmpty) flatMap ( e => e._2))
       case Some(reply) => provideReply(reply._2)
     }

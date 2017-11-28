@@ -9,8 +9,6 @@ import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
 
 class Bot extends Manager with MessageHandler with BotMemory {
   def startDemo(): Unit = {
-    disapprovalMessages = Set("", "", "Changed the subject...")
-
     /*persist(List(new Person(Map(Attribute(AgeAttr, 10) -> "123",
       Attribute(AgeAttr, 15) -> "12",
       Attribute(AgeAttr, 14) -> "12")),
@@ -18,12 +16,12 @@ class Bot extends Manager with MessageHandler with BotMemory {
         Attribute(AgeAttr, 15) -> "12",
         Attribute(AgeAttr, 14) -> "12"))), "out.xml")*/
 
-    val peopleXML = remember("out.xml")
+    /*val peopleXML = remember("out.xml")
 
     val people = peopleXML map translate
 
     people.foreach(println)
-
+    */
     /*println(tryMatch(
       List(Map(Attribute(AgeAttr, 10) -> "123",
         Attribute(AgeAttr, 15) -> "12",
@@ -62,4 +60,8 @@ class Bot extends Manager with MessageHandler with BotMemory {
 
     people filter applier.isDefinedAt map applier
   }
+
+  override def disapprovalMessages: Set[String] = Set("", "", "Changed the subject...")
+
+  override def unknownHumanMessages: Set[String] = Set("")
 }
