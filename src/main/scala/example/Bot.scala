@@ -2,7 +2,7 @@ package example
 
 import bot.handler.MessageHandler
 import bot.memory.{BotMemory, Person}
-import bot.trie.{Attribute, Trie}
+import bot.trie.Attribute
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
 
@@ -10,17 +10,18 @@ import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
 class Bot extends Manager with MessageHandler with BotMemory {
   def startDemo(): Unit = {
     def go(botLog: List[String] = List.empty,
-           humanLog: List[String] = List.empty): Unit = {
+           humanLog: List[String] = List.empty,
+           people: List[Map[Attribute, String]]): Unit = {
       val message = scala.io.StdIn.readLine()
       if (message == "QUIT") {
-
+        persist(add(people, currentSessionInformation.toMap) map (new Person(_)), "out.xml")
       }
       else {
         val updatedHumanLog = humanLog :+ message
-        val updatedBotLog = handle(masterBrain, message, updatedHumanLog, botLog)
+        val updatedBotLog = botLog :+ handle(masterBrain, message, updatedHumanLog, botLog)
         println(updatedBotLog.last)
 
-        go(botLog, humanLog)
+        go(updatedBotLog, humanLog, people)
       }
     }
 
@@ -28,24 +29,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
 
     val people = peopleXML map translate map(e => e.flatten.toMap)
 
-    println(people)
-
-    /*println(tryMatch(
-      List(Map(Attribute(AgeAttr, 10) -> "123",
-        Attribute(AgeAttr, 15) -> "12",
-        Attribute(AgeAttr, 14) -> "14"),
-        Map(Attribute(AgeAttr, 10) -> "123",
-          Attribute(AgeAttr, 15) -> "12",
-          Attribute(AgeAttr, 14) -> "13")),
-      Map(Attribute(AgeAttr, 15) -> "12",
-        Attribute(AgeAttr, 14) -> "13").toList,
-      15
-    ))*/
-    /*breakable {
-      while (true) {
-
-      }
-    }*/
+    go(people = people)
   }
 
   /** The triple represents:
@@ -69,5 +53,5 @@ class Bot extends Manager with MessageHandler with BotMemory {
 
   override def disapprovalMessages: Set[String] = Set("", "", "Changed the subject...")
 
-  override def unknownHumanMessages: Set[String] = Set("")
+  override def unknownHumanMessages: Set[String] = Set("Not familiar with this")
 }

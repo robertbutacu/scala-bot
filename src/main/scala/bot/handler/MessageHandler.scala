@@ -11,9 +11,10 @@ trait MessageHandler {
   def disapprovalMessages: Set[String]
   def unknownHumanMessages: Set[String]
 
-  private var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
+  var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
-  def handle(trie: Trie, msg: String,
+  def handle(trie: Trie,
+             msg: String,
              humanLog: List[String],
              botLog: List[String]): String = {
     val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
