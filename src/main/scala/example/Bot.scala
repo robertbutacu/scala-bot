@@ -2,26 +2,34 @@ package example
 
 import bot.handler.MessageHandler
 import bot.memory.{BotMemory, Person}
-import bot.trie.Attribute
+import bot.trie.{Attribute, Trie}
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
 
 
 class Bot extends Manager with MessageHandler with BotMemory {
   def startDemo(): Unit = {
-    /*persist(List(new Person(Map(Attribute(AgeAttr, 10) -> "123",
-      Attribute(AgeAttr, 15) -> "12",
-      Attribute(AgeAttr, 14) -> "12")),
-      new Person(Map(Attribute(AgeAttr, 10) -> "123",
-        Attribute(AgeAttr, 15) -> "12",
-        Attribute(AgeAttr, 14) -> "12"))), "out.xml")*/
+    def go(botLog: List[String] = List.empty,
+           humanLog: List[String] = List.empty): Unit = {
+      val message = scala.io.StdIn.readLine()
+      if (message == "QUIT") {
 
-    /*val peopleXML = remember("out.xml")
+      }
+      else {
+        val updatedHumanLog = humanLog :+ message
+        val updatedBotLog = handle(masterBrain, message, updatedHumanLog, botLog)
+        println(updatedBotLog.last)
 
-    val people = peopleXML map translate
+        go(botLog, humanLog)
+      }
+    }
 
-    people.foreach(println)
-    */
+    val peopleXML = remember("out.xml")
+
+    val people = peopleXML map translate map(e => e.flatten.toMap)
+
+    println(people)
+
     /*println(tryMatch(
       List(Map(Attribute(AgeAttr, 10) -> "123",
         Attribute(AgeAttr, 15) -> "12",
@@ -35,9 +43,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
     ))*/
     /*breakable {
       while (true) {
-        val message = scala.io.StdIn.readLine()
-        if (message == "QUIT") break()
-        else println(handle(masterBrain, message))
+
       }
     }*/
   }
