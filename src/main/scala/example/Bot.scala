@@ -6,6 +6,7 @@ import bot.trie.Attribute
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
 
+import scala.annotation.tailrec
 import scala.util.{Failure, Success}
 
 
@@ -20,10 +21,19 @@ class Bot extends Manager with MessageHandler with BotMemory {
       }
       else {
         val updatedHumanLog = humanLog :+ message
-        val updatedBotLog = botLog :+ handle(masterBrain, message, updatedHumanLog, botLog)
-        println(updatedBotLog.last)
 
-        go(updatedBotLog, humanLog, people)
+        if(message == "Do you remember me?"){
+          val possibleMatches = tryMatch(people, currentSessionInformation.toList, 10)
+
+
+        }
+        else{
+          val updatedBotLog = botLog :+ handle(masterBrain, message, updatedHumanLog, botLog)
+          println(updatedBotLog.last)
+
+          go(updatedBotLog, humanLog, people)
+        }
+
       }
     }
 
@@ -35,6 +45,24 @@ class Bot extends Manager with MessageHandler with BotMemory {
     }
 
     go(people = people)
+  }
+
+  @tailrec
+  final def matcher(people: List[Map[Attribute, String]]): Option[Map[Attribute, String]] = {
+    if(people.isEmpty){
+      println("Sorry, I do not seem to remember you.")
+      None
+    }
+    else{
+      println("Does this represent you: " + people.head.maxBy(_._1.weight)._2)
+
+      val userMsg = scala.io.StdIn.readLine()
+
+      if(userMsg == "Yes")
+        Some(people.head)
+      else
+        matcher(people.tail)
+    }
   }
 
   /** The triple represents:
