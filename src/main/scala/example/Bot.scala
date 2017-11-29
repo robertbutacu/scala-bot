@@ -11,6 +11,8 @@ import scala.util.{Failure, Success}
 
 
 class Bot extends Manager with MessageHandler with BotMemory {
+  type Matcher = (Option[Map[Attribute, String]], List[String], List[String])
+
   def startDemo(): Unit = {
     def go(botLog: List[String] = List.empty,
            humanLog: List[String] = List.empty,
@@ -25,7 +27,12 @@ class Bot extends Manager with MessageHandler with BotMemory {
         if(message == "Do you remember me?"){
           val possibleMatches = tryMatch(people, currentSessionInformation.toList, 10)
 
-
+          val isMatch = matcher(possibleMatches, humanLog, botLog)
+          isMatch match {
+            case (None, bL, hL)    => go(bL, hL, possibleMatches)
+            case (Some(p), bL, hL) => currentSessionInformation = currentSessionInformation.empty ++ p;
+              go(bL, hL, possibleMatches)
+          }
         }
         else{
           val updatedBotLog = botLog :+ handle(masterBrain, message, updatedHumanLog, botLog)
@@ -33,7 +40,6 @@ class Bot extends Manager with MessageHandler with BotMemory {
 
           go(updatedBotLog, humanLog, people)
         }
-
       }
     }
 
@@ -48,20 +54,24 @@ class Bot extends Manager with MessageHandler with BotMemory {
   }
 
   @tailrec
-  final def matcher(people: List[Map[Attribute, String]]): Option[Map[Attribute, String]] = {
+  final def matcher(people: List[Map[Attribute, String]],
+                    humanLog: List[String],
+                    botLog: List[String]): Matcher = {
     if(people.isEmpty){
-      println("Sorry, I do not seem to remember you.")
-      None
+      val response = "Sorry, I do not seem to remember you."
+      println(response)
+      (None, humanLog, botLog :+ response)
     }
     else{
-      println("Does this represent you: " + people.head.maxBy(_._1.weight)._2)
+      val botMsg = "Does this represent you: "  + people.head.maxBy(_._1.weight)._2
+      println(botMsg)
 
       val userMsg = scala.io.StdIn.readLine()
 
       if(userMsg == "Yes")
-        Some(people.head)
+        (Some(people.head), humanLog :+ userMsg, botLog :+ botMsg)
       else
-        matcher(people.tail)
+        matcher(people.tail, humanLog :+ userMsg, botLog :+ botMsg)
     }
   }
 
