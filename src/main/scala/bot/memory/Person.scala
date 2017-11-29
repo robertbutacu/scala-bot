@@ -6,9 +6,7 @@ import scala.xml.Elem
 
 class Trait(attribute: Attribute, value: String) {
   def toXml: Elem =
-    <attribute type={attribute.characteristic.toString} weight={attribute.weight.toString}>
-      {value}
-    </attribute>
+    <attribute type={attribute.characteristic.toString} weight={attribute.weight.toString}>{value}</attribute>
 
 }
 
@@ -17,6 +15,6 @@ class Person(traits: Map[Attribute, String]) {
 
   def toXml: Elem =
     <person>
-    {serialized.map(e => e)}
-</person>
+      {serialized.map(e => e)}
+    </person>
 }

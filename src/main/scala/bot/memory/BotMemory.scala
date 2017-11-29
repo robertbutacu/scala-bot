@@ -104,8 +104,6 @@ trait BotMemory {
       person.foldLeft(0)((total, curr) => total + curr._1.weight)
 
     val initialMatches = people filter (p => person.forall(p.toList.contains))
-    println(people)
-    println(person)
 
     initialMatches filter (p => isMatch(p.toList)) sortWith ((p1, p2) => sum(p1.toList) > sum(p2.toList))
   }

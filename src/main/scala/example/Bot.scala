@@ -58,7 +58,6 @@ class Bot extends Manager with MessageHandler with BotMemory {
                     humanLog: List[String],
                     botLog: List[String]): Matcher = {
     if(people.isEmpty){
-      println(people)
       val response = "Sorry, I do not seem to remember you."
       println(response)
       (None, humanLog, botLog :+ response)
