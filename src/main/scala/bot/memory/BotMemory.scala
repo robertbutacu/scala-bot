@@ -86,7 +86,6 @@ trait BotMemory {
     * @return - every item from the list converted to a map of Attribute, String
     */
   def translate(people: List[(String, String, String)]): List[Map[Attribute, String]]
-  //use partial function to represent the cases
 
   /**
     *
@@ -104,7 +103,9 @@ trait BotMemory {
     def sum(person: List[(Attribute, String)]): Int =
       person.foldLeft(0)((total, curr) => total + curr._1.weight)
 
-    val initialMatches = people filter (p => p.forall(e => person.contains(e)))
+    val initialMatches = people filter (p => person.forall(p.toList.contains))
+    println(people)
+    println(person)
 
     initialMatches filter (p => isMatch(p.toList)) sortWith ((p1, p2) => sum(p1.toList) > sum(p2.toList))
   }
