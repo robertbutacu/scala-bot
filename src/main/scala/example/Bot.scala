@@ -63,7 +63,9 @@ class Bot extends Manager with MessageHandler with BotMemory {
       (None, humanLog, botLog :+ response)
     }
     else{
-      val botMsg = "Does this represent you: "  + people.head.maxBy(_._1.weight)._2
+      val botMsg = "Does this represent you: "  + people.head
+        .filterNot(currentSessionInformation.toList.contains)
+        .maxBy(_._1.weight)._2
       println(botMsg)
 
       val userMsg = scala.io.StdIn.readLine()
