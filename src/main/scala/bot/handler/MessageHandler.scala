@@ -17,7 +17,7 @@ trait MessageHandler {
              msg: String,
              humanLog: List[String],
              botLog: List[String]): String = {
-    val response = search(msg.split(' ').filterNot(_ == "").toList.map(w => (w.r, None)), trie)
+    val response = search(msg.split(' ').toList.withFilter(_ != "").map(w => (w.r, None)), trie)
     if(response._2.isEmpty){
       val r = provideReply(unknownHumanMessages)
       r
@@ -52,7 +52,7 @@ trait MessageHandler {
     val appliedFunctions = possibleReplies map (p => (p._1, p._2.flatMap(e => e())))
 
     appliedFunctions find (p => p._1.exists(p => p().contains(botLog))) match {
-      case None        => provideReply(appliedFunctions filter (_._1.isEmpty) flatMap ( e => e._2))
+      case None        => provideReply(appliedFunctions withFilter (_._1.isEmpty) flatMap ( e => e._2))
       case Some(reply) => provideReply(reply._2)
     }
   }

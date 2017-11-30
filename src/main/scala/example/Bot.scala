@@ -30,7 +30,8 @@ class Bot extends Manager with MessageHandler with BotMemory {
           val isMatch = matcher(possibleMatches, humanLog, botLog)
           isMatch match {
             case (None, bL, hL)    => go(bL, hL, possibleMatches)
-            case (Some(p), bL, hL) => currentSessionInformation = currentSessionInformation.empty ++ p;
+            case (Some(p), bL, hL) =>
+              currentSessionInformation = currentSessionInformation.empty ++ p
               go(bL, hL, possibleMatches)
           }
         }
@@ -70,8 +71,10 @@ class Bot extends Manager with MessageHandler with BotMemory {
 
       val userMsg = scala.io.StdIn.readLine()
 
-      if(userMsg == "Yes")
+      if(userMsg == "Yes"){
+        println("Ah, welcome back!")
         (Some(people.head), humanLog :+ userMsg, botLog :+ botMsg)
+      }
       else
         matcher(people.tail, humanLog :+ userMsg, botLog :+ botMsg)
     }
@@ -93,7 +96,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
       case ("Job", weight, jobValue) => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
     }
 
-    people filter applier.isDefinedAt map applier
+    people withFilter applier.isDefinedAt map applier
   }
 
   override def disapprovalMessages: Set[String] = Set("", "", "Changed the subject...")
