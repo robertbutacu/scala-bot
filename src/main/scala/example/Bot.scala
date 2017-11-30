@@ -47,7 +47,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
     val peopleXML = remember("out.xml")
 
     val people = peopleXML match {
-      case Success(p)   => p map translate map(e => e.flatten.toMap)
+      case Success(p)   => p.view.map(translate).map(_.flatten.toMap).toList
       case Failure(_) => println("There seem to be a problem loading up my memory..."); List.empty
     }
 
