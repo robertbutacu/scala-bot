@@ -6,5 +6,7 @@
       <attribute type="PassionAttr" weight="15">programming</attribute><attribute type="AgeAttr" weight="10">40</attribute>
     </person><person>
       <attribute type="PassionAttr" weight="15">tv</attribute><attribute type="AgeAttr" weight="10">30</attribute>
+    </person><person>
+      <attribute type="PassionAttr" weight="15">scala</attribute><attribute type="AgeAttr" weight="10">30</attribute>
     </person>
     </people>
