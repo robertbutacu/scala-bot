@@ -68,9 +68,11 @@ trait BotMemory {
         val peopleXML = XML.loadFile(filename)
 
         Success(peopleXML.\\("person").toList
+          .view
           .map(node => node.\\("attribute"))
           .map(e =>
-            e.toList.map(n => (n.\\("@type").text, n.\\("@weight").text, n.text))))
+            e.toList.map(n => (n.\\("@type").text, n.\\("@weight").text, n.text)))
+          .toList)
       }
       else
         Failure(new FileNotFoundException("Inexisting file!"))
