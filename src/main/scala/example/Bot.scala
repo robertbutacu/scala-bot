@@ -96,7 +96,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
       case ("Job", weight, jobValue) => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
     }
 
-    people withFilter applier.isDefinedAt map applier
+    people collect applier
   }
 
   override def disapprovalMessages: Set[String] = Set("", "", "Changed the subject...")
