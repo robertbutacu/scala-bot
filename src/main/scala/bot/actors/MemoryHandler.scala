@@ -1,5 +1,6 @@
-package bot.memory
+package bot.actors
 
+import bot.memory.Person
 import bot.trie.Attribute
 
 object MemoryHandler {

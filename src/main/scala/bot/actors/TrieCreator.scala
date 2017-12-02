@@ -1,5 +1,6 @@
-package bot.trie
+package bot.actors
 
+import bot.trie.Trie
 import bot.trie.TrieOperations.Word
 
 object TrieCreator{

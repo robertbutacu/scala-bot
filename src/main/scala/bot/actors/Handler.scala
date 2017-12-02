@@ -1,4 +1,4 @@
-package bot.handler
+package bot.actors
 
 import bot.trie.Trie
 
