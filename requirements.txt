@@ -48,9 +48,8 @@ Stages of development for ScalaBot:
                     which is returned by a function.
 
         FOR NOW, IT WILL RECALL EVENTS FROM THE CURRENT SESSION.
-    5. previous sessions' memory
+    5. previous sessions' memory - DONE
 
-        Separate xml files will be held on to after the ending of each session: people and their details.
         One huge file will all the previous conversations' details.
         If there is to identify one person from the List, its details will be updated at the end of the convo
         and persisted.
