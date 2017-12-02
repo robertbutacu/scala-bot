@@ -29,10 +29,10 @@ class Bot extends Manager with MessageHandler with BotMemory {
 
           val isMatch = matcher(possibleMatches, humanLog, botLog)
           isMatch match {
-            case (None, bL, hL)    => go(bL, hL, possibleMatches)
+            case (None, bL, hL)    => go(bL, hL, people)
             case (Some(p), bL, hL) =>
               currentSessionInformation = currentSessionInformation.empty ++ p
-              go(bL, hL, possibleMatches)
+              go(bL, hL, forget(people, p))
           }
         }
         else{

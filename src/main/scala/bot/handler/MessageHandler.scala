@@ -52,7 +52,7 @@ trait MessageHandler {
     *                        the bot sent, and a set of functions returning a string representing possible replies.
     * @return a message suitable for the last input the client gave.
     */
-  def provideResponse(possibleReplies: Set[(Option[() => Set[String]], Set[() => Set[String]])],
+  private def provideResponse(possibleReplies: Set[(Option[() => Set[String]], Set[() => Set[String]])],
                       botLog: String): String = {
     val appliedFunctions = possibleReplies map (p => (p._1, p._2.flatMap(e => e())))
 
@@ -65,7 +65,7 @@ trait MessageHandler {
   def getAttribute(attribute: Attribute): Option[String] =
     currentSessionInformation.get(attribute)
 
-  def provideReply(replies: Set[String]): String = {
+  private def provideReply(replies: Set[String]): String = {
     if (replies.isEmpty)
       provideReply(unknownHumanMessages)
     else
