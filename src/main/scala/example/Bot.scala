@@ -24,18 +24,18 @@ class Bot extends Manager with MessageHandler with BotMemory {
       else {
         val updatedHumanLog = humanLog :+ message
 
-        if(message == "Do you remember me?"){
+        if (message == "Do you remember me?") {
           val possibleMatches = tryMatch(people, currentSessionInformation.toList, 10)
 
           val isMatch = matcher(possibleMatches, humanLog, botLog)
           isMatch match {
-            case (None, bL, hL)    => go(bL, hL, people)
+            case (None, bL, hL) => go(bL, hL, people)
             case (Some(p), bL, hL) =>
               currentSessionInformation = currentSessionInformation.empty ++ p
               go(bL, hL, forget(people, p))
           }
         }
-        else{
+        else {
           val updatedBotLog = botLog :+ handle(masterBrain, message, updatedHumanLog, botLog)
           println(updatedBotLog.last)
 
@@ -47,7 +47,7 @@ class Bot extends Manager with MessageHandler with BotMemory {
     val peopleXML = remember("out.xml")
 
     val people = peopleXML match {
-      case Success(p)   => p.view.map(translate).map(_.flatten.toMap).toList
+      case Success(p) => p.view.map(translate).map(_.flatten.toMap).toList
       case Failure(_) => println("There seem to be a problem loading up my memory..."); List.empty
     }
 
@@ -58,20 +58,20 @@ class Bot extends Manager with MessageHandler with BotMemory {
   final def matcher(people: List[Map[Attribute, String]],
                     humanLog: List[String],
                     botLog: List[String]): Matcher = {
-    if(people.isEmpty){
+    if (people.isEmpty) {
       val response = "Sorry, I do not seem to remember you."
       println(response)
       (None, humanLog, botLog :+ response)
     }
-    else{
-      val botMsg = "Does this represent you: "  + people.head
+    else {
+      val botMsg = "Does this represent you: " + people.head
         .filterNot(currentSessionInformation.toList.contains)
         .maxBy(_._1.weight)._2
       println(botMsg)
 
       val userMsg = scala.io.StdIn.readLine()
 
-      if(userMsg == "Yes"){
+      if (userMsg == "Yes") {
         println("Ah, welcome back!")
         (Some(people.head), humanLog :+ userMsg, botLog :+ botMsg)
       }
@@ -90,10 +90,10 @@ class Bot extends Manager with MessageHandler with BotMemory {
     */
   override def translate(people: List[(String, String, String)]): List[Map[Attribute, String]] = {
     val applier: PartialFunction[(String, String, String), Map[Attribute, String]] = {
-      case ("AgeAttr", weight, ageValue)  => Map(Attribute(AgeAttr, weight.toInt) -> ageValue)
-      case ("NameAttr", weight, nameValue) => Map(Attribute(NameAttr, weight.toInt) -> nameValue)
+      case ("AgeAttr", weight, ageValue)         => Map(Attribute(AgeAttr, weight.toInt) -> ageValue)
+      case ("NameAttr", weight, nameValue)       => Map(Attribute(NameAttr, weight.toInt) -> nameValue)
       case ("PassionAttr", weight, passionValue) => Map(Attribute(PassionAttr, weight.toInt) -> passionValue)
-      case ("Job", weight, jobValue) => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
+      case ("Job", weight, jobValue)             => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
     }
 
     people collect applier

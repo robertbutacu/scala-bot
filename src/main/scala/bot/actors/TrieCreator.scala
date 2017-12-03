@@ -9,7 +9,9 @@ object TrieCreator{
                  replies: (Option[() => Set[String]], Set[() => Set[String]]),
                  trie: Trie)
 
+
   case class Search(message: List[Word], trie: Trie)
+
 
   case object Print
 }
