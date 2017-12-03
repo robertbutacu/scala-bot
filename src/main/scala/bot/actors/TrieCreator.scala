@@ -13,6 +13,9 @@ object TrieCreator{
   case class Search(message: List[Word], trie: Trie)
 
 
+  case class TrieResponse(trie: Trie)
+
+
   case object Print
 }
 

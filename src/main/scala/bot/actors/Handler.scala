@@ -9,6 +9,8 @@ object Handler {
                     humanLog: List[String],
                     botLog: List[String])
 
+  case class BotResponse(msg: String)
+
 }
 
 class Handler {
