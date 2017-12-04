@@ -1,11 +1,15 @@
 package bot.actors
 
+import akka.actor.{Actor, Props}
+import akka.util.Timeout
 import bot.memory.Person
 import bot.trie.Attribute
 
 import scala.util.Try
 
 object MemoryHandler {
+  def props(implicit timeout: Timeout) = Props(new MemoryHandler)
+  def name = "memoryHandler"
 
   case class Save(file: String, people: List[Person])
 
@@ -30,6 +34,6 @@ object MemoryHandler {
   case class RetrievePeople(people: List[Map[Attribute, String]])
 }
 
-class MemoryHandler {
-
+class MemoryHandler(implicit timeout: Timeout) extends Actor{
+  override def receive = ???
 }

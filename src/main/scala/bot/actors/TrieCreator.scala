@@ -1,9 +1,12 @@
 package bot.actors
 
+import akka.actor.{Actor, Props}
+import akka.util.Timeout
 import bot.trie.Trie
 import bot.trie.TrieOperations.Word
 
 object TrieCreator{
+  def props(implicit timeout: Timeout) = Props(new TrieCreator)
 
   case class Add(message: List[Word],
                  replies: (Option[() => Set[String]], Set[() => Set[String]]),
@@ -19,6 +22,6 @@ object TrieCreator{
   case object Print
 }
 
-class TrieCreator {
-
+class TrieCreator(implicit timeout: Timeout) extends Actor{
+  override def receive = ???
 }
