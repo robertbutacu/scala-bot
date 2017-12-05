@@ -1,8 +1,10 @@
 package bot.actors
 
 import akka.actor.{Actor, Props}
+import bot.actors.MemoryHandler._
 import bot.memory.Person
 import bot.trie.Attribute
+import bot.memory.BotMemory._
 
 import scala.util.Try
 
@@ -35,6 +37,15 @@ object MemoryHandler {
 
 class MemoryHandler() extends Actor{
   override def receive: Actor.Receive = {
-    case _ => "asdfas"
+    case Load(file) => sender() ! LoadedPeople(remember(file))
+
+    case Save(file, people) => persist(people, file)
+
+    case Forget(people, person) => sender() ! RetrievePeople(forget(people, person))
+
+    case Add(people, person) => sender() ! RetrievePeople(add(people, person))
+
+    case TryAndMatch(people, person, minThreshold) =>
+      sender() ! PossibleMatches(tryMatch(people, person, minThreshold))
   }
 }
