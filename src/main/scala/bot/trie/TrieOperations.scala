@@ -20,7 +20,10 @@ object TrieOperations {
 
   /**
     * For a current Trie, the algorithm returns another trie with the message added.
-    *
+    * The pattern matching does the following:
+    *   1. in case of None => current word isn't in the set => add it, and call the function with the same node
+    *   2. in case of Some(next) => next node has been found => remove it from the Set, since its gonna be different 
+    *    it would double stack otherwise
     * @param message - list of words to be added into the trie
     * @param replies - a set of functions which return a set of possible replies
     * @param trie    - trie where the message will be stored
@@ -36,10 +39,7 @@ object TrieOperations {
         addReplies(curr, replies) // adding the replies to the Set
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
-          // current word isn't in the set => add it, and call the function with the same node
           case None       => go(curr.addValue(Trie(words.head)), words)
-          // next node has been found => remove it from the Set, since its gonna be different
-          //it would double stack otherwise
           case Some(next) => Trie(curr.curr,
             curr.children - next ++ Set(go(next, words.tail)),
             curr.replies)
