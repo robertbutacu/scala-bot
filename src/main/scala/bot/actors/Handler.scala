@@ -24,6 +24,6 @@ object Handler {
 
 class Handler() extends Actor{
   override def receive: Actor.Receive = {
-    case Hello => println(World)
+    case Hello => sender() ! World
   }
 }

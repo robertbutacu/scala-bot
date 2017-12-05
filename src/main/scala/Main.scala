@@ -1,8 +1,10 @@
-import akka.actor.ActorSystem
 import bot.actors.Master
 import example.Bot
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 object Main extends App {
-  println(Master.tickle())
+  Master.tickle().onComplete(s => println(s + "1"))
+  Master.tickle().onComplete(s => println(s + "2"))
   new Bot().startDemo()
 }
