@@ -46,7 +46,7 @@ object RepliesLearner {
     * @return a list of words that could be either a string with no attr set,
     *         or a regex with an attribute
     */
-  def toWords(message: List[(Regex, Option[Attribute])]): List[Word] =
+  private def toWords(message: List[(Regex, Option[Attribute])]): List[Word] =
     message flatMap { w =>
       w._1.toString
         .split(" ").toList

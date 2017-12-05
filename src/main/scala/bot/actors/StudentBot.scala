@@ -8,8 +8,9 @@ object StudentBot {
   def props() = Props(new StudentBot)
   def name() = "studentBot"
 
-  case class LearnReply(trie: Trie, acquired: List[Reply])
+  case class LearnReplies(trie: Trie, acquired: List[Reply])
 
+  case class CreatedTrie(trie: Trie)
 }
 
 class StudentBot() extends Actor{
