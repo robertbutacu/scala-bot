@@ -8,9 +8,9 @@ import scala.util.Random
 //TODO this will be an object, and all the variables will come from outside.
 
 trait MessageHandler {
-  def disapprovalMessages: Set[String]
+  def disapprovalMessages: Set[String] = Set("")
 
-  def unknownHumanMessages: Set[String]
+  def unknownHumanMessages: Set[String] = Set("")
 
   var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 

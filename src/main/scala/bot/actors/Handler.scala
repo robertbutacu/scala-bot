@@ -1,8 +1,10 @@
 package bot.actors
 
 import akka.actor.{Actor, Props}
-import bot.actors.Handler.{Hello, World}
+import bot.actors.Handler.{BotResponse, Handle, Hello, World}
+import bot.handler.MessageHandler
 import bot.trie.Trie
+
 
 object Handler {
   def props() = Props(new Handler)
@@ -22,8 +24,10 @@ object Handler {
   }
 }
 
-class Handler() extends Actor{
+class Handler() extends Actor with MessageHandler{
   override def receive: Actor.Receive = {
     case Hello => sender() ! World
+
+    case Handle(trie, msg, humanLog, botLog) => sender() ! BotResponse(handle(trie, msg, humanLog, botLog))
   }
 }
