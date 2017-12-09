@@ -2,7 +2,7 @@ package bot.actors
 
 import akka.actor.{Actor, Props}
 import bot.actors.TrieCreator._
-import bot.trie.Trie
+import bot.trie.SpeakingKnowledge
 import bot.trie.TrieOperations._
 
 object TrieCreator {
@@ -12,19 +12,19 @@ object TrieCreator {
 
   case class Add(message: List[Word],
                  replies: (Option[() => Set[String]], Set[() => Set[String]]),
-                 trie: Trie)
+                 trie: SpeakingKnowledge)
 
 
-  case class Search(message: List[Word], trie: Trie)
+  case class Search(message: List[Word], trie: SpeakingKnowledge)
 
 
-  case class TrieResponse(trie: Trie)
+  case class TrieResponse(trie: SpeakingKnowledge)
 
 
   case class CreateTrie(message: List[Word],
                         replies: (Option[() => Set[String]], Set[() => Set[String]]))
 
-  case class Print(trie: Trie)
+  case class Print(trie: SpeakingKnowledge)
 
   case class SearchReturnMessage(response: SearchResponse)
 
@@ -32,9 +32,9 @@ object TrieCreator {
 
 class TrieCreator() extends Actor {
   override def receive: Actor.Receive = {
-    case Print(trie: Trie) => printTrie(trie)
+    case Print(trie: SpeakingKnowledge) => printTrie(trie)
 
-    case CreateTrie(msg, replies) => sender() ! TrieResponse(add(msg, replies, Trie()))
+    case CreateTrie(msg, replies) => sender() ! TrieResponse(add(msg, replies, SpeakingKnowledge()))
 
     case Search(msg, trie) => sender() ! SearchReturnMessage(search(msg, trie))
 

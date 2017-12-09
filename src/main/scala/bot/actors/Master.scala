@@ -19,4 +19,6 @@ object Master {
 
   def tickle(): Future[Any] = handler ? Hello
 
+  def kill(): Future[Any] = system.terminate()
+
 }

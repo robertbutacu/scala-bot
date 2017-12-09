@@ -32,15 +32,15 @@ object TrieOperations {
   final def add(message: List[Word],
                 replies: (Option[() => Set[String]],
                   Set[() => Set[String]]),
-                trie: Trie): Trie = {
+                trie: SpeakingKnowledge): SpeakingKnowledge = {
 
-    def go(curr: Trie, words: List[Word]): Trie = {
+    def go(curr: SpeakingKnowledge, words: List[Word]): SpeakingKnowledge = {
       if (words.isEmpty) //went through all the list
         addReplies(curr, replies) // adding the replies to the Set
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
-          case None       => go(curr.addValue(Trie(words.head)), words)
-          case Some(next) => Trie(curr.curr,
+          case None       => go(curr.addValue(SpeakingKnowledge(words.head)), words)
+          case Some(next) => SpeakingKnowledge(curr.curr,
             curr.children - next ++ Set(go(next, words.tail)),
             curr.replies)
         }
@@ -59,10 +59,10 @@ object TrieOperations {
     * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
     *         from which another algorithm will pick the best choice.
     */
-  final def search(message: List[Word], trie: Trie): SearchResponse = {
+  final def search(message: List[Word], trie: SpeakingKnowledge): SearchResponse = {
 
     @tailrec
-    def go(message: List[Word], trie: Trie,
+    def go(message: List[Word], trie: SpeakingKnowledge,
            attributes: Map[Attribute, String]): SearchResponse = {
       if (message.isEmpty)
         (attributes, trie.replies) //completely ran over all the words
@@ -83,7 +83,7 @@ object TrieOperations {
     go(message, trie, Map[Attribute, String]().empty)
   }
 
-  def printTrie(trie: Trie): Unit = {
+  def printTrie(trie: SpeakingKnowledge): Unit = {
     println("Node " + trie.curr + "   ")
     trie.replies.foreach(r => println("Leaf " + r))
     trie.children.foreach(t => printTrie(t))
@@ -100,10 +100,10 @@ object TrieOperations {
     *             2. when they aren't stored at all:
     *             they are registered as new replies with their attribute.
     */
-  private def addReplies(t: Trie, replies: (Option[() => Set[String]], Set[() => Set[String]])): Trie =
+  private def addReplies(t: SpeakingKnowledge, replies: (Option[() => Set[String]], Set[() => Set[String]])): SpeakingKnowledge =
     t.replies.find(l => l._1 == replies._1) match {
-      case None      => Trie(t.curr, t.children, t.replies ++ Set(replies))
-      case Some(rep) => Trie(t.curr, t.children, t.replies -- Set(rep) ++ Set((rep._1, rep._2 ++ replies._2)))
+      case None      => SpeakingKnowledge(t.curr, t.children, t.replies ++ Set(replies))
+      case Some(rep) => SpeakingKnowledge(t.curr, t.children, t.replies -- Set(rep) ++ Set((rep._1, rep._2 ++ replies._2)))
     }
 
   /**
@@ -111,7 +111,7 @@ object TrieOperations {
     * @param w - message word
     * @return whether the message matches the trie node
     */
-  private def isMatching(t: Trie, w: Word): Boolean =
+  private def isMatching(t: SpeakingKnowledge, w: Word): Boolean =
     t.curr._1.pattern.matcher(w._1.regex).matches()
 
   private def isMatching(node: Word, that: Word): Boolean =

@@ -1,6 +1,6 @@
 package bot.handler
 
-import bot.trie.{Attribute, Trie}
+import bot.trie.{Attribute, SpeakingKnowledge}
 import scala.collection.mutable
 import bot.trie.TrieOperations._
 import scala.util.Random
@@ -14,7 +14,7 @@ trait MessageHandler {
 
   var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
-  def handle(trie: Trie,
+  def handle(trie: SpeakingKnowledge,
              msg: String,
              humanLog: List[String],
              botLog: List[String]): String = {
@@ -37,7 +37,7 @@ trait MessageHandler {
     }
   }
 
-  def isDisapproved(brain: Trie, msg: String): String = {
+  def isDisapproved(brain: SpeakingKnowledge, msg: String): String = {
     ""
   }
 

@@ -1,7 +1,7 @@
 package bot.learn
 
 import bot.trie.TrieOperations._
-import bot.trie.{Attribute, Trie}
+import bot.trie.{Attribute, SpeakingKnowledge}
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex
@@ -15,9 +15,9 @@ object RepliesLearner {
     * @param acquired - a list of replies to be added
     * @return - a new trie with the list of acquired replies in memory
     */
-  def learn(trie: Trie, acquired: List[Reply]): Trie = {
+  def learn(trie: SpeakingKnowledge, acquired: List[Reply]): SpeakingKnowledge = {
     @tailrec
-    def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
+    def startLearning(curr: SpeakingKnowledge, toBeLearned: List[Reply]): SpeakingKnowledge = {
       toBeLearned match {
         case Nil       => curr
         case h :: tail => startLearning(learn(curr, h), tail)
@@ -29,7 +29,7 @@ object RepliesLearner {
       * @param r    - reply
       * @return - a new trie with the acquired reply in memory
       */
-    def learn(trie: Trie, r: Reply): Trie =
+    def learn(trie: SpeakingKnowledge, r: Reply): SpeakingKnowledge =
       add(toWords(r.humanMessage.message),
         (r.humanMessage.previousBotReply, r.botReplies),
         trie)

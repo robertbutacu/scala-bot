@@ -17,13 +17,22 @@ import scala.util.matching.Regex
   *                 => It is done that way so that the replies are generated dynamically,
   *                 depending on the already existing/non-existing attributes.
   **/
-case class Trie(curr: (Regex, Option[Attribute]) = ("".r, None),
-                children: Set[Trie] = Set[Trie]().empty,
-                replies: Set[
-                  (Option[() => Set[String]],
-                    Set[() => Set[String]])] = Set((None, Set(() => Set[String]().empty)))) {
-  def addValue(node: Trie): Trie =
-    Trie(curr, children ++ Set(node), replies)
+class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
+                        val children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
+                        val replies: Set[
+                          (Option[() => Set[String]],
+                            Set[() => Set[String]])] = Set((None, Set(() => Set[String]().empty)))) {
+
+  def addValue(node: SpeakingKnowledge): SpeakingKnowledge =
+    SpeakingKnowledge(curr, children ++ Set(node), replies)
 }
 
-case class Attribute(characteristic: Characteristic, weight: Int)
+object SpeakingKnowledge {
+  def apply(curr: (Regex, Option[Attribute]) = ("".r, None),
+            children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
+            replies: Set[
+              (Option[() => Set[String]],
+                Set[() => Set[String]])] = Set((None, Set(() => Set[String]().empty)))): SpeakingKnowledge =
+    new SpeakingKnowledge(curr, children, replies)
+}
+

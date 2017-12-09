@@ -1,16 +1,16 @@
 package bot.actors
 
 import akka.actor.{Actor, Props}
-import bot.actors.Handler.{BotResponse, Handle, Hello, World}
+import bot.actors.Handler._
 import bot.handler.MessageHandler
-import bot.trie.Trie
+import bot.trie.SpeakingKnowledge
 
 
 object Handler {
   def props() = Props(new Handler)
   def name() = "handler"
 
-  case class Handle(trie: Trie,
+  case class Handle(trie: SpeakingKnowledge,
                     msg: String,
                     humanLog: List[String],
                     botLog: List[String])
