@@ -1,6 +1,5 @@
 package bot.trie
 
-import scala.annotation.tailrec
 import scala.util.matching.Regex
 
 protected trait TrieOperations {

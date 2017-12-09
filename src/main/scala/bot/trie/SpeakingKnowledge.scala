@@ -20,7 +20,8 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
                         val children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
                         val replies: Set[
                           (Option[() => Set[String]],
-                            Set[() => Set[String]])] = Set((None, Set(() => Set[String]().empty))))
+                            Set[() => Set[String]])
+                          ] = Set((None, Set(() => Set[String]().empty))))
   extends TrieOperations {
 
   /**
@@ -28,7 +29,8 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
     * The pattern matching does the following:
     *   1. in case of None => current word isn't in the set => add it, and call the function with the same node
     *   2. in case of Some(next) => next node has been found => remove it from the Set, since its gonna be different 
-    *    it would double stack otherwise
+    * it would double stack otherwise
+    *
     * @param message - list of words to be added into the trie
     * @param replies - a set of functions which return a set of possible replies
     * @return - a new trie with the new message included
@@ -63,7 +65,6 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
     *         from which another algorithm will pick the best choice.
     */
   final def search(message: List[Word]): SearchResponse = {
-
     @tailrec
     def go(message: List[Word], trie: SpeakingKnowledge,
            attributes: Map[Attribute, String]): SearchResponse = {
@@ -105,7 +106,7 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
     *             2. when they aren't stored at all:
     *             they are registered as new replies with their attribute.
     */
-  def addReplies(replies: (Option[() => Set[String]], Set[() => Set[String]])): SpeakingKnowledge =
+  private def addReplies(replies: (Option[() => Set[String]], Set[() => Set[String]])): SpeakingKnowledge =
     this.replies.find(l => l._1 == replies._1) match {
       case None      => SpeakingKnowledge(this.curr, this.children, this.replies ++ Set(replies))
       case Some(rep) => SpeakingKnowledge(this.curr,
@@ -114,7 +115,7 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
     }
 
 
-  def addValue(node: SpeakingKnowledge): SpeakingKnowledge =
+  private def addValue(node: SpeakingKnowledge): SpeakingKnowledge =
     SpeakingKnowledge(curr, children ++ Set(node), replies)
 }
 

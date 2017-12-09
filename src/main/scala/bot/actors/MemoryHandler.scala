@@ -4,7 +4,7 @@ import akka.actor.{Actor, Props}
 import bot.actors.MemoryHandler._
 import bot.memory.Person
 import bot.trie.Attribute
-import bot.memory.BotMemory._
+import bot.memory.Acquaintances._
 
 import scala.util.Try
 

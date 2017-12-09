@@ -5,7 +5,7 @@ import bot.memory.Person
 import bot.trie.Attribute
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
-import bot.memory.BotMemory._
+import bot.memory.Acquaintances._
 import scala.annotation.tailrec
 import scala.util.{Failure, Success}
 

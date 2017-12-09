@@ -10,9 +10,6 @@ object RepliesLearner {
   type Word = (Regex, Option[Attribute])
   type SearchResponse = (Map[Attribute, String], Set[(Option[() => Set[String]], Set[() => Set[String]])])
 
-
-
-
   /**
     * @param trie     - previous trie to which new templates are to be added
     * @param acquired - a list of replies to be added

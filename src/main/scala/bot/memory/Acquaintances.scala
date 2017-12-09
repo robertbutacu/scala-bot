@@ -7,7 +7,7 @@ import bot.trie.Attribute
 import scala.util.{Failure, Success, Try}
 import scala.xml.{Elem, XML}
 
-object BotMemory {
+object Acquaintances {
 
   /**Receiving a list of people traits and a filename, it will store all the information about them in an XML file.
     *
@@ -79,17 +79,6 @@ object BotMemory {
     }
   }
 
-  /*
-  /**The triple represents:
-    *  _1 : Attribute name
-    *  _2 : Attribute weight
-    *  _3 : Attribute value
-    *
-    * @param people - a list where every single element represent a person with all their traits
-    * @return - every item from the list converted to a map of Attribute, String
-    */
-  def translate(people: List[(String, String, String)]): List[Map[Attribute, String]]
-  */
   /**
     *
     * @param people - people from previous conversations
