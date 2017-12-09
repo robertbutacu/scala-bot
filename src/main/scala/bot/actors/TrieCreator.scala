@@ -2,8 +2,8 @@ package bot.actors
 
 import akka.actor.{Actor, Props}
 import bot.actors.TrieCreator._
+import bot.learn.RepliesLearner.{SearchResponse, Word}
 import bot.trie.SpeakingKnowledge
-import bot.trie.TrieOperations._
 
 object TrieCreator {
   def props() = Props(new TrieCreator)
@@ -32,12 +32,12 @@ object TrieCreator {
 
 class TrieCreator() extends Actor {
   override def receive: Actor.Receive = {
-    case Print(trie: SpeakingKnowledge) => printTrie(trie)
+    case Print(trie: SpeakingKnowledge) => trie.print()
 
-    case CreateTrie(msg, replies) => sender() ! TrieResponse(add(msg, replies, SpeakingKnowledge()))
+    case CreateTrie(msg, replies) => sender() ! TrieResponse(SpeakingKnowledge().add(msg, replies))
 
-    case Search(msg, trie) => sender() ! SearchReturnMessage(search(msg, trie))
+    case Search(msg, trie) => sender() ! SearchReturnMessage(trie.search(msg))
 
-    case Add(msg, replies, trie) => sender() ! TrieResponse(add(msg, replies, trie))
+    case Add(msg, replies, trie) => sender() ! TrieResponse(trie.add(msg, replies))
   }
 }

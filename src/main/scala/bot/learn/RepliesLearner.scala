@@ -1,6 +1,5 @@
 package bot.learn
 
-import bot.trie.TrieOperations._
 import bot.trie.{Attribute, SpeakingKnowledge}
 
 import scala.annotation.tailrec
@@ -8,6 +7,10 @@ import scala.util.matching.Regex
 
 object RepliesLearner {
   type Responses = Set[() => Set[String]]
+  type Word = (Regex, Option[Attribute])
+  type SearchResponse = (Map[Attribute, String], Set[(Option[() => Set[String]], Set[() => Set[String]])])
+
+
 
 
   /**
@@ -30,9 +33,8 @@ object RepliesLearner {
       * @return - a new trie with the acquired reply in memory
       */
     def learn(trie: SpeakingKnowledge, r: Reply): SpeakingKnowledge =
-      add(toWords(r.humanMessage.message),
-        (r.humanMessage.previousBotReply, r.botReplies),
-        trie)
+      trie.add(toWords(r.humanMessage.message),
+        (r.humanMessage.previousBotReply, r.botReplies))
 
     startLearning(trie, acquired)
   }

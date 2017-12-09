@@ -18,5 +18,11 @@
       
     </person><person>
       
+    </person><person>
+      <attribute type="PassionAttr" weight="15">scala</attribute><attribute type="AgeAttr" weight="10">20</attribute>
+    </person><person>
+      <attribute type="PassionAttr" weight="15">thesky</attribute><attribute type="AgeAttr" weight="10">20</attribute>
+    </person><person>
+      
     </person>
     </people>

@@ -2,7 +2,6 @@ package bot.handler
 
 import bot.trie.{Attribute, SpeakingKnowledge}
 import scala.collection.mutable
-import bot.trie.TrieOperations._
 import scala.util.Random
 
 //TODO this will be an object, and all the variables will come from outside.
@@ -18,11 +17,10 @@ trait MessageHandler {
              msg: String,
              humanLog: List[String],
              botLog: List[String]): String = {
-    val response = search(
+    val response = trie.search(
       msg.split(' ').toList
         .withFilter(_ != "")
-        .map(w => (w.r, None)),
-      trie)
+        .map(w => (w.r, None)))
     if (response._2.isEmpty) {
       val r = provideReply(unknownHumanMessages)
       r
