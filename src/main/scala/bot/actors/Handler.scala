@@ -27,7 +27,7 @@ object Handler {
 
 class Handler() extends Actor with MessageHandler {
   override def receive: Actor.Receive = {
-    case Hello => sender() ! World
+    case Hello => Thread.sleep(3000); sender() ! World
 
     case Handle(trie, msg, humanLog, botLog) => sender() ! BotResponse(handle(trie, msg, humanLog, botLog))
   }
