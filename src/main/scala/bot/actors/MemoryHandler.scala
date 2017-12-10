@@ -2,14 +2,15 @@ package bot.actors
 
 import akka.actor.{Actor, Props}
 import bot.actors.MemoryHandler._
+import bot.memory.Acquaintances._
 import bot.memory.Person
 import bot.trie.Attribute
-import bot.memory.Acquaintances._
 
 import scala.util.Try
 
 object MemoryHandler {
   def props() = Props(new MemoryHandler)
+
   def name() = "memoryHandler"
 
   case class Save(file: String, people: List[Person])
@@ -33,9 +34,10 @@ object MemoryHandler {
   case class PossibleMatches(people: List[Map[Attribute, String]])
 
   case class RetrievePeople(people: List[Map[Attribute, String]])
+
 }
 
-class MemoryHandler() extends Actor{
+class MemoryHandler() extends Actor {
   override def receive: Actor.Receive = {
     case Load(file) => sender() ! LoadedPeople(remember(file))
 

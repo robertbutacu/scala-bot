@@ -20,9 +20,11 @@ trait MessageHandler {
              humanLog: List[String],
              botLog: List[String]): String = {
     val response = trie.search(
-      msg.split(' ').toList
+      msg.split(' ')
+        .toList
         .withFilter(_ != "")
         .map(w => (w.r, None)))
+
     if (response.possibleReplies.isEmpty) {
       val r = provideReply(unknownHumanMessages)
       r
@@ -62,7 +64,7 @@ trait MessageHandler {
       AppliedFunctions(p.previousBotMessage, p.possibleReply.flatMap(e => e())))
 
     appliedFunctions find (p => p.previousBotMsg.exists(f => f().contains(lastBotMsg))) match {
-      case None        =>
+      case None =>
         provideReply(appliedFunctions withFilter (_.previousBotMsg.isEmpty) flatMap (e => e.appliedFunctions))
       case Some(reply) =>
         provideReply(reply.appliedFunctions)

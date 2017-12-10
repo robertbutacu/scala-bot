@@ -5,7 +5,6 @@ import akka.pattern.ask
 import akka.util.Timeout
 import bot.actors.Handler.Hello
 
-
 import scala.concurrent.Future
 import scala.concurrent.duration._
 

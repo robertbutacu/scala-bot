@@ -42,7 +42,7 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
         curr.addReplies(replies) // adding the replies to the Set
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
-          case None => go(curr.addValue(SpeakingKnowledge(words.head)), words)
+          case None       => go(curr.addValue(SpeakingKnowledge(words.head)), words)
           case Some(next) => SpeakingKnowledge(curr.curr,
             curr.children - next ++ Set(go(next, words.tail)),
             curr.replies)

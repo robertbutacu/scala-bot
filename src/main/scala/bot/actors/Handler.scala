@@ -8,6 +8,7 @@ import bot.trie.SpeakingKnowledge
 
 object Handler {
   def props() = Props(new Handler)
+
   def name() = "handler"
 
   case class Handle(trie: SpeakingKnowledge,
@@ -19,12 +20,12 @@ object Handler {
 
   case object Hello
 
-  case object World{
+  case object World {
     override def toString = "World"
   }
 }
 
-class Handler() extends Actor with MessageHandler{
+class Handler() extends Actor with MessageHandler {
   override def receive: Actor.Receive = {
     case Hello => sender() ! World
 
