@@ -18,9 +18,9 @@ import scala.util.matching.Regex
   *                 => It is done that way so that the replies are generated dynamically,
   *                 depending on the already existing/non-existing attributes.
   **/
-class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
-                        val children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
-                        val replies: Set[PossibleReply] = Set.empty)
+case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
+                             children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
+                             replies: Set[PossibleReply] = Set.empty)
   extends TrieOperations {
 
   /**
@@ -118,12 +118,5 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
 
   private def addValue(node: SpeakingKnowledge): SpeakingKnowledge =
     SpeakingKnowledge(curr, children ++ Set(node), replies)
-}
-
-object SpeakingKnowledge {
-  def apply(curr: (Regex, Option[Attribute]) = ("".r, None),
-            children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
-            replies: Set[PossibleReply] = Set.empty): SpeakingKnowledge =
-    new SpeakingKnowledge(curr, children, replies)
 }
 
