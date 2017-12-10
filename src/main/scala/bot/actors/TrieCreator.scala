@@ -2,7 +2,8 @@ package bot.actors
 
 import akka.actor.{Actor, Props}
 import bot.actors.TrieCreator._
-import bot.learn.RepliesLearner.{SearchResponse, Word}
+import bot.learn.RepliesLearner.Word
+import bot.learn.{PossibleReply, SearchResponses}
 import bot.trie.SpeakingKnowledge
 
 object TrieCreator {
@@ -11,7 +12,7 @@ object TrieCreator {
   def name() = "trieCreator"
 
   case class Add(message: List[Word],
-                 replies: (Option[() => Set[String]], Set[() => Set[String]]),
+                 replies: PossibleReply,
                  trie: SpeakingKnowledge)
 
 
@@ -22,11 +23,11 @@ object TrieCreator {
 
 
   case class CreateTrie(message: List[Word],
-                        replies: (Option[() => Set[String]], Set[() => Set[String]]))
+                        replies: PossibleReply)
 
   case class Print(trie: SpeakingKnowledge)
 
-  case class SearchReturnMessage(response: SearchResponse)
+  case class SearchReturnMessage(response: SearchResponses)
 
 }
 

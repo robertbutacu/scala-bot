@@ -1,5 +1,7 @@
 package bot.trie
 
+import bot.learn.{PossibleReply, SearchResponses}
+
 import scala.annotation.tailrec
 import scala.util.matching.Regex
 
@@ -18,10 +20,7 @@ import scala.util.matching.Regex
   **/
 class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
                         val children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
-                        val replies: Set[
-                          (Option[() => Set[String]],
-                            Set[() => Set[String]])
-                          ] = Set((None, Set(() => Set[String]().empty))))
+                        val replies: Set[PossibleReply] = Set.empty)
   extends TrieOperations {
 
   /**
@@ -36,8 +35,7 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
     * @return - a new trie with the new message included
     */
   final def add(message: List[Word],
-                replies: (Option[() => Set[String]],
-                  Set[() => Set[String]])): SpeakingKnowledge = {
+                replies: PossibleReply): SpeakingKnowledge = {
 
     def go(curr: SpeakingKnowledge, words: List[Word]): SpeakingKnowledge = {
       if (words.isEmpty) //went through all the list
@@ -64,17 +62,17 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
     * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
     *         from which another algorithm will pick the best choice.
     */
-  final def search(message: List[Word]): SearchResponse = {
+  final def search(message: List[Word]): SearchResponses = {
     @tailrec
     def go(message: List[Word], trie: SpeakingKnowledge,
-           attributes: Map[Attribute, String]): SearchResponse = {
+           attributes: Map[Attribute, String]): SearchResponses = {
       if (message.isEmpty)
-        (attributes, trie.replies) //completely ran over all the words
+        SearchResponses(attributes, trie.replies) //completely ran over all the words
       else {
         val head = message.head
         val next = trie.children.find(t => isMatching(t, head))
         next match {
-          case None           => (attributes, Set()) //word wasn't found in the trie
+          case None           => SearchResponses(attributes, Set()) //word wasn't found in the trie
           case Some(nextNode) => go(message.tail, nextNode,
             nextNode.curr._2 match {
               case None       => attributes
@@ -88,13 +86,13 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
   }
 
   def print(): Unit = {
-    def go(trie: SpeakingKnowledge): Unit = {
-      println("Node " + trie.curr + "   ")
-      trie.replies.foreach(r => println("Leaf " + r))
-      trie.children.foreach(t => go(t))
+    def go(trie: SpeakingKnowledge, tabs: Int): Unit = {
+      println("\t" * tabs + "Node " + trie.curr + "   ")
+      trie.replies.foreach(r => println("\t" * (tabs + 1) + " Leaf " + r))
+      trie.children.foreach(t => go(t, tabs + 1))
     }
 
-    go(this)
+    go(this, 0)
   }
 
   /**
@@ -105,15 +103,18 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
     *             the replies are appended to the already existing replies.
     *             2. when they aren't stored at all:
     *             they are registered as new replies with their attribute.
+    *
     */
-  private def addReplies(replies: (Option[() => Set[String]], Set[() => Set[String]])): SpeakingKnowledge =
-    this.replies.find(l => l._1 == replies._1) match {
+  private def addReplies(replies: PossibleReply): SpeakingKnowledge =
+    this.replies.find(l => l.previousBotMessage == replies.previousBotMessage) match {
       case None      => SpeakingKnowledge(this.curr, this.children, this.replies ++ Set(replies))
-      case Some(rep) => SpeakingKnowledge(this.curr,
-        this.children,
-        this.replies -- Set(rep) ++ Set((rep._1, rep._2 ++ replies._2)))
+      case Some(rep) => addReplies(rep, replies)
     }
 
+
+  private def addReplies(to: PossibleReply, newReplies: PossibleReply) =
+    SpeakingKnowledge(this.curr, this.children,
+      this.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
 
   private def addValue(node: SpeakingKnowledge): SpeakingKnowledge =
     SpeakingKnowledge(curr, children ++ Set(node), replies)
@@ -122,9 +123,7 @@ class SpeakingKnowledge(val curr: (Regex, Option[Attribute]) = ("".r, None),
 object SpeakingKnowledge {
   def apply(curr: (Regex, Option[Attribute]) = ("".r, None),
             children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
-            replies: Set[
-              (Option[() => Set[String]],
-                Set[() => Set[String]])] = Set((None, Set(() => Set[String]().empty)))): SpeakingKnowledge =
+            replies: Set[PossibleReply] = Set.empty): SpeakingKnowledge =
     new SpeakingKnowledge(curr, children, replies)
 }
 

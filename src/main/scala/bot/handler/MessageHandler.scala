@@ -1,6 +1,8 @@
 package bot.handler
 
+import bot.learn.PossibleReply
 import bot.trie.{Attribute, SpeakingKnowledge}
+
 import scala.collection.mutable
 import scala.util.Random
 
@@ -21,13 +23,13 @@ trait MessageHandler {
       msg.split(' ').toList
         .withFilter(_ != "")
         .map(w => (w.r, None)))
-    if (response._2.isEmpty) {
+    if (response.possibleReplies.isEmpty) {
       val r = provideReply(unknownHumanMessages)
       r
     }
     else {
-      currentSessionInformation ++= response._1
-      val r = provideResponse(response._2, botLog.lastOption match {
+      currentSessionInformation ++= response.attributesFound
+      val r = provideResponse(response.possibleReplies, botLog.lastOption match {
         case Some(last) => last
         case None => ""
       })
@@ -50,13 +52,20 @@ trait MessageHandler {
     *                        the bot sent, and a set of functions returning a string representing possible replies.
     * @return a message suitable for the last input the client gave.
     */
-  private def provideResponse(possibleReplies: Set[(Option[() => Set[String]], Set[() => Set[String]])],
-                      botLog: String): String = {
-    val appliedFunctions = possibleReplies map (p => (p._1, p._2.flatMap(e => e())))
+  private def provideResponse(possibleReplies: Set[PossibleReply],
+                              lastBotMsg: String): String = {
 
-    appliedFunctions find (p => p._1.exists(p => p().contains(botLog))) match {
-      case None        => provideReply(appliedFunctions withFilter (_._1.isEmpty) flatMap (e => e._2))
-      case Some(reply) => provideReply(reply._2)
+    case class AppliedFunctions(previousBotMsg: Option[() => Set[String]],
+                                appliedFunctions: Set[String])
+
+    val appliedFunctions = possibleReplies map (p =>
+      AppliedFunctions(p.previousBotMessage, p.possibleReply.flatMap(e => e())))
+
+    appliedFunctions find (p => p.previousBotMsg.exists(f => f().contains(lastBotMsg))) match {
+      case None        =>
+        provideReply(appliedFunctions withFilter (_.previousBotMsg.isEmpty) flatMap (e => e.appliedFunctions))
+      case Some(reply) =>
+        provideReply(reply.appliedFunctions)
     }
   }
 

@@ -51,6 +51,7 @@ class Bot extends Manager with MessageHandler {
       case Failure(_) => println("There seem to be a problem loading up my memory..."); List.empty
     }
 
+    masterBrain.print()
     go(people = people)
   }
 

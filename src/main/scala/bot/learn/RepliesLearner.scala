@@ -8,9 +8,6 @@ import scala.util.matching.Regex
 object RepliesLearner {
   type Responses = Set[() => Set[String]]
   type Word = (Regex, Option[Attribute])
-  //TODO provide class containing a map and a function instead of type
-  //TODO Set[(Option[() => Set[String]], Set[() => Set[String]])] class out of this
-  type SearchResponse = (Map[Attribute, String], Set[(Option[() => Set[String]], Set[() => Set[String]])])
 
   /**
     * @param trie     - previous trie to which new templates are to be added
@@ -33,7 +30,7 @@ object RepliesLearner {
       */
     def learn(trie: SpeakingKnowledge, r: Reply): SpeakingKnowledge =
       trie.add(toWords(r.humanMessage.message),
-        (r.humanMessage.previousBotReply, r.botReplies))
+        PossibleReply(r.humanMessage.previousBotReply, r.botReplies))
 
     startLearning(trie, acquired)
   }
