@@ -2,7 +2,7 @@ package bot.trie.definition
 
 import scala.util.matching.Regex
 
-case class Definition(word: Regex, synonyms: Set[Synonym] = Set.empty)
+case class Definition(word: Word, synonyms: Set[Synonym] = Set.empty)
 
 object Definition {
   def ==(that: Definition, other: Definition): Boolean = that.word == other.word

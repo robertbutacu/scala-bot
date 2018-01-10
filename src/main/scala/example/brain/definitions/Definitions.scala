@@ -1,6 +1,6 @@
 package example.brain.definitions
 
-import bot.trie.definition.{Definition, Synonym}
+import bot.trie.definition.{Definition, Synonym, Word}
 
 import scala.util.matching.Regex
 
@@ -11,6 +11,7 @@ object Definitions {
     implicit def convertString(s: String): Regex = s.r
 
     implicit def convertDefinition(d: Definition): Synonym = Synonym(d)
+    implicit def convertToWord(d: String): Word = Word(d)
 
     val underage: Definition = Definition("underage")
     val minor: Definition = Definition("minor")
