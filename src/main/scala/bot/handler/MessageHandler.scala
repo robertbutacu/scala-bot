@@ -1,7 +1,7 @@
 package bot.handler
 
 import bot.learn.PossibleReply
-import bot.trie.{Attribute, SpeakingKnowledge}
+import bot.memory.{Attribute, SpeakingKnowledge}
 
 import scala.collection.mutable
 import scala.util.Random

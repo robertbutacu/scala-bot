@@ -1,6 +1,6 @@
 package bot.learn
 
-import bot.trie.{Attribute, SpeakingKnowledge}
+import bot.memory.{Attribute, SpeakingKnowledge}
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex

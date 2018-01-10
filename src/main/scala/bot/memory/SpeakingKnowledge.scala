@@ -1,4 +1,4 @@
-package bot.trie
+package bot.memory
 
 import bot.learn.{PossibleReply, SearchResponses}
 
@@ -42,7 +42,7 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
         curr.addReplies(replies) // adding the replies to the Set
       else {
         curr.children.find(n => isMatching(n.curr, words.head)) match {
-          case None       => go(curr.addValue(SpeakingKnowledge(words.head)), words)
+          case None => go(curr.addValue(SpeakingKnowledge(words.head)), words)
           case Some(next) => SpeakingKnowledge(curr.curr,
             curr.children - next ++ Set(go(next, words.tail)),
             curr.replies)
@@ -72,10 +72,10 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
         val head = message.head
         val next = trie.children.find(t => isMatching(t, head))
         next match {
-          case None           => SearchResponses(attributes, Set()) //word wasn't found in the trie
+          case None => SearchResponses(attributes, Set()) //word wasn't found in the trie
           case Some(nextNode) => go(message.tail, nextNode,
             nextNode.curr._2 match {
-              case None       => attributes
+              case None => attributes
               case Some(attr) => attributes + (attr -> head._1.regex)
             })
         }
@@ -107,7 +107,7 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
     */
   private def addReplies(replies: PossibleReply): SpeakingKnowledge =
     this.replies.find(l => l.previousBotMessage == replies.previousBotMessage) match {
-      case None      => SpeakingKnowledge(this.curr, this.children, this.replies ++ Set(replies))
+      case None => SpeakingKnowledge(this.curr, this.children, this.replies ++ Set(replies))
       case Some(rep) => addReplies(rep, replies)
     }
 

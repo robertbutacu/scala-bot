@@ -3,7 +3,7 @@ package bot.actors
 import akka.actor.{Actor, Props}
 import bot.actors.Handler._
 import bot.handler.MessageHandler
-import bot.trie.SpeakingKnowledge
+import bot.memory.SpeakingKnowledge
 
 
 object Handler {

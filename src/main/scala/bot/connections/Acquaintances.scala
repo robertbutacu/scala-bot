@@ -1,8 +1,8 @@
-package bot.memory
+package bot.connections
 
 import java.io.{File, FileNotFoundException}
 
-import bot.trie.Attribute
+import bot.memory.Attribute
 
 import scala.util.{Failure, Success, Try}
 import scala.xml.{Elem, XML}

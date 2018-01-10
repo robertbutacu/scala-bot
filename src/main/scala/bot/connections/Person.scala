@@ -1,6 +1,6 @@
-package bot.memory
+package bot.connections
 
-import bot.trie.Attribute
+import bot.memory.Attribute
 
 import scala.xml.Elem
 

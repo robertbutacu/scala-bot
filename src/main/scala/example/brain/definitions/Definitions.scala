@@ -1,6 +1,6 @@
 package example.brain.definitions
 
-import bot.trie.definition.{Definition, Synonym, Word}
+import bot.memory.definition.{Definition, Synonym, Word}
 
 import scala.util.matching.Regex
 

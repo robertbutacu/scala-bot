@@ -1,4 +1,4 @@
-package bot.trie.definition
+package bot.memory.definition
 
 import scala.util.matching.Regex
 

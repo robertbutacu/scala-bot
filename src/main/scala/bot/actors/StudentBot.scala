@@ -2,7 +2,7 @@ package bot.actors
 
 import akka.actor.{Actor, Props}
 import bot.learn.Reply
-import bot.trie.SpeakingKnowledge
+import bot.memory.SpeakingKnowledge
 
 object StudentBot {
   def props() = Props(new StudentBot)

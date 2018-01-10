@@ -1,11 +1,12 @@
 package example
 
+import bot.connections.Acquaintances._
+import bot.connections.Person
 import bot.handler.MessageHandler
-import bot.memory.Person
-import bot.trie.Attribute
+import bot.memory.Attribute
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
-import bot.memory.Acquaintances._
+
 import scala.annotation.tailrec
 import scala.util.{Failure, Success}
 
@@ -91,10 +92,10 @@ class Bot extends Manager with MessageHandler {
     */
   def translate(people: List[(String, String, String)]): List[Map[Attribute, String]] = {
     val applier: PartialFunction[(String, String, String), Map[Attribute, String]] = {
-      case ("AgeAttr", weight, ageValue)         => Map(Attribute(AgeAttr, weight.toInt) -> ageValue)
-      case ("NameAttr", weight, nameValue)       => Map(Attribute(NameAttr, weight.toInt) -> nameValue)
+      case ("AgeAttr", weight, ageValue) => Map(Attribute(AgeAttr, weight.toInt) -> ageValue)
+      case ("NameAttr", weight, nameValue) => Map(Attribute(NameAttr, weight.toInt) -> nameValue)
       case ("PassionAttr", weight, passionValue) => Map(Attribute(PassionAttr, weight.toInt) -> passionValue)
-      case ("Job", weight, jobValue)             => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
+      case ("Job", weight, jobValue) => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
     }
 
     people collect applier

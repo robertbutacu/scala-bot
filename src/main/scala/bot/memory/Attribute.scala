@@ -1,4 +1,4 @@
-package bot.trie
+package bot.memory
 
 import bot.handler.Characteristic
 

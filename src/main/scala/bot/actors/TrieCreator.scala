@@ -4,7 +4,7 @@ import akka.actor.{Actor, Props}
 import bot.actors.TrieCreator._
 import bot.learn.RepliesLearner.Word
 import bot.learn.{PossibleReply, SearchResponses}
-import bot.trie.SpeakingKnowledge
+import bot.memory.SpeakingKnowledge
 
 object TrieCreator {
   def props() = Props(new TrieCreator)

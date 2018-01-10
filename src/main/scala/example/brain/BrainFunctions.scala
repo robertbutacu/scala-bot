@@ -16,9 +16,9 @@ trait BrainFunctions extends MessageHandler with Attributes {
       case _ if age > 50 => Set("quite old", "old afff")
       case _ if age > 24 => Set("you're an adult", "children?")
       case _ if age > 18 => Set("programming", "is", "fun")
-      case _ if age > 0 && age < 18  => Set("Underage", "Minor")
-      case _ if age < 0  => Set(s"""It appears your age is $age . What a lie. Tell me your real age please.""")
-      case _             => Set("got me there", "lost")
+      case _ if age > 0 && age < 18 => Set("Underage", "Minor")
+      case _ if age < 0 => Set(s"""It appears your age is $age . What a lie. Tell me your real age please.""")
+      case _ => Set("got me there", "lost")
     }
 
   def passionReply(): Set[String] = {
@@ -30,7 +30,7 @@ trait BrainFunctions extends MessageHandler with Attributes {
 
   def passionReplies(): Set[String] =
     getAttribute(passion) match {
-      case None          => Set("You're not passionate about anything")
+      case None => Set("You're not passionate about anything")
       case Some(p) => Set(s"""You're passionate about $p""")
     }
 }

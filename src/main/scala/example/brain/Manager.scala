@@ -1,7 +1,7 @@
 package example.brain
 
-import bot.trie.SpeakingKnowledge
 import bot.learn.RepliesLearner._
+import bot.memory.SpeakingKnowledge
 import example.brain.modules.MasterModule
 
 trait Manager extends MasterModule {
