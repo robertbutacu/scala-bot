@@ -6,21 +6,38 @@ import scala.util.matching.Regex
 
 object Definitions {
 
-  implicit def convert(s: String): Regex = s.r
-  implicit def convert(d: Definition): Synonym = Synonym(d)
+  def get(): Set[Definition] = {
 
-  lazy val underage = Definition("underage", Set(minor))
-  lazy val minor = Definition("minor", Set(underage))
+    implicit def convertString(s: String): Regex = s.r
 
-  lazy val old = Definition("age", Set(ageOld))
-  lazy val ageOld = Definition("age-old", Set(old))
+    implicit def convertDefinition(d: Definition): Synonym = Synonym(d)
 
-  lazy val passionate = Definition("passionate", Set(ardent, keen))
-  lazy val ardent = Definition("ardent", Set(passionate, keen))
-  lazy val keen = Definition("keen", Set(passionate, ardent))
+    val underage: Definition = Definition("underage")
+    val minor: Definition = Definition("minor")
 
-  lazy val greetings = Definition("greetings", Set(hi, hello, whatsup))
-  lazy val hi = Definition("hi", Set(greetings, hello, whatsup))
-  lazy val hello = Definition("hello", Set(greetings, hi, whatsup))
-  lazy val whatsup = Definition("hello", Set(greetings, hi, hello))
+    val old: Definition = Definition("age")
+    val ageOld: Definition = Definition("age-old", Set(old))
+
+    val passionate: Definition = Definition("passionate")
+    val ardent: Definition = Definition("ardent")
+    val keen: Definition = Definition("keen")
+
+    val greetings: Definition = Definition("greetings")
+    val hi: Definition = Definition("hi")
+    val hello: Definition = Definition("hello")
+    val whatsup: Definition = Definition("hello")
+
+    Set(Definition.addDefinitions(underage, Set(minor)),
+      Definition.addDefinitions(minor, Set(underage)),
+      Definition.addDefinitions(old, Set(ageOld)),
+      Definition.addDefinitions(ageOld, Set(old)),
+      Definition.addDefinitions(passionate, Set(ardent, keen)),
+      Definition.addDefinitions(ardent, Set(passionate, keen)),
+      Definition.addDefinitions(keen, Set(passionate, ardent)),
+      Definition.addDefinitions(greetings, Set(hi, hello, whatsup)),
+      Definition.addDefinitions(hi, Set(greetings, hello, whatsup)),
+      Definition.addDefinitions(hello, Set(greetings, hi, whatsup)),
+      Definition.addDefinitions(whatsup, Set(greetings, hi, hello))
+    )
+  }
 }
