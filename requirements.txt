@@ -61,4 +61,6 @@ Stages of development for ScalaBot:
 
     7. maybe implement a whole actor system to make everything concurrent.
 
-    8. Definitions - add definitions to words and create the trie upon that
+    8. Definitions - add definitions to words and create the trie upon that - DOING
+
+    9. having being given an unknown word, question about it and then learn the word :)
