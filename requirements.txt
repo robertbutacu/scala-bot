@@ -60,3 +60,5 @@ Stages of development for ScalaBot:
             Might know that scala is FP language, that it's awesome, and it's current version is 2.12.
 
     7. maybe implement a whole actor system to make everything concurrent.
+
+    8. Definitions - add definitions to words and create the trie upon that
