@@ -2,7 +2,7 @@ package bot.trie.definition
 
 import scala.util.matching.Regex
 
-case class Definition(word: Regex, synonyms: Set[Synonym])
+case class Definition(word: Regex, synonyms: Set[Synonym] = Set.empty)
 
 object Definition {
   def apply(word: Regex, definitions: Set[Synonym]) = new Definition(word, definitions)
