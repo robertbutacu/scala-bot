@@ -10,7 +10,7 @@ object Definitions {
 
     implicit def convertString(s: String): Regex = s.r
 
-    implicit def convertDefinition(d: Definition): Synonym = Synonym(d)
+    implicit def convertDefinition(d: Definition): Synonym = Synonym(d.word)
     implicit def convertToWord(d: String): Word = Word(d)
 
     val underage: Definition = Definition(Word("underage"))
