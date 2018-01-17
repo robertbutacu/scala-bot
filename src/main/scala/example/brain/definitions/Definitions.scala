@@ -9,8 +9,8 @@ object Definitions {
   def get(): Set[Definition] = {
 
     implicit def convertString(s: String): Regex = s.r
-
-    implicit def convertDefinition(d: Definition): Synonym = Synonym(d.word)
+    implicit def convertDefinitionToWord(d: Definition) : Word = d.word
+    implicit def convertDefinition(d: Definition): Synonym = Synonym(d)
     implicit def convertToWord(d: String): Word = Word(d)
 
     val underage: Definition = Definition(Word("underage"))
