@@ -1,6 +1,6 @@
 package example.brain.definitions
 
-import bot.memory.definition.{Definition, Synonym, Word}
+import bot.memory.definition.{Definition, Word, Synonym, Node}
 
 import scala.util.matching.Regex
 
@@ -13,20 +13,20 @@ object Definitions {
     implicit def convertDefinition(d: Definition): Synonym = Synonym(d)
     implicit def convertToWord(d: String): Word = Word(d)
 
-    val underage: Definition = Definition("underage")
-    val minor: Definition = Definition("minor")
+    val underage: Definition = Definition(Word("underage"))
+    val minor: Definition = Definition(Word("minor"))
 
-    val old: Definition = Definition("age")
-    val ageOld: Definition = Definition("age-old", Set(old))
+    val old: Definition = Definition(Word("age"))
+    val ageOld: Definition = Definition(Word("age-old"), Set(old))
 
-    val passionate: Definition = Definition("passionate")
-    val ardent: Definition = Definition("ardent")
-    val keen: Definition = Definition("keen")
+    val passionate: Definition = Definition(Word("passionate"))
+    val ardent: Definition = Definition(Word("ardent"))
+    val keen: Definition = Definition(Word("keen"))
 
-    val greetings: Definition = Definition("greetings")
-    val hi: Definition = Definition("hi")
-    val hello: Definition = Definition("hello")
-    val whatsup: Definition = Definition("hello")
+    val greetings: Definition = Definition(Word("greetings"))
+    val hi: Definition = Definition(Word("hi"))
+    val hello: Definition = Definition(Word("hello"))
+    val whatsup: Definition = Definition(Word("hello"))
 
     Set(Definition.addDefinitions(underage, Set(minor)),
       Definition.addDefinitions(minor, Set(underage)),

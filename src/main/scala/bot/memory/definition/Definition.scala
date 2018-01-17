@@ -1,6 +1,12 @@
 package bot.memory.definition
 
+import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
+
 import scala.util.matching.Regex
+
+case class Word(word: String,
+                otherAcceptableForms: Set[Word] = Set.empty,
+                partOfSpeech: PartOfSpeech = Irrelevant)
 
 case class Definition(word: Word, synonyms: Set[Synonym] = Set.empty)
 

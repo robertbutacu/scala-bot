@@ -1,4 +1,4 @@
-package bot.memory.definition.part.of.speech
+package bot.memory.part.of.speech
 
 sealed trait GrammaticalNumber
 
