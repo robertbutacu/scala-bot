@@ -1,0 +1,9 @@
+SOOO
+this is gonna be a big mess to implement
+
+Given a dictionary ( a list of definitions ), and a list of sentences ( a list of SentenceWord
+                                                                        = (Regex, Option[Attribute]),
+the function returns a trie looking like:
+    Set[NodeWord]
+
+A function, given a dictionary and a word, will return a list of NodeWord representing the possible replacements.
