@@ -34,7 +34,7 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
     * @param replies - a set of functions which return a set of possible replies
     * @return - a new trie with the new message included
     */
-  final def add(message: List[Word],
+  override final def add(message: List[Word],
                 replies: PossibleReply): SpeakingKnowledge = {
 
     def go(curr: SpeakingKnowledge, words: List[Word]): SpeakingKnowledge = {
@@ -62,7 +62,7 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
     * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
     *         from which another algorithm will pick the best choice.
     */
-  final def search(message: List[Word]): SearchResponses = {
+  override final def search(message: List[Word]): SearchResponses = {
     @tailrec
     def go(message: List[Word], trie: SpeakingKnowledge,
            attributes: Map[Attribute, String]): SearchResponses = {

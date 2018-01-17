@@ -1,5 +1,7 @@
 package bot.memory
 
+import bot.learn.{PossibleReply, SearchResponses}
+
 import scala.util.matching.Regex
 
 protected trait TrieOperations {
@@ -15,4 +17,8 @@ protected trait TrieOperations {
 
   def isMatching(node: Word, that: Word): Boolean =
     node._1.regex == that._1.regex && node._2 == that._2
+
+  def add(message: List[Word], replies: PossibleReply): SpeakingKnowledge
+
+  def search(message: List[Word]): SearchResponses
 }
