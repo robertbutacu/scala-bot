@@ -5,6 +5,8 @@ import bot.memory.definition.{Definition, NodeWord, Synonym, Word}
 protected[memory] object Utils {
 
   def findReplacements(sentence: List[NodeWord], word: NodeWord, dictionary: Set[Definition]): List[Word] = {
+    case class ContextMatchCount(synonym: Synonym, count: Int)
+
     def wordsInSameContext(sentence: List[NodeWord], contextWords: Set[Word]): Int = {
       for {
         word <- sentence
@@ -17,17 +19,22 @@ protected[memory] object Utils {
 
     //having the definition found out, try to zip each synonym with the number of words found in that context
 
-    val contextCount = for {
+    val contextCount = definitionM map { d =>
+      d.synonyms
+        .filter(s => wordsInSameContext(sentence, s.contextWords) > 0)
+        .map(s => ContextMatchCount(s, wordsInSameContext(sentence, s.contextWords)))
+    }
+    /*for {
       definition <- definitionM
       synonym <- definition.synonyms
       if wordsInSameContext(sentence, synonym.contextWords) > 0
-    } yield (synonym, wordsInSameContext(sentence, synonym.contextWords))
-
+    } yield ContextMatchCount(synonym, wordsInSameContext(sentence, synonym.contextWords))
+    */
     //max by apparitions
-    val maxMatch = contextCount.maxBy(_._2) ._2
+    val maxMatch = contextCount.map(c => c.maxBy(_.count).count)
 
-    contextCount.filter { _._2 == maxMatch }
-      .map {w: (Synonym, Int) => w._1.definition}
-      .toList
+    contextCount.map(c => c.filter(cc => maxMatch.getOrElse(-1) == cc.count))
+      .map(cc => cc.map(_.synonym.definition))
+      .getOrElse(List.empty).toList
   }
 }
