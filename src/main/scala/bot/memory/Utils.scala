@@ -9,7 +9,7 @@ protected[memory] object Utils {
       def unapply(): Word = this.synonym.definition
     }
 
-    def wordsInSameContext(sentence: List[NodeWord], contextWords: Set[Word]): Option[Int] = {
+    def wordsInSameContextCount(sentence: List[NodeWord], contextWords: Set[Word]): Option[Int] = {
       val count = sentence count ( w => contextWords exists w.matchesWord )
 
       if (count > 0) Some(count)
@@ -22,7 +22,7 @@ protected[memory] object Utils {
     val contextsCount = for {
       definition <- definitionM.toList
       synonym <- definition.synonyms
-      count <- wordsInSameContext(sentence, synonym.contextWords)
+      count <- wordsInSameContextCount(sentence, synonym.contextWords)
       if count > 0
     } yield ContextMatchCount(synonym, count)
 
