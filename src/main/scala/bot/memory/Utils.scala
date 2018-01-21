@@ -10,18 +10,10 @@ protected[memory] object Utils {
     }
 
     def wordsInSameContext(sentence: List[NodeWord], contextWords: Set[Word]): Option[Int] = {
-      implicit def nodeWordToString(n: NodeWord): String = n.word.toString()
-
-      def isMatch(nw: String, toMatch: Word): Boolean = {
-        toMatch.word == nw || toMatch.otherAcceptableForms.exists(isMatch(nw, _))
-      }
-
-      val count = sentence count {
-        w => contextWords exists (isMatch(w, _))
-      }
+      val count = sentence count ( w => contextWords exists w.matchesWord )
 
       if (count > 0) Some(count)
-      else None
+      else           None
     }
 
     val definitionM = dictionary find { p => p.word.word == word.word.toString() }

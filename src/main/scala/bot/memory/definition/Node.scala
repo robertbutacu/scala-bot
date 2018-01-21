@@ -11,5 +11,9 @@ protected[memory] case class Node(word: NodeWord,
                 acceptableSynonyms: Set[Node] = Set.empty
                )
 
-protected[memory] case class NodeWord(word: Regex = "".r, attribute: Option[Attribute] = None)
+protected[memory] case class NodeWord(word: Regex = "".r, attribute: Option[Attribute] = None) {
+  def matchesWord(toMatch: Word): Boolean =
+    toMatch.word == this.word.toString() || toMatch.otherAcceptableForms.exists(this.matchesWord)
+
+}
 
