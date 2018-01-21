@@ -2,8 +2,6 @@ package bot.memory
 
 import bot.memory.definition.{Definition, NodeWord, Synonym, Word}
 
-import scala.util.matching.Regex
-
 protected[memory] object Utils {
 
   def findReplacements(sentence: List[NodeWord], word: NodeWord, dictionary: Set[Definition]): List[Word] = {
