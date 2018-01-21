@@ -32,7 +32,7 @@ protected[memory] object Utils {
     val contextsCount = for {
       definition <- definitionM.toList
       synonym <- definition.synonyms
-      count <- wordsInSameContext(sentence, synonym.contextWords).toList
+      count <- wordsInSameContext(sentence, synonym.contextWords)
       if count > 0
     } yield ContextMatchCount(synonym, count)
 
