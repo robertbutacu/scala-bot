@@ -1,26 +1,27 @@
 package bot.memory
 
 import bot.learn.{PossibleReply, SearchResponses}
+import bot.memory.definition.{NodeInformation, NodeSimpleWord, PartOfSentence}
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex
 
 /**
   *
-  * @param curr     - current node, containing a word( or a regex), and an optional attribute
-  *                 which is to be stored in map if necessary
-  *                 Regex             - current word , part of the message
-  *                 Option[Attribute] - in case it is something to be remembered
-  * @param children - next parts of a possible message from a client.
-  * @param replies  - replies to the message starting from the top of the trie all the way down to curr.
-  *                 Option[() => Set[String]    - a function returning a possible last bot message
-  *                 Set[f: Any => Set[String] ] - a set of functions returning a set of possible replies
-  *                 => It is done that way so that the replies are generated dynamically,
-  *                 depending on the already existing/non-existing attributes.
+  * @param information - current node, containing a word( or a regex), and an optional attribute
+  *                    which is to be stored in map if necessary
+  *                    Regex             - current word , part of the message
+  *                    Option[Attribute] - in case it is something to be remembered
+  * @param children    - next parts of a possible message from a client.
+  * @param replies     - replies to the message starting from the top of the trie all the way down to curr.
+  *                    Option[() => Set[String]    - a function returning a possible last bot message
+  *                    Set[f: Any => Set[String] ] - a set of functions returning a set of possible replies
+  *                    => It is done that way so that the replies are generated dynamically,
+  *                    depending on the already existing/non-existing attributes.
   **/
-case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
-                             children: Set[SpeakingKnowledge] = Set[SpeakingKnowledge]().empty,
-                             replies: Set[PossibleReply] = Set.empty)
+case class Trie(information: NodeInformation,
+                children: Set[Trie] = Set[Trie]().empty,
+                replies: Set[PossibleReply] = Set.empty)
   extends TrieOperations {
 
   /**
@@ -34,19 +35,20 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
     * @param replies - a set of functions which return a set of possible replies
     * @return - a new trie with the new message included
     */
-  override final def add(message: List[Word],
-                replies: PossibleReply): SpeakingKnowledge = {
+  override final def add(message: List[PartOfSentence],
+                         replies: PossibleReply): Trie = {
 
-    def go(curr: SpeakingKnowledge, words: List[Word]): SpeakingKnowledge = {
+    def go(curr: Trie, words: List[PartOfSentence]): Trie = {
       if (words.isEmpty) //went through all the list
         curr.addReplies(replies) // adding the replies to the Set
       else {
-        curr.children.find(n => isMatching(n.curr, words.head)) match {
+        /*curr.children.find(n => isMatching(n, words.head)) match {
           case None => go(curr.addValue(SpeakingKnowledge(words.head)), words)
           case Some(next) => SpeakingKnowledge(curr.curr,
             curr.children - next ++ Set(go(next, words.tail)),
             curr.replies)
-        }
+        }*/
+        Trie(NodeSimpleWord("rda".r))
       }
     }
 
@@ -62,10 +64,10 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
     * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
     *         from which another algorithm will pick the best choice.
     */
-  override final def search(message: List[Word]): SearchResponses = {
-    @tailrec
-    def go(message: List[Word], trie: SpeakingKnowledge,
-           attributes: Map[Attribute, String]): SearchResponses = {
+  override final def search(message: List[PartOfSentence]): SearchResponses = {
+    //@tailrec
+    def go(message: List[PartOfSentence], trie: Trie,
+           attributes: Map[Attribute, String]): SearchResponses =/* {
       if (message.isEmpty)
         SearchResponses(attributes, trie.replies) //completely ran over all the words
       else {
@@ -74,20 +76,20 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
         next match {
           case None => SearchResponses(attributes, Set()) //word wasn't found in the trie
           case Some(nextNode) => go(message.tail, nextNode,
-            nextNode.curr._2 match {
+            nextNode.information match {
               case None => attributes
               case Some(attr) => attributes + (attr -> head._1.regex)
             })
         }
       }
-    }
+    }*/ SearchResponses(Map.empty, Set.empty)
 
     go(message, this, Map[Attribute, String]().empty)
   }
 
   def print(): Unit = {
-    def go(trie: SpeakingKnowledge, tabs: Int): Unit = {
-      println("\t" * tabs + "Node " + trie.curr + "   ")
+    def go(trie: Trie, tabs: Int): Unit = {
+      println("\t" * tabs + "Node " + trie.information + "   ")
       trie.replies.foreach(r => println("\t" * (tabs + 1) + " Leaf " + r))
       trie.children.foreach(t => go(t, tabs + 1))
     }
@@ -105,18 +107,18 @@ case class SpeakingKnowledge(curr: (Regex, Option[Attribute]) = ("".r, None),
     *             they are registered as new replies with their attribute.
     *
     */
-  private def addReplies(replies: PossibleReply): SpeakingKnowledge =
+  private def addReplies(replies: PossibleReply): Trie =
     this.replies.find(l => l.previousBotMessage == replies.previousBotMessage) match {
-      case None => SpeakingKnowledge(this.curr, this.children, this.replies ++ Set(replies))
+      case None => Trie(this.information, this.children, this.replies ++ Set(replies))
       case Some(rep) => addReplies(rep, replies)
     }
 
 
   private def addReplies(to: PossibleReply, newReplies: PossibleReply) =
-    SpeakingKnowledge(this.curr, this.children,
+    Trie(this.information, this.children,
       this.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
 
-  private def addValue(node: SpeakingKnowledge): SpeakingKnowledge =
-    SpeakingKnowledge(curr, children ++ Set(node), replies)
+  private def addValue(node: Trie): Trie =
+    Trie(information, children ++ Set(node), replies)
 }
 

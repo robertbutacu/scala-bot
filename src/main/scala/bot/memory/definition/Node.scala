@@ -6,17 +6,23 @@ import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
 import scala.util.matching.Regex
 
 
-protected[memory] trait NodeInformation
+trait NodeInformation {
+  def find: Option[Regex]
+}
 
-protected[memory] case class NodeSimpleWord(word: String,
+case class NodeSimpleWord(word: Regex,
                                             otherAcceptableForms: Set[NodeInformation] = Set.empty,
                                             partOfSpeech: PartOfSpeech = Irrelevant,
                                             synonyms: Set[NodeInformation] = Set.empty
                                            )
-  extends NodeInformation
+  extends NodeInformation {
+  override def find: Option[Regex] = None
+}
 
-protected[memory] case class NodeUserInformation(word: Regex = "".r,
+case class NodeUserInformation(word: Regex = "".r,
                                                  attribute: Option[Attribute] = None)
-  extends NodeInformation
+  extends NodeInformation {
+  override def find: Option[Regex] = None
+}
 
 

@@ -3,7 +3,7 @@ package bot.actors
 import akka.actor.{Actor, Props}
 import bot.actors.Handler._
 import bot.handler.MessageHandler
-import bot.memory.SpeakingKnowledge
+import bot.memory.Trie
 
 
 object Handler {
@@ -11,7 +11,7 @@ object Handler {
 
   def name() = "handler"
 
-  case class Handle(trie: SpeakingKnowledge,
+  case class Handle(trie: Trie,
                     msg: String,
                     humanLog: List[String],
                     botLog: List[String])

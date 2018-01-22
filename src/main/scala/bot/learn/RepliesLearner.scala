@@ -1,22 +1,22 @@
 package bot.learn
 
-import bot.memory.{Attribute, SpeakingKnowledge}
+import bot.memory.definition.PartOfSentence
+import bot.memory.{Attribute, Trie}
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex
 
 object RepliesLearner {
   type Responses = Set[() => Set[String]]
-  type Word = (Regex, Option[Attribute])
 
   /**
     * @param trie     - previous trie to which new templates are to be added
     * @param acquired - a list of replies to be added
     * @return - a new trie with the list of acquired replies in memory
     */
-  def learn(trie: SpeakingKnowledge, acquired: List[Reply]): SpeakingKnowledge = {
+  def learn(trie: Trie, acquired: List[Reply]): Trie = {
     @tailrec
-    def startLearning(curr: SpeakingKnowledge, toBeLearned: List[Reply]): SpeakingKnowledge = {
+    def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
       toBeLearned match {
         case Nil       => curr
         case h :: tail => startLearning(learn(curr, h), tail)
@@ -28,7 +28,7 @@ object RepliesLearner {
       * @param r    - reply
       * @return - a new trie with the acquired reply in memory
       */
-    def learn(trie: SpeakingKnowledge, r: Reply): SpeakingKnowledge =
+    def learn(trie: Trie, r: Reply): Trie =
       trie.add(toWords(r.humanMessage.message),
         PossibleReply(r.humanMessage.previousBotReply, r.botReplies))
 
@@ -44,11 +44,11 @@ object RepliesLearner {
     * @return a list of words that could be either a string with no attr set,
     *         or a regex with an attribute
     */
-  private def toWords(message: List[(Regex, Option[Attribute])]): List[Word] =
+  private def toWords(message: List[(Regex, Option[Attribute])]): List[PartOfSentence] =
     message flatMap { w =>
       w._1.toString
         .split(" ").toList
         .withFilter( _ != "")
-        .map(p => (p.r, w._2))
+        .map(p => PartOfSentence(p.r, w._2))
     }
 }

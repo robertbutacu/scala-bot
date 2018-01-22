@@ -2,30 +2,30 @@ package bot.actors
 
 import akka.actor.{Actor, Props}
 import bot.actors.TrieCreator._
-import bot.learn.RepliesLearner.Word
 import bot.learn.{PossibleReply, SearchResponses}
-import bot.memory.SpeakingKnowledge
+import bot.memory.Trie
+import bot.memory.definition.{NodeSimpleWord, PartOfSentence}
 
 object TrieCreator {
   def props() = Props(new TrieCreator)
 
   def name() = "trieCreator"
 
-  case class Add(message: List[Word],
+  case class Add(message: List[PartOfSentence],
                  replies: PossibleReply,
-                 trie: SpeakingKnowledge)
+                 trie: Trie)
 
 
-  case class Search(message: List[Word], trie: SpeakingKnowledge)
+  case class Search(message: List[PartOfSentence], trie: Trie)
 
 
-  case class TrieResponse(trie: SpeakingKnowledge)
+  case class TrieResponse(trie: Trie)
 
 
-  case class CreateTrie(message: List[Word],
+  case class CreateTrie(message: List[PartOfSentence],
                         replies: PossibleReply)
 
-  case class Print(trie: SpeakingKnowledge)
+  case class Print(trie: Trie)
 
   case class SearchReturnMessage(response: SearchResponses)
 
@@ -33,9 +33,9 @@ object TrieCreator {
 
 class TrieCreator() extends Actor {
   override def receive: Actor.Receive = {
-    case Print(trie: SpeakingKnowledge) => trie.print()
+    case Print(trie: Trie) => trie.print()
 
-    case CreateTrie(msg, replies) => sender() ! TrieResponse(SpeakingKnowledge().add(msg, replies))
+    case CreateTrie(msg, replies) => sender() ! TrieResponse(Trie(NodeSimpleWord("".r)).add(msg, replies))
 
     case Search(msg, trie) => sender() ! SearchReturnMessage(trie.search(msg))
 

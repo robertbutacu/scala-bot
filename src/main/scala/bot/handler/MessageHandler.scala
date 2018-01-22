@@ -1,7 +1,8 @@
 package bot.handler
 
 import bot.learn.PossibleReply
-import bot.memory.{Attribute, SpeakingKnowledge}
+import bot.memory.definition.PartOfSentence
+import bot.memory.{Attribute, Trie}
 
 import scala.collection.mutable
 import scala.util.Random
@@ -15,7 +16,7 @@ trait MessageHandler {
 
   var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
-  def handle(trie: SpeakingKnowledge,
+  def handle(trie: Trie,
              msg: String,
              humanLog: List[String],
              botLog: List[String]): String = {
@@ -23,7 +24,7 @@ trait MessageHandler {
       msg.split(' ')
         .toList
         .withFilter(_ != "")
-        .map(w => (w.r, None)))
+        .map(w => PartOfSentence(w.r, None)))
 
     if (response.possibleReplies.isEmpty) {
       val r = provideReply(unknownHumanMessages)
@@ -39,7 +40,7 @@ trait MessageHandler {
     }
   }
 
-  def isDisapproved(brain: SpeakingKnowledge, msg: String): String = {
+  def isDisapproved(brain: Trie, msg: String): String = {
     ""
   }
 

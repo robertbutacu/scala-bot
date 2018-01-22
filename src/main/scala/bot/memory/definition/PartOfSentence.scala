@@ -4,9 +4,8 @@ import bot.memory.Attribute
 
 import scala.util.matching.Regex
 
-protected[memory] case class PartOfSentence(word: Regex = "".r,
-                                            attribute: Option[Attribute] = None) {
-
+case class PartOfSentence(word: Regex = "".r,
+                          attribute: Option[Attribute] = None) {
   def matchesWord(toMatch: Word): Boolean =
     toMatch
       .otherAcceptableForms
