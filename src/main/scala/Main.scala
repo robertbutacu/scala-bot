@@ -1,3 +1,4 @@
+import bot.memory.definition.NodeSimpleWord
 import example.brain.definitions.Definitions
 
 object Main extends App {

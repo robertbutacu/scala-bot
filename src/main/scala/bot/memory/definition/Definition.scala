@@ -9,7 +9,7 @@ case class Word(word: String,
                 partOfSpeech: PartOfSpeech = Irrelevant)
 
 case class Definition(word: Word, synonyms: Set[Synonym] = Set.empty) {
-  def equals(other: NodeWord): Boolean = this.word.word == other.word.toString
+  def equals(other: PartOfSentence): Boolean = this.word.word == other.word.toString
 
 }
 
