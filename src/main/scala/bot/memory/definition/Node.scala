@@ -6,23 +6,36 @@ import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
 import scala.util.matching.Regex
 
 
-trait NodeInformation {
-  def find: Option[Regex]
+sealed trait NodeInformation {
+  def exists(p: PartOfSentence): Boolean
 }
 
 case class NodeSimpleWord(word: Regex,
-                                            otherAcceptableForms: Set[NodeInformation] = Set.empty,
-                                            partOfSpeech: PartOfSpeech = Irrelevant,
-                                            synonyms: Set[NodeInformation] = Set.empty
-                                           )
+                          otherAcceptableForms: Set[Regex] = Set.empty,
+                          partOfSpeech: PartOfSpeech = Irrelevant,
+                          synonyms: Set[Regex] = Set.empty
+                         )
   extends NodeInformation {
-  override def find: Option[Regex] = None
+  override def exists(p: PartOfSentence): Boolean = {
+    def anyMatch(): Boolean =
+      this.word == p.word || otherAcceptableForms.contains(p.word) || synonyms.contains(p.word)
+
+    p.attribute match {
+      case None => anyMatch()
+      case Some(_) => false
+    }
+  }
 }
 
 case class NodeUserInformation(word: Regex = "".r,
-                                                 attribute: Option[Attribute] = None)
+                               attribute: Option[Attribute] = None)
   extends NodeInformation {
-  override def find: Option[Regex] = None
+  override def exists(p: PartOfSentence): Boolean = {
+    p.attribute match {
+      case None => false
+      case Some(_) => this.word.toString() == p.word.toString() // TODO this SHOULD be better
+    }
+  }
 }
 
 

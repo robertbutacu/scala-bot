@@ -35,6 +35,8 @@ case class Trie(information: NodeInformation,
     * @param replies - a set of functions which return a set of possible replies
     * @return - a new trie with the new message included
     */
+
+  // TODO state monad => prev and curr held
   override final def add(message: List[PartOfSentence],
                          replies: PossibleReply): Trie = {
 
@@ -42,6 +44,16 @@ case class Trie(information: NodeInformation,
       if (words.isEmpty) //went through all the list
         curr.addReplies(replies) // adding the replies to the Set
       else {
+        val currWord = words.head
+
+        val next = for {
+          child <- this.children
+          if child.information.exists(currWord)
+        } yield child
+
+        //if(next.isEmpty)
+          //go(curr.addValue(currWord))
+
         /*curr.children.find(n => isMatching(n, words.head)) match {
           case None => go(curr.addValue(SpeakingKnowledge(words.head)), words)
           case Some(next) => SpeakingKnowledge(curr.curr,
@@ -67,7 +79,7 @@ case class Trie(information: NodeInformation,
   override final def search(message: List[PartOfSentence]): SearchResponses = {
     //@tailrec
     def go(message: List[PartOfSentence], trie: Trie,
-           attributes: Map[Attribute, String]): SearchResponses =/* {
+           attributes: Map[Attribute, String]): SearchResponses = /* {
       if (message.isEmpty)
         SearchResponses(attributes, trie.replies) //completely ran over all the words
       else {
@@ -118,7 +130,8 @@ case class Trie(information: NodeInformation,
     Trie(this.information, this.children,
       this.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
 
-  private def addValue(node: Trie): Trie =
-    Trie(information, children ++ Set(node), replies)
+  private def addValue(node: PartOfSentence): Trie = {
+    Trie(NodeSimpleWord("".r))
+  }
 }
 
