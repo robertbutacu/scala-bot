@@ -59,9 +59,10 @@ Stages of development for ScalaBot:
         For example:
             Might know that scala is FP language, that it's awesome, and it's current version is 2.12.
 
-    7. maybe implement a whole actor system to make everything concurrent.
+    7. maybe implement a whole actor system to make everything concurrent - DOING
 
     8. Definitions - add definitions to words and create the trie upon that - DOING
                    - the ideal case would be to store in the trie ONLY the possible definitions from which to choose from
+                            - think its done... ?
 
     9. having being given an unknown word, question about it and then learn the word :)
