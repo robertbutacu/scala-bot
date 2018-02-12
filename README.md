@@ -1,6 +1,6 @@
 # ScalaBot
 
-ScalaBot is a concurrent, purely functional, easy to use and customizable light-weight Scala Library that can be used to create ChatBots.
+ScalaBot is a concurrent, purely functional, easy to use and customizable lightweight Scala Library that can be used to create ChatBots.
 
 Among its features, it includes:
 - custom replies for input
