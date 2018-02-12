@@ -58,11 +58,14 @@ trait MessageHandler {
   private def provideResponse(possibleReplies: Set[PossibleReply],
                               lastBotMsg: String): String = {
 
+
     val appliedFunctions = possibleReplies map AppliedFunctions.toAppliedFunctions
 
-    appliedFunctions find (p => p.previousBotMsg.exists(f => f().contains(lastBotMsg))) match {
+    appliedFunctions find (_.isAnswerToPreviousBotMessage(lastBotMsg)) match {
       case None =>
-        provideReply(appliedFunctions withFilter (_.previousBotMsg.isEmpty) flatMap (e => e.appliedFunctions))
+        provideReply(appliedFunctions
+          .withFilter{_.hasNoPreviousBotMessage}
+          .flatMap{e => e.appliedFunctions})
       case Some(reply) =>
         provideReply(reply.appliedFunctions)
     }
