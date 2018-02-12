@@ -15,8 +15,6 @@ object Clusterize {
 
     val divided = divide(sortedTemplates, numberOfClusters)
 
-    divided.zipWithIndex.foreach(r => r._1.foreach(e => println("\t" * r._2 + e)))
-
     List.empty
   }
 
