@@ -8,4 +8,5 @@ object Main extends App with Manager{
   // new Bot().startDemo()
   //Master.kill()
   //Definitions.get().foreach(println)
+  clusterizedMasterBrain
 }

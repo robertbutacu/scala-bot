@@ -9,15 +9,19 @@ object Clusterize {
   type ClusteredReplies = List[List[Reply]]
 
   def apply(templates: List[Reply], numberOfClusters: Int): List[Trie] = {
-    val divided = divide(templates, numberOfClusters)
+    def regexToString(r: Reply) = r.humanMessage.message.foldRight("")((curr, acc) => acc ++ curr._1.toString)
 
-    println(divided)
+    val sortedTemplates = templates.sortBy(regexToString)
+
+    val divided = divide(sortedTemplates, numberOfClusters)
+
+    divided.zipWithIndex.foreach(r => r._1.foreach(e => println("\t" * r._2 + e)))
 
     List.empty
   }
 
   private def divide(templates: List[Reply], numberOfClusters: Int): ClusteredReplies = {
-    def optimum = Math.ceil(templates.size / numberOfClusters).toInt
+    def optimum = Math.ceil(templates.size.toDouble / numberOfClusters).toInt
 
     @tailrec
     def go(remaining: List[Reply], results: ClusteredReplies, sliceSize: Int): List[List[Reply]] = {
@@ -25,7 +29,7 @@ object Clusterize {
         results :+ remaining
       else{
         val updatedRemaining = remaining.drop(sliceSize)
-        val updatedResults = results :+ remaining.slice(0, sliceSize + 1)
+        val updatedResults = results :+ remaining.slice(0, sliceSize)
 
         go(updatedRemaining, updatedResults, sliceSize)
       }
