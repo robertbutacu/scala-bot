@@ -20,11 +20,13 @@ trait MessageHandler {
              msg: String,
              humanLog: List[String],
              botLog: List[String]): String = {
-    val response = trie.search(
+    def toPartsOfSentence(msg: String): List[PartOfSentence] =
       msg.split(' ')
         .toList
         .withFilter(_ != "")
-        .map(w => PartOfSentence(w.r, None)))
+        .map(w => PartOfSentence(w.r, None))
+
+    val response = trie.search(toPartsOfSentence(msg))
 
     if (response.possibleReplies.isEmpty) {
       val r = provideReply(unknownHumanMessages)
@@ -32,11 +34,12 @@ trait MessageHandler {
     }
     else {
       currentSessionInformation ++= response.attributesFound
-      val r = provideResponse(response.possibleReplies, botLog.lastOption match {
+      val lastBotMessage = botLog.lastOption match {
         case Some(last) => last
         case None => ""
-      })
-      r
+      }
+
+      provideResponse(response.possibleReplies, lastBotMessage)
     }
   }
 
@@ -46,13 +49,16 @@ trait MessageHandler {
 
   /**
     * First off, all the functions are being applied so that all the replies are known.
-    * After that, it is tried to find a match for the last bot message. In that case, it is provided a reply for that
-    * specific case. Otherwise, all the possible replies that are dependent on the last message the bot sent are
-    * disregarded and all the other are flatMapped and sent as a parameter to a function which will arbitrarily
-    * choose a reply
+    * After that, it is tried to find a match for the last bot message.
+    * In that case, it is provided a reply for that specific case.
+    * Otherwise, all the possible replies that are dependent on the last message the bot sent are
+    * disregarded and all the other are flatMapped
+    * and sent as a parameter to a function which will arbitrarily
+    * choose a reply.
     *
-    * @param possibleReplies = a set of optional functions who return a set of string representing the last message
-    *                        the bot sent, and a set of functions returning a string representing possible replies.
+    * @param possibleReplies = a set of optional functions
+    *                       who return a set of string representing the last message the bot sent,
+    *                       and a set of functions returning a string representing possible replies.
     * @return a message suitable for the last input the client gave.
     */
   private def provideResponse(possibleReplies: Set[PossibleReply],
@@ -64,8 +70,10 @@ trait MessageHandler {
     appliedFunctions find (_.isAnswerToPreviousBotMessage(lastBotMsg)) match {
       case None =>
         provideReply(appliedFunctions
-          .withFilter{_.hasNoPreviousBotMessage}
-          .flatMap{e => e.appliedFunctions})
+          .withFilter {
+            _.hasNoPreviousBotMessage
+          }
+          .flatMap { e => e.appliedFunctions })
       case Some(reply) =>
         provideReply(reply.appliedFunctions)
     }
