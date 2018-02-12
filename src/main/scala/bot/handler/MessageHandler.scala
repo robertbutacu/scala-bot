@@ -23,20 +23,21 @@ trait MessageHandler {
     def toPartsOfSentence(msg: String): List[PartOfSentence] =
       msg.split(' ')
         .toList
-        .withFilter(_ != "")
+        .withFilter(!_.isEmpty)
         .map(w => PartOfSentence(w.r, None))
 
     val response = trie.search(toPartsOfSentence(msg))
 
     if (response.possibleReplies.isEmpty) {
-      val r = provideReply(unknownHumanMessages)
-      r
+      provideReply(unknownHumanMessages)
     }
     else {
       currentSessionInformation ++= response.attributesFound
+
+      //just in case it's the first message and there are no previous bot messages
       val lastBotMessage = botLog.lastOption match {
         case Some(last) => last
-        case None => ""
+        case None       => ""
       }
 
       provideResponse(response.possibleReplies, lastBotMessage)
@@ -64,7 +65,6 @@ trait MessageHandler {
   private def provideResponse(possibleReplies: Set[PossibleReply],
                               lastBotMsg: String): String = {
 
-
     val appliedFunctions = possibleReplies map AppliedFunctions.toAppliedFunctions
 
     lazy val noPreviousBotMessageMatches = appliedFunctions
@@ -80,10 +80,10 @@ trait MessageHandler {
   def getAttribute(attribute: Attribute): Option[String] =
     currentSessionInformation.get(attribute)
 
-  private def provideReply(replies: Set[String]): String = {
+  private def provideReply(replies: Set[String]): String =
     if (replies.isEmpty)
       provideReply(unknownHumanMessages)
     else
       Random.shuffle(replies).head
-  }
+
 }
