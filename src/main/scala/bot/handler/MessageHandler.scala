@@ -57,8 +57,8 @@ trait MessageHandler {
     * choose a reply.
     *
     * @param possibleReplies = a set of optional functions
-    *                       who return a set of string representing the last message the bot sent,
-    *                       and a set of functions returning a string representing possible replies.
+    *                        who return a set of string representing the last message the bot sent,
+    *                        and a set of functions returning a string representing possible replies.
     * @return a message suitable for the last input the client gave.
     */
   private def provideResponse(possibleReplies: Set[PossibleReply],
@@ -67,15 +67,13 @@ trait MessageHandler {
 
     val appliedFunctions = possibleReplies map AppliedFunctions.toAppliedFunctions
 
+    lazy val noPreviousBotMessageMatches = appliedFunctions
+      .withFilter(_.hasNoPreviousBotMessage)
+      .flatMap(_.appliedFunctions)
+
     appliedFunctions find (_.isAnswerToPreviousBotMessage(lastBotMsg)) match {
-      case None =>
-        provideReply(appliedFunctions
-          .withFilter {
-            _.hasNoPreviousBotMessage
-          }
-          .flatMap { e => e.appliedFunctions })
-      case Some(reply) =>
-        provideReply(reply.appliedFunctions)
+      case None        => provideReply(noPreviousBotMessageMatches)
+      case Some(reply) => provideReply(reply.appliedFunctions)
     }
   }
 
