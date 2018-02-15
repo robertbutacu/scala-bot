@@ -1,5 +1,7 @@
 package bot.learner
 
-class Learner {
+import org.scalatest.FlatSpec
+
+class Learner extends FlatSpec {
 
 }

@@ -1,5 +1,7 @@
 package bot.memory
 
-class Memory {
+import org.scalatest.FlatSpec
+
+class Memory extends FlatSpec {
 
 }

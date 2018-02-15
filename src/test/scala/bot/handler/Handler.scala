@@ -1,5 +1,7 @@
 package bot.handler
 
-class Handler {
+import org.scalatest.FlatSpec
+
+class Handler extends FlatSpec {
 
 }
