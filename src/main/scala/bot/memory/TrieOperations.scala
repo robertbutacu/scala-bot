@@ -24,6 +24,4 @@ protected trait TrieOperations {
     false
 
   def add(message: List[PartOfSentence], replies: PossibleReply): Trie
-
-  def search(message: List[PartOfSentence]): SearchResponses
 }

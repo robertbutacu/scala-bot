@@ -65,38 +65,6 @@ case class Trie(information: NodeInformation,
     go(this, message)
   }
 
-
-  /**
-    * The algorithm describes the search of a message in a trie, by parsing every word and matching it,
-    * thus returning a Set of possible replies depending on bot's previous replies.
-    *
-    * @param message - the sentence that is to be found, or not
-    * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
-    *         from which another algorithm will pick the best choice.
-    */
-  override final def search(message: List[PartOfSentence]): SearchResponses = {
-    //@tailrec
-    def go(message: List[PartOfSentence], trie: Trie,
-           attributes: Map[Attribute, String]): SearchResponses = /* {
-      if (message.isEmpty)
-        SearchResponses(attributes, trie.replies) //completely ran over all the words
-      else {
-        val head = message.head
-        val next = trie.children.find(t => isMatching(t, head))
-        next match {
-          case None => SearchResponses(attributes, Set()) //word wasn't found in the trie
-          case Some(nextNode) => go(message.tail, nextNode,
-            nextNode.information match {
-              case None => attributes
-              case Some(attr) => attributes + (attr -> head._1.regex)
-            })
-        }
-      }
-    }*/ SearchResponses(Map.empty, Set.empty)
-
-    go(message, this, Map[Attribute, String]().empty)
-  }
-
   /**
     * @param replies - replies that are to be added
     * @return     - new leafs which also contain the new replies
@@ -117,9 +85,5 @@ case class Trie(information: NodeInformation,
   private def addReplies(to: PossibleReply, newReplies: PossibleReply) =
     Trie(this.information, this.children,
       this.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
-
-  private def addValue(node: PartOfSentence): Trie = {
-    Trie(NodeSimpleWord("".r))
-  }
 }
 
