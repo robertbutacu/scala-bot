@@ -8,9 +8,12 @@ import scala.util.matching.Regex
 
 sealed trait NodeInformation {
   def exists(p: PartOfSentence): Boolean
+
+  def addInformation(p: PartOfSentence,
+                     information: Map[Attribute, String]): Map[Attribute, String]
 }
 
-case class NodeSimpleWord(word: Regex,
+case class NodeSimpleWord(word: Regex = "".r,
                           otherAcceptableForms: Set[Regex] = Set.empty,
                           partOfSpeech: PartOfSpeech = Irrelevant,
                           synonyms: Set[Regex] = Set.empty
@@ -25,18 +28,26 @@ case class NodeSimpleWord(word: Regex,
       case Some(_) => false
     }
   }
+
+  override def addInformation(p: PartOfSentence,
+                              information: Map[Attribute, String]): Map[Attribute, String] =
+    information
 }
 
 case class NodeUserInformation(word: Regex = "".r,
-                               attribute: Option[Attribute] = None)
+                               attribute: Attribute)
   extends NodeInformation {
   override def exists(p: PartOfSentence): Boolean = {
     p.attribute match {
       case None => false
       case Some(attr) =>
-        this.word.pattern.matcher(p.word.toString()).matches() && attribute.contains(attr)
+        this.word.pattern.matcher(p.word.toString()).matches() && attribute == attr
     }
   }
+
+  override def addInformation(p: PartOfSentence,
+                              information: Map[Attribute, String]): Map[Attribute, String] =
+    information + (this.attribute -> p.word.toString())
 }
 
 

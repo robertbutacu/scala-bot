@@ -33,10 +33,7 @@ object MemoryLookup {
           next match {
             case None => SearchResponses(attributes) //word wasn't found in the trie
             case Some(nextNode) => go(message.tail, nextNode,
-              nextNode.information match {
-                case None => attributes
-                case Some(attr) => attributes + (attr -> head._1.regex)
-              })
+              nextNode.information.addInformation(head, attributes))
           }
         }
       }
