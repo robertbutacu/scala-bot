@@ -1,12 +1,16 @@
 package bot.memory
 
 import bot.learn.{PossibleReply, SearchResponses}
-import bot.memory.definition.PartOfSentence
+import bot.memory.definition.{NodeInformation, PartOfSentence}
 
 import scala.util.matching.Regex
 
 protected trait TrieOperations {
   type Word = (Regex, Option[Attribute])
+
+  def information: NodeInformation
+  def children: Set[Trie]
+  def replies: Set[PossibleReply]
 
   /**
     * @param t - trie word

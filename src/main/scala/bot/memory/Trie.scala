@@ -3,9 +3,6 @@ package bot.memory
 import bot.learn.{PossibleReply, SearchResponses}
 import bot.memory.definition.{NodeInformation, NodeSimpleWord, PartOfSentence}
 
-import scala.annotation.tailrec
-import scala.util.matching.Regex
-
 /**
   *
   * @param information - current node, containing a word( or a regex), and an optional attribute
