@@ -2,9 +2,7 @@ package bot.memory.storage
 
 import bot.learn.PossibleReply
 import bot.memory.Trie
-import bot.memory.definition.{NodeSimpleWord, PartOfSentence}
-
-import scala.annotation.tailrec
+import bot.memory.definition.PartOfSentence
 
 trait MemoryStorer {
   def add(message: List[PartOfSentence], replies: PossibleReply): Trie
@@ -29,8 +27,7 @@ object MemoryStorer {
     override final def add(message: List[PartOfSentence],
                            replies: PossibleReply): Trie = {
 
-      //TODO make this a future => a lot of possible parallel operations
-      @tailrec
+      //TODO make this a future => possibly a lot of parallel operations
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
         if (words.isEmpty) //went through all the list
           this.addReplies(curr, replies) // adding the replies to the Set
@@ -43,9 +40,9 @@ object MemoryStorer {
           } yield child
 
           if (next.isEmpty)
-            go(curr.addValue(currWord))
+            go(this.addValue(curr, currWord), words.tail)
           else {
-            Trie(curr.information, curr.children -- next ++ next.map(t => t.add(words.tail)), trie.replies)
+            Trie(curr.information, curr.children -- next ++ next.map(t => go(t, words.tail)), trie.replies)
           }
         }
       }
@@ -73,5 +70,7 @@ object MemoryStorer {
       Trie(trie.information, trie.children,
         trie.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
 
+    private def addValue(trie: Trie, node: PartOfSentence): Trie =
+      Trie(trie.information, trie.children + Trie(node), trie.replies)
   }
 }

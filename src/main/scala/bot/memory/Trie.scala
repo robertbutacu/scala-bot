@@ -1,8 +1,11 @@
 package bot.memory
 
 import bot.learn.{PossibleReply, SearchResponses}
-import bot.memory.definition.{NodeInformation, NodeSimpleWord, PartOfSentence}
+import bot.memory.definition.{NodeInformation, NodeSimpleWord, NodeUserInformation, PartOfSentence}
+import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
 import bot.memory.storage.Printer.TriePrinter
+
+import scala.util.matching.Regex
 
 /**
   *
@@ -50,7 +53,7 @@ case class Trie(information: NodeInformation,
         } yield child
 
         //if(next.isEmpty)
-          //go(curr.addValue(currWord))
+        //go(curr.addValue(currWord))
 
         /*curr.children.find(n => isMatching(n, words.head)) match {
           case None => go(curr.addValue(SpeakingKnowledge(words.head)), words)
@@ -85,5 +88,11 @@ case class Trie(information: NodeInformation,
   private def addReplies(to: PossibleReply, newReplies: PossibleReply) =
     Trie(this.information, this.children,
       this.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
+}
+
+object Trie {
+  def apply(node: PartOfSentence): Trie = {
+    Trie(NodeSimpleWord())
+  }
 }
 
