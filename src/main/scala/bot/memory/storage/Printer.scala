@@ -7,7 +7,6 @@ trait Printer {
 }
 
 object Printer {
-
   implicit class TriePrinter(trie: Trie) extends Printer {
     override def print(): Unit = {
       def go(trie: Trie, tabs: Int): Unit = {
@@ -19,5 +18,4 @@ object Printer {
       go(trie, 0)
     }
   }
-
 }

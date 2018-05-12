@@ -4,12 +4,13 @@ import bot.learn.SearchResponses
 import bot.memory.{Attribute, Trie}
 import bot.memory.definition.PartOfSentence
 
+import scala.annotation.tailrec
+
 trait MemoryLookup {
   def search(message: List[PartOfSentence]): SearchResponses
 }
 
 object MemoryLookup {
-
   implicit class TrieLookup(trie: Trie) extends MemoryLookup {
     /**
       * The algorithm describes the search of a message in a trie, by parsing every word and matching it,
@@ -20,11 +21,11 @@ object MemoryLookup {
       *         from which another algorithm will pick the best choice.
       */
     override def search(message: List[PartOfSentence]): SearchResponses = {
-      //@tailrec
+      @tailrec
       def go(message: List[PartOfSentence], trie: Trie,
-             attributes: Map[Attribute, String]): SearchResponses = /* {
+             attributes: Map[Attribute, String]): SearchResponses = {
       if (message.isEmpty)
-        SearchResponses(attributes, trie.replies) //completely ran over all the words
+        SearchResponses(attributes, trie.replies, true) //completely ran over all the words
       else {
         val head = message.head
         val next = trie.children.find(t => isMatching(t, head))
@@ -37,7 +38,7 @@ object MemoryLookup {
             })
         }
       }
-    }*/ SearchResponses(Map.empty, Set.empty)
+    } SearchResponses(Map.empty, Set.empty)
 
       go(message, trie, Map[Attribute, String]().empty)
     }
