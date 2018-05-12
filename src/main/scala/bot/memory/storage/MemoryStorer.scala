@@ -29,7 +29,8 @@ object MemoryStorer {
     override final def add(message: List[PartOfSentence],
                            replies: PossibleReply): Trie = {
 
-      //@tailrec
+      //TODO make this a future => a lot of possible parallel operations
+      @tailrec
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
         if (words.isEmpty) //went through all the list
           this.addReplies(curr, replies) // adding the replies to the Set
@@ -41,16 +42,11 @@ object MemoryStorer {
             if child.information.exists(currWord)
           } yield child
 
-          //if(next.isEmpty)
-          //go(curr.addValue(currWord))
-
-          /*curr.children.find(n => isMatching(n, words.head)) match {
-            case None => go(curr.addValue(SpeakingKnowledge(words.head)), words)
-            case Some(next) => SpeakingKnowledge(curr.curr,
-              curr.children - next ++ Set(go(next, words.tail)),
-              curr.replies)
-          }*/
-          Trie(NodeSimpleWord("rda".r))
+          if (next.isEmpty)
+            go(curr.addValue(currWord))
+          else {
+            Trie(curr.information, curr.children -- next ++ next.map(t => t.add(words.tail)), trie.replies)
+          }
         }
       }
 
@@ -72,7 +68,6 @@ object MemoryStorer {
         case None => Trie(trie.information, trie.children, trie.replies ++ Set(replies))
         case Some(rep) => addReplies(trie, rep, replies)
       }
-
 
     private def addReplies(trie: Trie, to: PossibleReply, newReplies: PossibleReply) =
       Trie(trie.information, trie.children,
