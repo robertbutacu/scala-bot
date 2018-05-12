@@ -9,7 +9,7 @@ object Clusterize {
   type ClusteredReplies = List[List[Reply]]
 
   def apply(templates: List[Reply], numberOfClusters: Int): List[Trie] = {
-    def regexToString(r: Reply) = r.humanMessage.message.foldRight("")((curr, acc) => acc ++ curr._1.toString)
+    def regexToString(r: Reply) = r.humanMessage.message.foldRight("")((curr, acc) => acc ++ curr.pattern.toString)
 
     val sortedTemplates = templates.sortBy(regexToString)
 
