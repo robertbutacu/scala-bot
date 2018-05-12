@@ -44,11 +44,11 @@ object RepliesLearner {
     * @return a list of words that could be either a string with no attr set,
     *         or a regex with an attribute
     */
-  private def toWords(message: List[(Regex, Option[Attribute])]): List[PartOfSentence] =
+  private def toWords(message: List[PartOfMessage]): List[PartOfSentence] =
     message flatMap { w =>
-      w._1.toString
+      w.pattern.toString
         .split(" ").toList
         .withFilter( _ != "")
-        .map(p => PartOfSentence(p.r, w._2))
+        .map(p => PartOfSentence(p.r, w.attribute))
     }
 }

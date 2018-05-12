@@ -11,7 +11,7 @@ import scala.util.matching.Regex
   * @param message          - human's actual message, composed of multiple words/regexes.
   */
 case class HumanMessage(previousBotReply: Option[() => Set[String]],
-                        message: List[(Regex, Option[Attribute])])
+                        message: List[PartOfMessage])
 
 
 /**
