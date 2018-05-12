@@ -3,6 +3,7 @@ package bot.handler
 import bot.learn.PossibleReply
 import bot.memory.definition.PartOfSentence
 import bot.memory.{Attribute, Trie}
+import bot.memory.storage.MemoryLookup.TrieLookup
 
 import scala.collection.mutable
 import scala.util.Random

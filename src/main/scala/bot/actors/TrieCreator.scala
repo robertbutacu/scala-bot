@@ -4,7 +4,10 @@ import akka.actor.{Actor, Props}
 import bot.actors.TrieCreator._
 import bot.learn.{PossibleReply, SearchResponses}
 import bot.memory.Trie
+import bot.memory.storage.Printer.TriePrinter
+import bot.memory.storage.MemoryLookup.TrieLookup
 import bot.memory.definition.{NodeSimpleWord, PartOfSentence}
+import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 
 object TrieCreator {
   def props() = Props(new TrieCreator)

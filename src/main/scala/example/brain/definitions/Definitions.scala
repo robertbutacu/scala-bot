@@ -1,7 +1,8 @@
 package example.brain.definitions
 
-import bot.memory.definition.{Definition, Word, Synonym, Node}
+import bot.memory.definition.{Definition, Synonym, Word}
 
+import scala.language.implicitConversions
 import scala.util.matching.Regex
 
 object Definitions {

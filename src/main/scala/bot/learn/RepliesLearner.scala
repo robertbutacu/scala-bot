@@ -1,10 +1,10 @@
 package bot.learn
 
+import bot.memory.Trie
 import bot.memory.definition.PartOfSentence
-import bot.memory.{Attribute, Trie}
+import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 
 import scala.annotation.tailrec
-import scala.util.matching.Regex
 
 object RepliesLearner {
   type Responses = Set[() => Set[String]]
@@ -18,7 +18,7 @@ object RepliesLearner {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
       toBeLearned match {
-        case Nil       => curr
+        case Nil => curr
         case h :: tail => startLearning(learn(curr, h), tail)
       }
     }
@@ -29,8 +29,7 @@ object RepliesLearner {
       * @return - a new trie with the acquired reply in memory
       */
     def learn(trie: Trie, r: Reply): Trie =
-      trie.add(toWords(r.humanMessage.message),
-        PossibleReply(r.humanMessage.previousBotReply, r.botReplies))
+      trie.add(toWords(r.humanMessage.message),PossibleReply(r))
 
     startLearning(trie, acquired)
   }
@@ -44,11 +43,11 @@ object RepliesLearner {
     * @return a list of words that could be either a string with no attr set,
     *         or a regex with an attribute
     */
-  private def toWords(message: List[(Regex, Option[Attribute])]): List[PartOfSentence] =
+  private def toWords(message: List[Message]): List[PartOfSentence] =
     message flatMap { w =>
-      w._1.toString
+      w.pattern.toString
         .split(" ").toList
-        .withFilter( _ != "")
-        .map(p => PartOfSentence(p.r, w._2))
+        .withFilter(_ != "")
+        .map(p => PartOfSentence(p.r, w.attribute))
     }
 }
