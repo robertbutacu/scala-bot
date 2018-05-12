@@ -2,6 +2,7 @@ package bot.learn
 
 import bot.memory.Trie
 import bot.memory.definition.PartOfSentence
+import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 
 import scala.annotation.tailrec
 
