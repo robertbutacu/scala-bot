@@ -31,7 +31,7 @@ object MemoryLookup {
           val head = message.head
           val next = trie.children.find(t => isMatching(t, head))
           next match {
-            case None => SearchResponses(attributes, Set()) //word wasn't found in the trie
+            case None => SearchResponses(attributes) //word wasn't found in the trie
             case Some(nextNode) => go(message.tail, nextNode,
               nextNode.information match {
                 case None => attributes
@@ -43,6 +43,8 @@ object MemoryLookup {
 
       go(message, trie, Map[Attribute, String]().empty)
     }
-  }
 
+    private def isMatching(trie: Trie, partOfSentence: PartOfSentence): Boolean =
+      trie.information.exists(partOfSentence)
+  }
 }

@@ -33,7 +33,7 @@ case class NodeUserInformation(word: Regex = "".r,
   override def exists(p: PartOfSentence): Boolean = {
     p.attribute match {
       case None => false
-      case Some(_) => this.word.toString() == p.word.toString() // TODO this SHOULD be better
+      case Some(attr) => p.word.toString().matches(this.word) && attribute.contains(attr)
     }
   }
 }
