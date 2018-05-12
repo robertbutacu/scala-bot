@@ -4,6 +4,8 @@ import bot.learn.PossibleReply
 import bot.memory.Trie
 import bot.memory.definition.{NodeSimpleWord, PartOfSentence}
 
+import scala.annotation.tailrec
+
 trait MemoryStorer {
   def add(message: List[PartOfSentence], replies: PossibleReply): Trie
 }
@@ -27,9 +29,10 @@ object MemoryStorer {
     override final def add(message: List[PartOfSentence],
                            replies: PossibleReply): Trie = {
 
+      //@tailrec
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
         if (words.isEmpty) //went through all the list
-          curr.addReplies(replies) // adding the replies to the Set
+          this.addReplies(curr, replies) // adding the replies to the Set
         else {
           val currWord = words.head
 
@@ -51,7 +54,7 @@ object MemoryStorer {
         }
       }
 
-      go(this, message)
+      go(trie, message)
     }
 
     /**
@@ -64,14 +67,14 @@ object MemoryStorer {
       *             they are registered as new replies with their attribute.
       *
       */
-    private def addReplies(replies: PossibleReply): Trie =
+    private def addReplies(trie: Trie, replies: PossibleReply): Trie =
       trie.replies.find(l => l.previousBotMessage == replies.previousBotMessage) match {
-        case None => Trie(this.information, this.children, this.replies ++ Set(replies))
-        case Some(rep) => addReplies(rep, replies)
+        case None => Trie(trie.information, trie.children, trie.replies ++ Set(replies))
+        case Some(rep) => addReplies(trie, rep, replies)
       }
 
 
-    private def addReplies(to: PossibleReply, newReplies: PossibleReply) =
+    private def addReplies(trie: Trie, to: PossibleReply, newReplies: PossibleReply) =
       Trie(trie.information, trie.children,
         trie.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
 
