@@ -2,6 +2,7 @@ package bot.memory
 
 import bot.learn.{PossibleReply, SearchResponses}
 import bot.memory.definition.{NodeInformation, NodeSimpleWord, PartOfSentence}
+import bot.memory.storage.Printer.TriePrinter
 
 /**
   *
@@ -94,16 +95,6 @@ case class Trie(information: NodeInformation,
     }*/ SearchResponses(Map.empty, Set.empty)
 
     go(message, this, Map[Attribute, String]().empty)
-  }
-
-  def print(): Unit = {
-    def go(trie: Trie, tabs: Int): Unit = {
-      println("\t" * tabs + "Node " + trie.information + "   ")
-      trie.replies.foreach(r => println("\t" * (tabs + 1) + " Leaf " + r))
-      trie.children.foreach(t => go(t, tabs + 1))
-    }
-
-    go(this, 0)
   }
 
   /**

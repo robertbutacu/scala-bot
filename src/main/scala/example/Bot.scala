@@ -4,6 +4,7 @@ import bot.connections.Acquaintances._
 import bot.connections.Person
 import bot.handler.MessageHandler
 import bot.memory.Attribute
+import bot.memory.storage.Printer.TriePrinter
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
 
