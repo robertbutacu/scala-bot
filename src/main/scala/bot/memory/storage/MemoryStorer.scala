@@ -23,6 +23,7 @@ object MemoryStorer {
       * @return - a new trie with the new message included
       */
 
+    // TODO the Trie will actually contain definitions and will also receive a dictionary at input
     // TODO state monad => prev and curr held
     override final def add(message: List[PartOfSentence],
                            replies: PossibleReply): Trie = {
