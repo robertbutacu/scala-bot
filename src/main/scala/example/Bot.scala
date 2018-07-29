@@ -1,7 +1,6 @@
 package example
 
-import bot.connections.Acquaintances._
-import bot.connections.Person
+import bot.connections.{Acquaintances, Person}
 import bot.handler.MessageHandler
 import bot.memory.Attribute
 import bot.memory.storage.Printer.TriePrinter
@@ -15,26 +14,28 @@ import scala.util.{Failure, Success}
 class Bot extends Manager with MessageHandler {
   type Matcher = (Option[Map[Attribute, String]], List[String], List[String])
 
-  def startDemo(): Unit = {
+  implicit val acquaintances = Acquaintances.xmlStorage("xml.out")
+
+  def startDemo(implicit acquaintances: Acquaintances): Unit = {
     def go(botLog: List[String] = List.empty,
            humanLog: List[String] = List.empty,
            people: List[Map[Attribute, String]]): Unit = {
       val message = scala.io.StdIn.readLine()
       if (message == "QUIT") {
-        persist(add(people, currentSessionInformation.toMap) map (new Person(_)), "out.xml")
+        acquaintances.persist(acquaintances.add(people, currentSessionInformation.toMap) map (new Person(_)))
       }
       else {
         val updatedHumanLog = humanLog :+ message
 
         if (message == "Do you remember me?") {
-          val possibleMatches = tryMatch(people, currentSessionInformation.toList, 10)
+          val possibleMatches = acquaintances.tryMatch(people, currentSessionInformation.toList, 10)
 
           val isMatch = matcher(possibleMatches, humanLog, botLog)
           isMatch match {
             case (None, bL, hL) => go(bL, hL, people)
             case (Some(p), bL, hL) =>
               currentSessionInformation = currentSessionInformation.empty ++ p
-              go(bL, hL, forget(people, p))
+              go(bL, hL, acquaintances.forget(people, p))
           }
         }
         else {
@@ -46,7 +47,7 @@ class Bot extends Manager with MessageHandler {
       }
     }
 
-    val peopleXML = remember("out.xml")
+    val peopleXML = acquaintances.remember()
 
     val people = peopleXML match {
       case Success(p) => p.view.map(translate).map(_.flatten.toMap).toList

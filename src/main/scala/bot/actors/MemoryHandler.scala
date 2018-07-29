@@ -3,7 +3,7 @@ package bot.actors
 import akka.actor.{Actor, Props}
 import bot.actors.MemoryHandler._
 import bot.connections.Acquaintances._
-import bot.connections.Person
+import bot.connections.{Acquaintances, Person}
 import bot.memory.Attribute
 
 import scala.util.Try
@@ -39,15 +39,15 @@ object MemoryHandler {
 
 class MemoryHandler() extends Actor {
   override def receive: Actor.Receive = {
-    case Load(file) => sender() ! LoadedPeople(remember(file))
+    case Load(file) => sender() ! LoadedPeople(Acquaintances.xmlStorage(file).remember())
 
-    case Save(file, people) => persist(people, file)
+    case Save(file, people) => Acquaintances.xmlStorage(file).persist(people)
 
-    case Forget(people, person) => sender() ! RetrievePeople(forget(people, person))
+    case Forget(people, person) => sender() ! RetrievePeople(Acquaintances.xmlStorage("").forget(people, person))
 
-    case Add(people, person) => sender() ! RetrievePeople(add(people, person))
+    case Add(people, person) => sender() ! RetrievePeople(Acquaintances.xmlStorage("").add(people, person))
 
     case TryAndMatch(people, person, minThreshold) =>
-      sender() ! PossibleMatches(tryMatch(people, person, minThreshold))
+      sender() ! PossibleMatches(Acquaintances.xmlStorage("").tryMatch(people, person, minThreshold))
   }
 }
