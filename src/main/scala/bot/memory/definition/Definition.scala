@@ -20,7 +20,7 @@ object Definition {
     definition.synonyms.map(_.definition) + definition.word
 
   def find(word: Regex, definitions: List[Definition]): Boolean =
-    definitions exists (_.word == word)
+    definitions exists (_.word.word == word)
 
   def addDefinitions(word: Definition,
                      definitions: Set[Synonym]): Definition =

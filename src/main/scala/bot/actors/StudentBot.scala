@@ -15,6 +15,6 @@ object StudentBot {
 
 class StudentBot() extends Actor{
   override def receive: Actor.Receive = {
-    case _ => "asdasd"
+    case _ => ???
   }
 }
