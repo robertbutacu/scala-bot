@@ -24,5 +24,7 @@ object Trie {
   def apply(node: PartOfSentence): Trie = {
     Trie(NodeSimpleWord())
   }
+
+  def empty: Trie = Trie(NodeSimpleWord("".r))
 }
 

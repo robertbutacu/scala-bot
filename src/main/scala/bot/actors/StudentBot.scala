@@ -1,14 +1,14 @@
 package bot.actors
 
 import akka.actor.{Actor, Props}
-import bot.learn.Reply
+import bot.learn.MessageTemplate
 import bot.memory.Trie
 
 object StudentBot {
   def props() = Props(new StudentBot)
   def name() = "studentBot"
 
-  case class LearnReplies(trie: Trie, acquired: List[Reply])
+  case class LearnReplies(trie: Trie, acquired: List[MessageTemplate])
 
   case class CreatedTrie(trie: Trie)
 }

@@ -14,9 +14,9 @@ object RepliesLearner {
     * @param acquired - a list of replies to be added
     * @return - a new trie with the list of acquired replies in memory
     */
-  def learn(trie: Trie, acquired: List[Reply]): Trie = {
+  def learn(trie: Trie, acquired: List[MessageTemplate]): Trie = {
     @tailrec
-    def startLearning(curr: Trie, toBeLearned: List[Reply]): Trie = {
+    def startLearning(curr: Trie, toBeLearned: List[MessageTemplate]): Trie = {
       toBeLearned match {
         case Nil => curr
         case h :: tail => startLearning(learn(curr, h), tail)
@@ -28,7 +28,7 @@ object RepliesLearner {
       * @param r    - reply
       * @return - a new trie with the acquired reply in memory
       */
-    def learn(trie: Trie, r: Reply): Trie =
+    def learn(trie: Trie, r: MessageTemplate): Trie =
       trie.add(toWords(r.humanMessage.message),PossibleReply(r))
 
     startLearning(trie, acquired)
