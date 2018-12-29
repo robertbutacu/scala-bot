@@ -4,28 +4,33 @@ import java.io.{File, FileNotFoundException}
 
 import bot.memory.Attribute
 
-import scala.util.{Failure, Success, Try}
+import scala.language.{higherKinds, postfixOps}
+import scala.util.{Failure, Try}
 import scala.xml.XML
 
-trait Acquaintances {
-  def persist(people: List[Person])
+trait Acquaintances[S[_]] {
+  type Name   = String
+  type Weight = String
+  type Value  = String
 
-  def forget(people: List[Map[Attribute, String]],
-             person: Map[Attribute, String]): List[Map[Attribute, String]]
+  def persist(people: S[Person])
 
-  def add(people: List[Map[Attribute, String]],
-          person: Map[Attribute, String]): List[Map[Attribute, String]]
+  def forget(people: S[Map[Attribute, Value]],
+             person: Map[Attribute, Value]): S[Map[Attribute, Value]]
 
-  def remember(): Try[List[List[(String, String, String)]]]
+  def add(people: S[Map[Attribute, Value]],
+          person: Map[Attribute, Value]): S[Map[Attribute, Value]]
 
-  def tryMatch(people: List[Map[Attribute, String]],
-               person: List[(Attribute, String)],
-               minThreshold: Int): List[Map[Attribute, String]]
+  def remember(): Try[List[List[(Name, Weight, Value)]]]
+
+  def tryMatch(people: List[Map[Attribute, Value]],
+               person: List[(Attribute, Value)],
+               minThreshold: Int): List[Map[Attribute, Value]]
 }
 
 object Acquaintances {
 
-  implicit class xmlStorage(filename: String) extends Acquaintances {
+  implicit class xmlStorage(filename: String) extends Acquaintances[List] {
     /** Receiving a list of people traits and a filename, it will store all the information about them in an XML file.
       *
       * @param people - all the people from all convo that have been persisted previously +- current session
@@ -54,8 +59,8 @@ object Acquaintances {
       * @param person - person to forget
       * @return - a list of people traits excluding the person
       */
-    def forget(people: List[Map[Attribute, String]],
-               person: Map[Attribute, String]): List[Map[Attribute, String]] = people.filterNot(_ == person)
+    def forget(people: List[Map[Attribute, Value]],
+               person: Map[Attribute, Value]): List[Map[Attribute, Value]] = people.filterNot(_ == person)
 
 
     /** At the end of a convo, it might be required for the bot to persist the person he/she just talked to.
@@ -64,8 +69,8 @@ object Acquaintances {
       * @param person - person to remember
       * @return
       */
-    def add(people: List[Map[Attribute, String]],
-            person: Map[Attribute, String]): List[Map[Attribute, String]] = people :+ person
+    def add(people: List[Map[Attribute, Value]],
+            person: Map[Attribute, Value]): List[Map[Attribute, Value]] = people :+ person
 
 
     /**
@@ -77,21 +82,17 @@ object Acquaintances {
       *
       * @return - a list of lists containing all the information about all the people.
       */
-    def remember(): Try[List[List[(String, String, String)]]] = {
-      try {
-        if (new File(filename).exists()) {
-          val peopleXML = XML.loadFile(filename)
+    def remember(): Try[List[List[(Name, Weight, Value)]]] = {
+      Try {
+        val peopleXML = XML.loadFile(filename)
 
-          Success(peopleXML.\\("person").toList
-            .view
-            .map(node => node.\\("attribute"))
-            .map(e =>
-              e.toList.map(n => (n.\\("@type").text, n.\\("@weight").text, n.text)))
-            .toList)
-        }
-        else
-          Failure(new FileNotFoundException("Inexisting file!"))
-      }
+        (peopleXML \\ "person").toList
+          .view
+          .map(node => node \\ "attribute")
+          .map(e =>
+            e.toList.map(n => (n \\ "@type" text, n \\ "@weight" text, n.text)))
+          .toList
+      }.orElse(Failure(new FileNotFoundException("Inexisting file!")))
     }
 
     /**
@@ -101,13 +102,13 @@ object Acquaintances {
       * @param minThreshold - a minimum amount of attribute weights sum
       * @return - a list of possible matching people
       */
-    def tryMatch(people: List[Map[Attribute, String]],
-                 person: List[(Attribute, String)],
-                 minThreshold: Int): List[Map[Attribute, String]] = {
-      def isMatch(person: List[(Attribute, String)]): Boolean =
+    def tryMatch(people: List[Map[Attribute, Value]],
+                 person: List[(Attribute, Value)],
+                 minThreshold: Int): List[Map[Attribute, Value]] = {
+      def isMatch(person: List[(Attribute, Value)]): Boolean =
         sum(person) >= minThreshold
 
-      def sum(person: List[(Attribute, String)]): Int =
+      def sum(person: List[(Attribute, Value)]): Int =
         person.foldLeft(0)((total, curr) => total + curr._1.weight)
 
       val initialMatches = people filter (p => person.forall(p.toList.contains))
