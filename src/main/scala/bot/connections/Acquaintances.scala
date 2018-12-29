@@ -8,18 +8,18 @@ import scala.language.{higherKinds, postfixOps}
 import scala.util.{Failure, Try}
 import scala.xml.XML
 
-trait Acquaintances[S[_]] {
+trait Acquaintances {
   type Name   = String
   type Weight = String
   type Value  = String
 
-  def persist(people: S[Person])
+  def persist(people: List[Person])
 
-  def forget(people: S[Map[Attribute, Value]],
-             person: Map[Attribute, Value]): S[Map[Attribute, Value]]
+  def forget(people: List[Map[Attribute, Value]],
+             person: Map[Attribute, Value]): List[Map[Attribute, Value]]
 
-  def add(people: S[Map[Attribute, Value]],
-          person: Map[Attribute, Value]): S[Map[Attribute, Value]]
+  def add(people: List[Map[Attribute, Value]],
+          person: Map[Attribute, Value]): List[Map[Attribute, Value]]
 
   def remember(): Try[List[List[(Name, Weight, Value)]]]
 
@@ -30,7 +30,7 @@ trait Acquaintances[S[_]] {
 
 object Acquaintances {
 
-  implicit class xmlStorage(filename: String) extends Acquaintances[List] {
+  implicit class xmlStorage(filename: String) extends Acquaintances {
     /** Receiving a list of people traits and a filename, it will store all the information about them in an XML file.
       *
       * @param people - all the people from all convo that have been persisted previously +- current session
