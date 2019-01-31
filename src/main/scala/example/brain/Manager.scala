@@ -1,9 +1,7 @@
 package example.brain
 
 import bot.clustering.Clusterize
-import bot.clustering.Clusterize.ClusteredReplies
 import bot.learn.RepliesLearner._
-import bot.learn.MessageTemplate
 import bot.memory.Trie
 import bot.memory.definition.NodeSimpleWord
 import example.brain.modules.MasterModule

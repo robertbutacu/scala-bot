@@ -1,7 +1,5 @@
 package bot.connections
 
-import bot.memory.Attribute
-
 import scala.xml.Elem
 
 class Trait(attribute: Attribute, value: String) {

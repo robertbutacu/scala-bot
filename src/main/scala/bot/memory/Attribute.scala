@@ -1,5 +1,6 @@
 package bot.memory
 
-import bot.handler.Characteristic
+trait Characteristic
 
-case class Attribute(characteristic: Characteristic, weight: Int)
+
+

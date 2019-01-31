@@ -1,6 +1,6 @@
 package bot.memory.definition
 
-import bot.memory.Attribute
+import bot.connections.Attribute
 
 import scala.util.matching.Regex
 

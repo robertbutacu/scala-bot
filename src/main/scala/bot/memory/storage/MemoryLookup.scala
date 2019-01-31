@@ -1,7 +1,8 @@
 package bot.memory.storage
 
+import bot.connections.Attribute
 import bot.learn.SearchResponses
-import bot.memory.{Attribute, Trie}
+import bot.memory.Trie
 import bot.memory.definition.PartOfSentence
 
 import scala.annotation.tailrec
@@ -26,7 +27,7 @@ object MemoryLookup {
       def go(message: List[PartOfSentence], trie: Trie,
              attributes: Map[Attribute, String]): SearchResponses = {
         if (message.isEmpty)
-          SearchResponses(attributes, trie.replies, hasFoundReply = true) //completely ran over all the words
+          SearchResponses(attributes, trie.replies) //completely ran over all the words
         else {
           val head = message.head
           val next = trie.children.find(t => isMatching(t, head))

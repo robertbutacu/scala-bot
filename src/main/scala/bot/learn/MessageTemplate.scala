@@ -1,7 +1,7 @@
 package bot.learn
 
+import bot.connections.Attribute
 import bot.learn.RepliesLearner.Responses
-import bot.memory.Attribute
 
 import scala.util.matching.Regex
 

@@ -1,8 +1,7 @@
 package example
 
-import bot.connections.{Acquaintances, Person}
+import bot.connections.{Acquaintances, Attribute, Person}
 import bot.handler.MessageHandler
-import bot.memory.Attribute
 import bot.memory.storage.Printer.TriePrinter
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}

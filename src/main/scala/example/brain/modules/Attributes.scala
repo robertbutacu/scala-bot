@@ -1,6 +1,7 @@
 package example.brain.modules
 
-import bot.memory.Attribute
+import bot.connections.Attribute
+
 
 trait Attributes {
   val age = Attribute(AgeAttr, 10)

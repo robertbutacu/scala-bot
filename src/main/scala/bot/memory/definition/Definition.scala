@@ -8,6 +8,8 @@ case class Word(word: String,
                 otherAcceptableForms: Set[Word] = Set.empty,
                 partOfSpeech: PartOfSpeech = Irrelevant)
 
+case class Synonym(definition: Word, contextWords: Set[Word] = Set.empty)
+
 case class Definition(word: Word, synonyms: Set[Synonym] = Set.empty) {
   def equals(other: PartOfSentence): Boolean = this.word.word == other.word.toString
 

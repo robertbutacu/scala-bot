@@ -3,8 +3,7 @@ package bot.actors
 import akka.actor.{Actor, Props}
 import bot.actors.MemoryHandler._
 import bot.connections.Acquaintances._
-import bot.connections.{Acquaintances, Person}
-import bot.memory.Attribute
+import bot.connections.{Acquaintances, Attribute, Person}
 
 import scala.util.Try
 

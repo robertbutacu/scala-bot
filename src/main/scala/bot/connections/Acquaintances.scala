@@ -2,8 +2,6 @@ package bot.connections
 
 import java.io.{File, FileNotFoundException}
 
-import bot.memory.Attribute
-
 import scala.language.{higherKinds, postfixOps}
 import scala.util.{Failure, Try}
 import scala.xml.XML

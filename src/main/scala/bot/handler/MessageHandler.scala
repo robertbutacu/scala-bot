@@ -1,8 +1,9 @@
 package bot.handler
 
+import bot.connections.Attribute
 import bot.learn.PossibleReply
 import bot.memory.definition.PartOfSentence
-import bot.memory.{Attribute, Trie}
+import bot.memory.Trie
 import bot.memory.storage.MemoryLookup.TrieLookup
 
 import scala.collection.mutable

@@ -1,6 +1,7 @@
 package bot.handler
 
-import bot.memory.{Attribute, Trie}
+import bot.connections.Attribute
+import bot.memory.Trie
 
 case class SessionInformation(replies: Trie,
                               unknownMessages: Trie,
