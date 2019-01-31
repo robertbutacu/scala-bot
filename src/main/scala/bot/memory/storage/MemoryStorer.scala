@@ -50,10 +50,12 @@ object MemoryStorer {
     }
 
     /**
+      * As part of the "storing" journey, this is at the very end - where the replies have to be added.
+      *
       * @param replies - replies that are to be added
       * @return     - new leafs which also contain the new replies
       *             There are 2 cases:
-      *             1. when they depend on a previous bot message ( or lack of) also stored:
+      *             1. when the replies depend on a previous bot message ( or lack of ) also stored:
       *             the replies are appended to the already existing replies.
       *             2. when they aren't stored at all:
       *             they are registered as new replies with their attribute.
