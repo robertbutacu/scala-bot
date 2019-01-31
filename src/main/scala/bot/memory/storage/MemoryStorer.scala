@@ -27,8 +27,6 @@ object MemoryStorer {
     // TODO state monad => prev and curr held
     override final def add(message: List[PartOfSentence],
                            replies: PossibleReply): Trie = {
-
-      //TODO make this a future => possibly a lot of parallel operations
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
         if (words.isEmpty) //went through all the list
           this.addReplies(curr, replies) // adding the replies to the Set
@@ -64,14 +62,12 @@ object MemoryStorer {
     private def addReplies(trie: Trie, replies: PossibleReply): Trie =
       trie.replies.find(l => l.previousBotMessage == replies.previousBotMessage) match {
         case None => Trie(trie.information, trie.children, trie.replies ++ Set(replies))
-        case Some(rep) => addReplies(trie, rep, replies)
+        case Some(rep) => updateReplies(trie, rep, replies)
       }
 
-    private def addReplies(trie: Trie, to: PossibleReply, newReplies: PossibleReply) =
-      Trie(trie.information, trie.children,
-        trie.replies -- Set(to) + PossibleReply(to.previousBotMessage, to.possibleReply ++ newReplies.possibleReply))
+    private def updateReplies(trie: Trie, to: PossibleReply, newReplies: PossibleReply): Trie =
+      trie.copy(replies = trie.replies - to + to.copy(possibleReply = to.possibleReply ++ newReplies.possibleReply))
 
-    private def addValue(trie: Trie, node: PartOfSentence): Trie =
-      Trie(trie.information, trie.children + Trie(node), trie.replies)
+    private def addValue(trie: Trie, node: PartOfSentence): Trie = trie.copy(children = trie.children + Trie(node))
   }
 }
