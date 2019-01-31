@@ -22,9 +22,6 @@ object MemoryStorer {
       * @param replies - a set of functions which return a set of possible replies
       * @return - a new trie with the new message included
       */
-
-    // TODO the Trie will actually contain definitions and will also receive a dictionary at input
-    // TODO state monad => prev and curr held
     override final def add(message: List[PartOfSentence],
                            replies: PossibleReply): Trie = {
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
@@ -41,7 +38,7 @@ object MemoryStorer {
           if (next.isEmpty)
             go(this.addValue(curr, currWord), words.tail)
           else {
-            Trie(curr.information, curr.children -- next ++ next.map(t => go(t, words.tail)), trie.replies)
+            trie.copy(children = curr.children -- next ++ next.map(t => go(t, words.tail)))
           }
         }
       }
