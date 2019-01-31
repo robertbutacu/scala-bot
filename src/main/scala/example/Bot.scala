@@ -15,10 +15,10 @@ class Bot extends Manager with MessageHandler {
 
   implicit val acquaintances = Acquaintances.xmlStorage("xml.out")
 
-  def startDemo(implicit acquaintances: Acquaintances): Unit = {
+  /*def startDemo[M](implicit acquaintances: Acquaintances[M]): Unit = {
     def go(botLog: List[String] = List.empty,
            humanLog: List[String] = List.empty,
-           people: List[Map[Attribute, String]]): Unit = {
+           people: M[List[Map[Attribute, String]]]): Unit = {
       val message = scala.io.StdIn.readLine()
       if (message == "QUIT") {
         acquaintances.persist(acquaintances.add(people, currentSessionInformation.toMap) map (new Person(_)))
@@ -56,7 +56,7 @@ class Bot extends Manager with MessageHandler {
     masterBrain.print()
     go(people = people)
   }
-
+*/
   @tailrec
   final def matcher(people: List[Map[Attribute, String]],
                     humanLog: List[String],
