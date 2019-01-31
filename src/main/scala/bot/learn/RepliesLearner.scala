@@ -7,7 +7,7 @@ import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 import scala.annotation.tailrec
 
 object RepliesLearner {
-  type Responses = Set[() => Set[String]]
+  type Responses = Set[ _ => Set[String]]
 
   /**
     * @param trie     - previous trie to which new templates are to be added
@@ -46,7 +46,8 @@ object RepliesLearner {
   private def toWords(message: List[Message]): List[PartOfSentence] =
     message flatMap { w =>
       w.pattern.toString
-        .split(" ").toList
+        .split(" ")
+        .toList
         .withFilter(_ != "")
         .map(p => PartOfSentence(p.r, w.attribute))
     }

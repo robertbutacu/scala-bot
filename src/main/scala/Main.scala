@@ -4,7 +4,9 @@ import bot.memory.storage.Printer._
 import example.brain.Manager
 
 object Main extends App with Manager {
-  val trie = Trie(NodeSimpleWord())
+/*  val trie = Trie(NodeSimpleWord())
 
-  trie.print()
+  trie.print()*/
+  type Test = List[() => String]
+  def test(go: Test): Unit = go
 }

@@ -1,9 +1,6 @@
 package bot.learn
 
-import bot.connections.Attribute
 import bot.learn.RepliesLearner.Responses
-
-import scala.util.matching.Regex
 
 /**
   * @param previousBotReply - an optional function that returns a set of strings =>
