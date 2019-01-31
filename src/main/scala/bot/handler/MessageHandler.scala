@@ -8,9 +8,10 @@ import bot.memory.storage.MemoryLookup.TrieLookup
 import scala.collection.mutable
 import scala.util.Random
 
-//TODO this will be an object, and all the variables will come from outside.
-
 trait MessageHandler {
+  def disapprovalTrie: Trie = ???
+  def unknownHumanTrie: Trie = ???
+
   def disapprovalMessages: Set[String] = Set("")
 
   def unknownHumanMessages: Set[String] = Set("")

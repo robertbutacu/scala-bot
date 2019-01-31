@@ -1,7 +1,10 @@
 package bot.learn
 
-case class PossibleReply(previousBotMessage: Option[() => Set[String]],
-                         possibleReply: Set[() => Set[String]])
+import bot.learn.RepliesLearner.Responses
+import bot.types.BotMessage
+
+case class PossibleReply(previousBotMessage: Option[BotMessage],
+                         possibleReply: Responses)
 
 object PossibleReply {
   def apply(reply: MessageTemplate): PossibleReply = {
