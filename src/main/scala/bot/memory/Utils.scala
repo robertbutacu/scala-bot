@@ -25,8 +25,8 @@ protected[memory] object Utils {
     //having the definition found out, try to zip each synonym with the number of words found in that context
     val contextsCount = for {
       definition <- definitionM.toList
-      synonym <- definition.synonyms
-      count <- wordsInSameContextCount(sentence, synonym.contextWords)
+      synonym    <- definition.synonyms
+      count      <- wordsInSameContextCount(sentence, synonym.contextWords)
       if count > 0
     } yield ContextMatchCount(synonym, count)
 
