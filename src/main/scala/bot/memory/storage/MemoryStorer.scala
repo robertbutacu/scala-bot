@@ -57,11 +57,10 @@ object MemoryStorer {
       *             the replies are appended to the already existing replies.
       *             2. when they aren't stored at all:
       *             they are registered as new replies with their attribute.
-      *
       */
     private def addReplies(trie: Trie, replies: PossibleReply): Trie =
-      trie.replies.find(l => l.previousBotMessage == replies.previousBotMessage) match {
-        case None => Trie(trie.information, trie.children, trie.replies ++ Set(replies))
+      trie.replies.find(_.previousBotMessage == replies.previousBotMessage) match {
+        case None      => trie.copy(replies = trie.replies + replies)
         case Some(rep) => updateReplies(trie, rep, replies)
       }
 
