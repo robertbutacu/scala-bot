@@ -9,7 +9,7 @@ import scala.util.matching.Regex
 sealed trait NodeInformation {
   def informationMatches(p: PartOfSentence): Boolean
 
-  def wordMatches(p: PartOfSentence): Boolean
+  def wordMatches(w: String): Boolean
 
   def addToAttributes(value:       String,
                       information: Map[Attribute, String]): Map[Attribute, String]
@@ -44,7 +44,7 @@ case class NodeSimpleWord(word:                 Regex        = "".r,
                                information: Map[Attribute, String]): Map[Attribute, String] =
     information
 
-  override def wordMatches(p: PartOfSentence): Boolean = word.anchored.pattern.matcher(p.word.toString()).matches()
+  override def wordMatches(w: String): Boolean = word.pattern.matcher(w).matches()
 }
 
 case class NodeUserInformation(word:      Regex = "".r,
@@ -61,7 +61,7 @@ case class NodeUserInformation(word:      Regex = "".r,
                                information: Map[Attribute, String]): Map[Attribute, String] =
     information + (this.attribute -> p)
 
-  override def wordMatches(p: PartOfSentence): Boolean = word.pattern.matcher(p.word.toString()).matches()
+  override def wordMatches(w: String): Boolean = word.pattern.matcher(w).matches()
 }
 
 

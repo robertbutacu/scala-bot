@@ -23,13 +23,7 @@ trait MessageHandler {
              msg:      String,
              humanLog: List[String],
              botLog:   List[String]): String = {
-    def toPartsOfSentence(msg: String): List[PartOfSentence] =
-      msg.split(' ')
-        .toList
-        .withFilter(!_.isEmpty)
-        .map(w => PartOfSentence(w.r, None))
-
-    val response = trie.search(toPartsOfSentence(msg))
+    val response = trie.search(msg)
 
     if (response.possibleReplies.isEmpty) {
       provideReply(unknownHumanMessages)

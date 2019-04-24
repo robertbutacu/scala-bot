@@ -19,7 +19,7 @@ object TrieCreator {
                  trie: Trie)
 
 
-  case class Search(message: List[PartOfSentence], trie: Trie)
+  case class Search(message: String, trie: Trie)
 
 
   case class TrieResponse(trie: Trie)

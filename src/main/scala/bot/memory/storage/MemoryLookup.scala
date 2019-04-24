@@ -8,7 +8,7 @@ import bot.memory.definition.PartOfSentence
 import scala.annotation.tailrec
 
 trait MemoryLookup {
-  def search(message: List[PartOfSentence]): SearchResponses
+  def search(message: String): SearchResponses
 }
 
 object MemoryLookup {
@@ -22,9 +22,9 @@ object MemoryLookup {
       * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
       *         from which another algorithm will pick the best choice.
       */
-    override def search(message: List[PartOfSentence]): SearchResponses = {
+    override def search(message: String): SearchResponses = {
       @tailrec
-      def go(message:    List[PartOfSentence],
+      def go(message:    List[String],
              trie:       Trie,
              attributes: Map[Attribute, String]): SearchResponses = {
         if (message.isEmpty)
@@ -34,12 +34,17 @@ object MemoryLookup {
 
           trie.children.find(t => t.information.wordMatches(head)) match {
             case None           => SearchResponses(attributes) //word wasn't found in the trie
-            case Some(nextNode) => go(message.tail, nextNode, nextNode.information.addToAttributes(head.word.toString(), attributes))
+            case Some(nextNode) => go(message.tail, nextNode, nextNode.information.addToAttributes(head, attributes))
           }
         }
       }
 
-      go(message, trie, Map[Attribute, String]().empty)
+      go(toPartsOfSentence(message), trie, Map[Attribute, String]().empty)
     }
+
+    private def toPartsOfSentence(msg: String): List[String] =
+      msg.split(' ')
+        .toList
+        .filter(!_.isEmpty)
   }
 }
