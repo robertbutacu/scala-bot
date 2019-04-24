@@ -31,20 +31,15 @@ object MemoryLookup {
           SearchResponses(attributes, trie.replies) //completely ran over all the words
         else {
           val head = message.head
-          val next = trie.children.find(t => isMatching(t, head))
-          next match {
+
+          trie.children.find(t => t.information.wordMatches(head)) match {
             case None           => SearchResponses(attributes) //word wasn't found in the trie
-            case Some(nextNode) => go(message.tail, nextNode,
-              nextNode.information.addInformation(head, attributes))
+            case Some(nextNode) => go(message.tail, nextNode, nextNode.information.addToAttributes(head.word.toString(), attributes))
           }
         }
       }
 
       go(message, trie, Map[Attribute, String]().empty)
     }
-
-    private def isMatching(trie:           Trie,
-                           partOfSentence: PartOfSentence): Boolean =
-      trie.information.exists(partOfSentence)
   }
 }

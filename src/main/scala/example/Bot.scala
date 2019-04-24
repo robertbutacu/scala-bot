@@ -61,7 +61,6 @@ case class Bot[F[_]](minKnowledgeThreshold: Int) extends Manager with MessageHan
       case Failure(e) => println(s"There seem to be a problem loading up my memory: $e ..."); List.empty
     }
 
-    masterBrain.print()
     people.map(p => go(people = p))
   }
 

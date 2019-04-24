@@ -25,20 +25,19 @@ object MemoryStorer {
     override final def add(message: List[PartOfSentence],
                            replies: PossibleReply): Trie = {
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
-        if (words.isEmpty) //went through all the list
-          this.addReplies(curr, replies) // adding the replies to the Set
+        if (words.isEmpty)
+          this.addReplies(curr, replies)
         else {
           val currWord = words.head
+          val next     = curr.children.find(t => t.information.informationMatches(currWord))
 
-          val next = for {
-            child <- curr.children
-            if child.information.exists(currWord)
-          } yield child
-
-          if (next.isEmpty)
-            go(this.addValue(curr, currWord), words.tail)
-          else {
-            trie.copy(children = curr.children -- next ++ next.map(t => go(t, words.tail)))
+          next match {
+            case None =>
+              val newTrie = go(Trie(currWord), words.tail)
+              curr.copy(children = curr.children + newTrie)
+            case Some(t) =>
+              val updatedTrie = go(t, words.tail)
+              curr.copy(children = curr.children - t + updatedTrie)
           }
         }
       }
@@ -67,7 +66,5 @@ object MemoryStorer {
                               to:         PossibleReply,
                               newReplies: PossibleReply): Trie =
       trie.copy(replies = trie.replies - to + to.copy(possibleReply = to.possibleReply ++ newReplies.possibleReply))
-
-    private def addValue(trie: Trie, node: PartOfSentence): Trie = trie.copy(children = trie.children + Trie(node))
   }
 }

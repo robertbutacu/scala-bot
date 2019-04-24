@@ -7,10 +7,12 @@ import scala.util.matching.Regex
 
 
 sealed trait NodeInformation {
-  def exists(p: PartOfSentence): Boolean
+  def informationMatches(p: PartOfSentence): Boolean
 
-  def addInformation(p:           PartOfSentence,
-                     information: Map[Attribute, String]): Map[Attribute, String]
+  def wordMatches(p: PartOfSentence): Boolean
+
+  def addToAttributes(value:       String,
+                      information: Map[Attribute, String]): Map[Attribute, String]
 }
 
 object NodeInformation {
@@ -28,34 +30,38 @@ case class NodeSimpleWord(word:                 Regex        = "".r,
                           synonyms:             Set[Regex]   = Set.empty
                          )
   extends NodeInformation {
-  override def exists(p: PartOfSentence): Boolean = {
+  override def informationMatches(p: PartOfSentence): Boolean = {
     def anyMatch(): Boolean =
-      this.word == p.word || otherAcceptableForms.contains(p.word) || synonyms.contains(p.word)
+      this.word.toString() == p.word.toString() || otherAcceptableForms.contains(p.word) || synonyms.contains(p.word)
 
     p.attribute match {
-      case None => anyMatch()
+      case None    => anyMatch()
       case Some(_) => false
     }
   }
 
-  override def addInformation(p:           PartOfSentence,
-                              information: Map[Attribute, String]): Map[Attribute, String] =
+  override def addToAttributes(p:           String,
+                               information: Map[Attribute, String]): Map[Attribute, String] =
     information
+
+  override def wordMatches(p: PartOfSentence): Boolean = word.anchored.pattern.matcher(p.word.toString()).matches()
 }
 
 case class NodeUserInformation(word:      Regex = "".r,
                                attribute: Attribute)
   extends NodeInformation {
-  override def exists(p: PartOfSentence): Boolean = {
+  override def informationMatches(p: PartOfSentence): Boolean = {
     p.attribute match {
       case None       => false
-      case Some(attr) => this.word.pattern.matcher(p.word.toString()).matches() && attribute == attr
+      case Some(attr) => this.word.toString() == p.word.toString() && attribute == attr
     }
   }
 
-  override def addInformation(p:           PartOfSentence,
-                              information: Map[Attribute, String]): Map[Attribute, String] =
-    information + (this.attribute -> p.word.toString())
+  override def addToAttributes(p:           String,
+                               information: Map[Attribute, String]): Map[Attribute, String] =
+    information + (this.attribute -> p)
+
+  override def wordMatches(p: PartOfSentence): Boolean = word.pattern.matcher(p.word.toString()).matches()
 }
 
 

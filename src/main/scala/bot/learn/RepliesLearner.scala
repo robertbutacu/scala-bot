@@ -28,8 +28,9 @@ object RepliesLearner {
       * @param r    - reply
       * @return - a new trie with the acquired reply in memory
       */
-    def learn(trie: Trie, r: MessageTemplate): Trie =
+    def learn(trie: Trie, r: MessageTemplate): Trie = {
       trie.add(toWords(r.humanMessage.message), PossibleReply(r))
+    }
 
     startLearning(trie, acquired)
   }
