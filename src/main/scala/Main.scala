@@ -1,10 +1,10 @@
 import cats.Id
 import example.Bot
 import cats.instances.all._
-import bot.memory.storage.Printer.TriePrinter
-object Main extends App {
-  val bot = Bot[Id](10)
+import scala.util.Try
 
-  bot.masterBrain.print()
+object Main extends App {
+  val bot = Bot[Try](10)
+
   bot.startDemo
 }

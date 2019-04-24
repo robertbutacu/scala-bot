@@ -3,7 +3,6 @@ package example
 import bot.connections.{Acquaintances, Attribute, Person}
 import bot.handler.MessageHandler
 import bot.memory.Trie
-import bot.memory.storage.Printer.TriePrinter
 import cats.{Applicative, Monad}
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
