@@ -13,6 +13,15 @@ sealed trait NodeInformation {
                      information: Map[Attribute, String]): Map[Attribute, String]
 }
 
+object NodeInformation {
+  def apply(p: PartOfSentence): NodeInformation = {
+    p.attribute match {
+      case None => NodeSimpleWord(p.word)
+      case Some(a) => NodeUserInformation(p.word, a)
+    }
+  }
+}
+
 case class NodeSimpleWord(word: Regex = "".r,
                           otherAcceptableForms: Set[Regex] = Set.empty,
                           partOfSpeech: PartOfSpeech = Irrelevant,

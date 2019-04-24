@@ -22,7 +22,7 @@ case class Trie(information: NodeInformation,
 
 object Trie {
   def apply(node: PartOfSentence): Trie = {
-    ???
+    Trie(NodeInformation(node))
   }
 
   def empty: Trie = Trie(NodeSimpleWord("".r))

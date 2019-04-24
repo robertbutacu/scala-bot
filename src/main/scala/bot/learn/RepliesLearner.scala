@@ -7,14 +7,14 @@ import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 import scala.annotation.tailrec
 
 object RepliesLearner {
-  type Responses = Set[ _ => Set[String]]
+  type Responses = Set[() => Set[String]]
 
   /**
     * @param trie     - previous trie to which new templates are to be added
     * @param acquired - a list of replies to be added
     * @return - a new trie with the list of acquired replies in memory
     */
-  def learn(trie: Trie, acquired: List[MessageTemplate]): Trie = {
+  def learn[A](trie: Trie, acquired: List[MessageTemplate]): Trie = {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[MessageTemplate]): Trie = {
       toBeLearned match {

@@ -11,7 +11,7 @@ trait Age extends BrainFunctions with Attributes {
         List(Message("Im ".r, None),
           Message("[0-9]+".r, Some(age)),
           Message(" years old".r, None))),
-      Set(ageReply _)
+      Set(ageReply)
     ),
     MessageTemplate(
       HumanMessage(None,
