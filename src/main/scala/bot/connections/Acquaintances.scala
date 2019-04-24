@@ -105,8 +105,8 @@ object Acquaintances {
       * @param minThreshold - a minimum amount of attribute weights sum
       * @return - a list of possible matching people
       */
-    def tryMatch(people: List[Map[Attribute, Value]],
-                 person: List[(Attribute, Value)],
+    def tryMatch(people:       List[Map[Attribute, Value]],
+                 person:       List[(Attribute, Value)],
                  minThreshold: Int): F[List[Map[Attribute, Value]]] = {
       def isMatch(person: List[(Attribute, Value)]): Boolean =
         sum(person) >= minThreshold

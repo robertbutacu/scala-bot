@@ -9,23 +9,23 @@ import scala.util.matching.Regex
 sealed trait NodeInformation {
   def exists(p: PartOfSentence): Boolean
 
-  def addInformation(p: PartOfSentence,
+  def addInformation(p:           PartOfSentence,
                      information: Map[Attribute, String]): Map[Attribute, String]
 }
 
 object NodeInformation {
   def apply(p: PartOfSentence): NodeInformation = {
     p.attribute match {
-      case None => NodeSimpleWord(p.word)
+      case None    => NodeSimpleWord(p.word)
       case Some(a) => NodeUserInformation(p.word, a)
     }
   }
 }
 
-case class NodeSimpleWord(word: Regex = "".r,
-                          otherAcceptableForms: Set[Regex] = Set.empty,
-                          partOfSpeech: PartOfSpeech = Irrelevant,
-                          synonyms: Set[Regex] = Set.empty
+case class NodeSimpleWord(word:                 Regex        = "".r,
+                          otherAcceptableForms: Set[Regex]   = Set.empty,
+                          partOfSpeech:         PartOfSpeech = Irrelevant,
+                          synonyms:             Set[Regex]   = Set.empty
                          )
   extends NodeInformation {
   override def exists(p: PartOfSentence): Boolean = {
@@ -38,23 +38,22 @@ case class NodeSimpleWord(word: Regex = "".r,
     }
   }
 
-  override def addInformation(p: PartOfSentence,
+  override def addInformation(p:           PartOfSentence,
                               information: Map[Attribute, String]): Map[Attribute, String] =
     information
 }
 
-case class NodeUserInformation(word: Regex = "".r,
+case class NodeUserInformation(word:      Regex = "".r,
                                attribute: Attribute)
   extends NodeInformation {
   override def exists(p: PartOfSentence): Boolean = {
     p.attribute match {
-      case None => false
-      case Some(attr) =>
-        this.word.pattern.matcher(p.word.toString()).matches() && attribute == attr
+      case None       => false
+      case Some(attr) => this.word.pattern.matcher(p.word.toString()).matches() && attribute == attr
     }
   }
 
-  override def addInformation(p: PartOfSentence,
+  override def addInformation(p:           PartOfSentence,
                               information: Map[Attribute, String]): Map[Attribute, String] =
     information + (this.attribute -> p.word.toString())
 }

@@ -4,7 +4,7 @@ import bot.connections.Attribute
 
 import scala.util.matching.Regex
 
-case class PartOfSentence(word: Regex = "".r,
+case class PartOfSentence(word:      Regex             = "".r,
                           attribute: Option[Attribute] = None) {
   def matchesWord(toMatch: Word): Boolean =
     toMatch

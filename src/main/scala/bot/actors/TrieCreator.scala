@@ -36,12 +36,12 @@ object TrieCreator {
 
 class TrieCreator() extends Actor {
   override def receive: Actor.Receive = {
-    case Print(trie: Trie) => trie.print()
+    case Print(trie: Trie)        => trie.print()
 
     case CreateTrie(msg, replies) => sender() ! TrieResponse(Trie(NodeSimpleWord("".r)).add(msg, replies))
 
-    case Search(msg, trie) => sender() ! SearchReturnMessage(trie.search(msg))
+    case Search(msg, trie)        => sender() ! SearchReturnMessage(trie.search(msg))
 
-    case Add(msg, replies, trie) => sender() ! TrieResponse(trie.add(msg, replies))
+    case Add(msg, replies, trie)  => sender() ! TrieResponse(trie.add(msg, replies))
   }
 }

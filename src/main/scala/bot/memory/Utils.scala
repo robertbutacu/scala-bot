@@ -3,8 +3,8 @@ package bot.memory
 import bot.memory.definition.{Definition, PartOfSentence, Synonym, Word}
 
 protected[memory] object Utils {
-  def findReplacements(sentence: List[PartOfSentence],
-                       word: PartOfSentence,
+  def findReplacements(sentence:   List[PartOfSentence],
+                       word:       PartOfSentence,
                        dictionary: Set[Definition]): List[Word] = {
 
     case class ContextMatchCount(synonym: Synonym, count: Int) {
@@ -12,7 +12,7 @@ protected[memory] object Utils {
     }
 
     //Option so it can be used as a Monad in the for comprehension
-    def wordsInSameContextCount(sentence: List[PartOfSentence],
+    def wordsInSameContextCount(sentence:     List[PartOfSentence],
                                 contextWords: Set[Word]): Option[Int] = {
       val count = sentence count (w => contextWords exists w.matchesWord)
 

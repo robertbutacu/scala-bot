@@ -18,7 +18,7 @@ object RepliesLearner {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[MessageTemplate]): Trie = {
       toBeLearned match {
-        case Nil => curr
+        case Nil       => curr
         case h :: tail => startLearning(learn(curr, h), tail)
       }
     }

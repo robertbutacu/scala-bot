@@ -8,7 +8,7 @@ import bot.learn.RepliesLearner.Responses
   * @param message          - human's actual message, composed of multiple words/regexes.
   */
 case class HumanMessage(previousBotReply: Option[() => Set[String]],
-                        message: List[Message])
+                        message:          List[Message])
 
 
 /**
@@ -17,4 +17,4 @@ case class HumanMessage(previousBotReply: Option[() => Set[String]],
   * @param botReplies   - a set of functions which return a string
   */
 case class MessageTemplate(humanMessage: HumanMessage,
-                           botReplies: Responses)
+                           botReplies:   Responses)

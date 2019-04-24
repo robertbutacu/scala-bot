@@ -2,6 +2,6 @@ package bot.handler
 
 import org.scalatest.FlatSpec
 
-class Handler extends FlatSpec with MessageHandler {
+class Handler extends FlatSpec {
 
 }

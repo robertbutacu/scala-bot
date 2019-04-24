@@ -24,7 +24,8 @@ object MemoryLookup {
       */
     override def search(message: List[PartOfSentence]): SearchResponses = {
       @tailrec
-      def go(message: List[PartOfSentence], trie: Trie,
+      def go(message:    List[PartOfSentence],
+             trie:       Trie,
              attributes: Map[Attribute, String]): SearchResponses = {
         if (message.isEmpty)
           SearchResponses(attributes, trie.replies) //completely ran over all the words
@@ -32,7 +33,7 @@ object MemoryLookup {
           val head = message.head
           val next = trie.children.find(t => isMatching(t, head))
           next match {
-            case None => SearchResponses(attributes) //word wasn't found in the trie
+            case None           => SearchResponses(attributes) //word wasn't found in the trie
             case Some(nextNode) => go(message.tail, nextNode,
               nextNode.information.addInformation(head, attributes))
           }
@@ -42,7 +43,8 @@ object MemoryLookup {
       go(message, trie, Map[Attribute, String]().empty)
     }
 
-    private def isMatching(trie: Trie, partOfSentence: PartOfSentence): Boolean =
+    private def isMatching(trie:           Trie,
+                           partOfSentence: PartOfSentence): Boolean =
       trie.information.exists(partOfSentence)
   }
 }

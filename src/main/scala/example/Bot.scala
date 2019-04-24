@@ -2,6 +2,7 @@ package example
 
 import bot.connections.{Acquaintances, Attribute, Person}
 import bot.handler.MessageHandler
+import bot.memory.Trie
 import bot.memory.storage.Printer.TriePrinter
 import cats.{Applicative, Monad}
 import example.brain.Manager
@@ -13,15 +14,15 @@ import scala.language.higherKinds
 import scala.util.{Failure, Success}
 
 
-case class Bot[F[_]]() extends Manager with MessageHandler {
+case class Bot[F[_]](minKnowledgeThreshold: Int) extends Manager with MessageHandler {
   type Matcher = (Option[Map[Attribute, String]], List[String], List[String])
 
   implicit def acquaintances(implicit A: Applicative[F]): Acquaintances[F] = Acquaintances.xmlStorage[F]("out.xml")
 
   def startDemo(implicit M: Monad[F]): Unit = {
-    def go(botLog: List[String] = List.empty,
+    def go(botLog:   List[String] = List.empty,
            humanLog: List[String] = List.empty,
-           people: List[Map[Attribute, String]]): Unit = {
+           people:   List[Map[Attribute, String]]): Unit = {
       val message = scala.io.StdIn.readLine()
       if (message == "QUIT") {
         acquaintances.add(people, currentSessionInformation.toMap)
@@ -32,15 +33,16 @@ case class Bot[F[_]]() extends Manager with MessageHandler {
         val updatedHumanLog = humanLog :+ message
 
         if (message == "Do you remember me?") {
-          val possibleMatches = acquaintances.tryMatch(people, currentSessionInformation.toList, 10)
+          val possibleMatches = acquaintances.tryMatch(people, currentSessionInformation.toList, minKnowledgeThreshold)
 
-          val isMatch = possibleMatches.map(pm => matcher(pm, humanLog, botLog))
-          isMatch.map {
-            case (None, bL, hL) => go(bL, hL, people)
-            case (Some(p), bL, hL) =>
-              currentSessionInformation = currentSessionInformation.empty ++ p
-              acquaintances.forget(people, p).map(p => go(bL, hL, p))
-          }
+          possibleMatches
+            .map(pm => matcher(pm, humanLog, botLog))
+            .map {
+              case (None, bL, hL)    => go(bL, hL, people)
+              case (Some(p), bL, hL) =>
+                currentSessionInformation = currentSessionInformation.empty ++ p
+                acquaintances.forget(people, p).map(p => go(bL, hL, p))
+            }
         }
 
         else {
@@ -63,10 +65,11 @@ case class Bot[F[_]]() extends Manager with MessageHandler {
     people.map(p => go(people = p))
   }
 
+  //TODO this is rather tricky - have maybe a separate brain module which deals with remembering people ...? More generic this way
   @tailrec
-  final def matcher(people: List[Map[Attribute, String]],
+  final def matcher(people:   List[Map[Attribute, String]],
                     humanLog: List[String],
-                    botLog: List[String]): Matcher = {
+                    botLog:   List[String]): Matcher = {
     if (people.isEmpty) {
       val response = "Sorry, I do not seem to remember you."
       println(response)
@@ -108,7 +111,11 @@ case class Bot[F[_]]() extends Manager with MessageHandler {
     people collect applier
   }
 
-  override def disapprovalMessages: Set[String] = Set("", "", "Changed the subject...")
+  override def disapprovalMessages:  Set[String] = Set("", "", "Changed the subject...")
 
   override def unknownHumanMessages: Set[String] = Set("Not familiar with this")
+
+  override def disapprovalTrie:   Trie = ???
+  override def unknownHumanTrie:  Trie = ???
+  override def peopleMatcherTrie: Trie = ???
 }

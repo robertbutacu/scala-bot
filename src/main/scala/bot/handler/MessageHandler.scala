@@ -10,19 +10,19 @@ import scala.collection.mutable
 import scala.util.Random
 
 trait MessageHandler {
-  def disapprovalTrie: Trie = ???
-  def unknownHumanTrie: Trie = ???
+  def disapprovalTrie:   Trie
+  def unknownHumanTrie:  Trie
+  def peopleMatcherTrie: Trie
 
-  def disapprovalMessages: Set[String] = Set("")
-
+  def disapprovalMessages:  Set[String] = Set("")
   def unknownHumanMessages: Set[String] = Set("")
 
   var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
-  def handle(trie: Trie,
-             msg: String,
+  def handle(trie:     Trie,
+             msg:      String,
              humanLog: List[String],
-             botLog: List[String]): String = {
+             botLog:   List[String]): String = {
     def toPartsOfSentence(msg: String): List[PartOfSentence] =
       msg.split(' ')
         .toList
@@ -66,7 +66,7 @@ trait MessageHandler {
     * @return a message suitable for the last input the client gave.
     */
   private def provideResponse(possibleReplies: Set[PossibleReply],
-                              lastBotMsg: String): String = {
+                              lastBotMsg:      String): String = {
 
     val appliedFunctions = possibleReplies map AppliedFunctions.toAppliedFunctions
 
@@ -80,13 +80,10 @@ trait MessageHandler {
     }
   }
 
-  def getAttribute(attribute: Attribute): Option[String] =
-    currentSessionInformation.get(attribute)
+  def getAttribute(attribute: Attribute): Option[String] = currentSessionInformation.get(attribute)
 
   private def provideReply(replies: Set[String]): String =
-    if (replies.isEmpty)
-      provideReply(unknownHumanMessages)
-    else
-      Random.shuffle(replies).head
+    if (replies.isEmpty) provideReply(unknownHumanMessages)
+    else                 Random.shuffle(replies).head
 
 }

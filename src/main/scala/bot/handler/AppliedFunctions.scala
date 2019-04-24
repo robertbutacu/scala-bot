@@ -9,7 +9,7 @@ import bot.learn.PossibleReply
   * @param previousBotMsgs - ???
   * @param appliedFunctions - ???
   */
-protected[this] case class AppliedFunctions(previousBotMsgs: Set[String],
+protected[this] case class AppliedFunctions(previousBotMsgs:  Set[String],
                                             appliedFunctions: Set[String]){
   def isAnswerToPreviousBotMessage(previousBotMessage: String): Boolean =
     previousBotMsgs.contains(previousBotMessage)
@@ -19,5 +19,5 @@ protected[this] case class AppliedFunctions(previousBotMsgs: Set[String],
 
 object AppliedFunctions {
   def toAppliedFunctions(p: PossibleReply) =
-    AppliedFunctions(p.previousBotMessage.map(_()).toSet.flatten, p.possibleReply.flatMap(f => f()))
+    AppliedFunctions(p.previousBotMessage.map(_()).toSet.flatten, p.possibleReply.flatMap(_()))
 }

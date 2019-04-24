@@ -4,9 +4,9 @@ import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
 
 import scala.util.matching.Regex
 
-case class Word(word: String,
+case class Word(word:                 String,
                 otherAcceptableForms: Set[Word] = Set.empty,
-                partOfSpeech: PartOfSpeech = Irrelevant)
+                partOfSpeech:         PartOfSpeech = Irrelevant)
 
 case class Synonym(definition: Word, contextWords: Set[Word] = Set.empty)
 

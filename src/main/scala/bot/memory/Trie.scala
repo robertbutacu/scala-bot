@@ -17,8 +17,8 @@ import bot.memory.definition.{NodeInformation, NodeSimpleWord, PartOfSentence}
   *                    depending on the already existing/non-existing attributes.
   **/
 case class Trie(information: NodeInformation,
-                children: Set[Trie] = Set[Trie]().empty,
-                replies: Set[PossibleReply] = Set.empty)
+                children:    Set[Trie]          = Set[Trie]().empty,
+                replies:     Set[PossibleReply] = Set.empty)
 
 object Trie {
   def apply(node: PartOfSentence): Trie = {

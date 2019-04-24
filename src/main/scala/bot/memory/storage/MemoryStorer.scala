@@ -63,7 +63,9 @@ object MemoryStorer {
         case Some(rep) => updateReplies(trie, rep, replies)
       }
 
-    private def updateReplies(trie: Trie, to: PossibleReply, newReplies: PossibleReply): Trie =
+    private def updateReplies(trie:       Trie,
+                              to:         PossibleReply,
+                              newReplies: PossibleReply): Trie =
       trie.copy(replies = trie.replies - to + to.copy(possibleReply = to.possibleReply ++ newReplies.possibleReply))
 
     private def addValue(trie: Trie, node: PartOfSentence): Trie = trie.copy(children = trie.children + Trie(node))
