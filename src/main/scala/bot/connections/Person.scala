@@ -8,7 +8,7 @@ class Trait(attribute: Attribute, value: String) {
 
 }
 
-class Person(traits: Map[Attribute, String]) {
+case class Person(traits: Map[Attribute, String]) {
   val serialized: List[Elem] = traits.toList.map(e => new Trait(e._1, e._2).toXml)
 
   def toXml: Elem =

@@ -3,25 +3,30 @@ package example
 import bot.connections.{Acquaintances, Attribute, Person}
 import bot.handler.MessageHandler
 import bot.memory.storage.Printer.TriePrinter
+import cats.{Applicative, Monad}
 import example.brain.Manager
 import example.brain.modules.{AgeAttr, JobAttr, NameAttr, PassionAttr}
+import cats.syntax.all._
 
 import scala.annotation.tailrec
+import scala.language.higherKinds
 import scala.util.{Failure, Success}
 
 
-class Bot extends Manager with MessageHandler {
+case class Bot[F[_]]() extends Manager with MessageHandler {
   type Matcher = (Option[Map[Attribute, String]], List[String], List[String])
 
-  implicit val acquaintances = Acquaintances.xmlStorage("xml.out")
+  implicit def acquaintances(implicit A: Applicative[F]): Acquaintances[F] = Acquaintances.xmlStorage[F]("out.xml")
 
-  /*def startDemo[M](implicit acquaintances: Acquaintances[M]): Unit = {
+  def startDemo(implicit M: Monad[F]): Unit = {
     def go(botLog: List[String] = List.empty,
            humanLog: List[String] = List.empty,
-           people: M[List[Map[Attribute, String]]]): Unit = {
+           people: List[Map[Attribute, String]]): Unit = {
       val message = scala.io.StdIn.readLine()
       if (message == "QUIT") {
-        acquaintances.persist(acquaintances.add(people, currentSessionInformation.toMap) map (new Person(_)))
+        acquaintances.add(people, currentSessionInformation.toMap)
+          .map(people => people.map(p => Person(p)))
+          .map(person => acquaintances.persist(person))
       }
       else {
         val updatedHumanLog = humanLog :+ message
@@ -29,14 +34,15 @@ class Bot extends Manager with MessageHandler {
         if (message == "Do you remember me?") {
           val possibleMatches = acquaintances.tryMatch(people, currentSessionInformation.toList, 10)
 
-          val isMatch = matcher(possibleMatches, humanLog, botLog)
-          isMatch match {
+          val isMatch = possibleMatches.map(pm => matcher(pm, humanLog, botLog))
+          isMatch.map {
             case (None, bL, hL) => go(bL, hL, people)
             case (Some(p), bL, hL) =>
               currentSessionInformation = currentSessionInformation.empty ++ p
-              go(bL, hL, acquaintances.forget(people, p))
+              acquaintances.forget(people, p).map(p => go(bL, hL, p))
           }
         }
+
         else {
           val updatedBotLog = botLog :+ handle(masterBrain, message, updatedHumanLog, botLog)
           println(updatedBotLog.last)
@@ -48,15 +54,15 @@ class Bot extends Manager with MessageHandler {
 
     val peopleXML = acquaintances.remember()
 
-    val people = peopleXML match {
+    val people = peopleXML.map {
       case Success(p) => p.view.map(translate).map(_.flatten.toMap).toList
-      case Failure(_) => println("There seem to be a problem loading up my memory..."); List.empty
+      case Failure(e) => println(s"There seem to be a problem loading up my memory: $e ..."); List.empty
     }
 
     masterBrain.print()
-    go(people = people)
+    people.map(p => go(people = p))
   }
-*/
+
   @tailrec
   final def matcher(people: List[Map[Attribute, String]],
                     humanLog: List[String],
@@ -93,10 +99,10 @@ class Bot extends Manager with MessageHandler {
     */
   def translate(people: List[(String, String, String)]): List[Map[Attribute, String]] = {
     val applier: PartialFunction[(String, String, String), Map[Attribute, String]] = {
-      case ("AgeAttr", weight, ageValue) => Map(Attribute(AgeAttr, weight.toInt) -> ageValue)
-      case ("NameAttr", weight, nameValue) => Map(Attribute(NameAttr, weight.toInt) -> nameValue)
+      case ("AgeAttr", weight, ageValue)         => Map(Attribute(AgeAttr, weight.toInt) -> ageValue)
+      case ("NameAttr", weight, nameValue)       => Map(Attribute(NameAttr, weight.toInt) -> nameValue)
       case ("PassionAttr", weight, passionValue) => Map(Attribute(PassionAttr, weight.toInt) -> passionValue)
-      case ("Job", weight, jobValue) => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
+      case ("Job", weight, jobValue)             => Map(Attribute(JobAttr, weight.toInt) -> jobValue)
     }
 
     people collect applier

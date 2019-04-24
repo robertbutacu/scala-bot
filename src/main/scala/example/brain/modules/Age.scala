@@ -17,12 +17,12 @@ trait Age extends BrainFunctions with Attributes {
       HumanMessage(None,
         List(Message("Im passionate about".r, None),
           Message("[a-zA-Z]+".r, Some(passion)))),
-      Set(passionReply _)
+      Set(passionReply)
     ),
     MessageTemplate(
       HumanMessage(Some(passionReply _),
         List(Message("What am i passionate about".r, None))),
-      Set(passionReplies _)
+      Set(passionReplies)
     )
   )
 }
