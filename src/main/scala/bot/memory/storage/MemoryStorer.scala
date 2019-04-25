@@ -2,10 +2,10 @@ package bot.memory.storage
 
 import bot.learn.PossibleReply
 import bot.memory.Trie
-import bot.memory.definition.PartOfSentence
+import bot.memory.definition.{Definition, PartOfSentence}
 
 trait MemoryStorer {
-  def add(message: List[PartOfSentence], replies: PossibleReply): Trie
+  def add(message: List[PartOfSentence], replies: PossibleReply, dictionary: Set[Definition]): Trie
 }
 
 object MemoryStorer {
@@ -22,8 +22,9 @@ object MemoryStorer {
       * @param replies - a set of functions which return a set of possible replies
       * @return - a new trie with the new message included
       */
-    override final def add(message: List[PartOfSentence],
-                           replies: PossibleReply): Trie = {
+    override final def add(message:    List[PartOfSentence],
+                           replies:    PossibleReply,
+                           dictionary: Set[Definition]): Trie = {
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
         if (words.isEmpty)
           this.addReplies(curr, replies)
@@ -33,7 +34,7 @@ object MemoryStorer {
 
           next match {
             case None =>
-              val newTrie = go(Trie(currWord), words.tail)
+              val newTrie = go(Trie(currWord, dictionary), words.tail)
               curr.copy(children = curr.children + newTrie)
             case Some(t) =>
               val updatedTrie = go(t, words.tail)

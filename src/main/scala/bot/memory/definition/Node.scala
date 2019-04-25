@@ -16,7 +16,7 @@ sealed trait NodeInformation {
 }
 
 object NodeInformation {
-  def apply(p: PartOfSentence): NodeInformation = {
+  def apply(p: PartOfSentence, dictionary: Set[Definition]): NodeInformation = {
     p.attribute match {
       case None    => NodeSimpleWord(p.word)
       case Some(a) => NodeUserInformation(p.word, a)

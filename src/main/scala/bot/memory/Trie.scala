@@ -1,7 +1,7 @@
 package bot.memory
 
 import bot.learn.PossibleReply
-import bot.memory.definition.{NodeInformation, NodeSimpleWord, PartOfSentence}
+import bot.memory.definition.{Definition, NodeInformation, NodeSimpleWord, PartOfSentence}
 
 /**
   *
@@ -21,8 +21,8 @@ case class Trie(information: NodeInformation,
                 replies:     Set[PossibleReply] = Set.empty)
 
 object Trie {
-  def apply(node: PartOfSentence): Trie = {
-    Trie(NodeInformation(node))
+  def apply(node: PartOfSentence, dictionary: Set[Definition]): Trie = {
+    Trie(NodeInformation(node, dictionary))
   }
 
   def empty: Trie = Trie(NodeSimpleWord("".r))
