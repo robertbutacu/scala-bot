@@ -1,7 +1,7 @@
 package bot.learn
 
 import bot.memory.Trie
-import bot.memory.definition.PartOfSentence
+import bot.memory.definition.{Definition, PartOfSentence}
 import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 
 import scala.annotation.tailrec
@@ -14,7 +14,7 @@ object RepliesLearner {
     * @param acquired - a list of replies to be added
     * @return - a new trie with the list of acquired replies in memory
     */
-  def learn[A](trie: Trie, acquired: List[MessageTemplate]): Trie = {
+  def learn[A](trie: Trie, acquired: List[MessageTemplate], dictionary: Set[Definition]): Trie = {
     @tailrec
     def startLearning(curr: Trie, toBeLearned: List[MessageTemplate]): Trie = {
       toBeLearned match {
@@ -29,7 +29,7 @@ object RepliesLearner {
       * @return - a new trie with the acquired reply in memory
       */
     def learn(trie: Trie, r: MessageTemplate): Trie = {
-      trie.add(toWords(r.humanMessage.message), PossibleReply(r))
+      trie.add(toWords(r.humanMessage.message), PossibleReply(r), dictionary)
     }
 
     startLearning(trie, acquired)
