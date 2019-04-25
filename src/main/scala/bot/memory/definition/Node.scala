@@ -56,7 +56,9 @@ case class NodeSimpleWord(word:                 Regex               = "".r,
                                information: Map[Attribute, String]): Map[Attribute, String] =
     information
 
-  override def wordMatches(w: String): Boolean = word.pattern.matcher(w).matches()
+  override def wordMatches(w: String): Boolean = {
+    word.pattern.matcher(w).matches() || otherAcceptableForms.contains(AcceptableForm(w)) || synonyms.exists(s => s.matches(w))
+  }
 }
 
 case class NodeUserInformation(word:      Regex = "".r,
