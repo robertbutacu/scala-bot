@@ -6,7 +6,7 @@ case class Definition(word:     Word,
                       synonyms: Set[Synonym] = Set.empty) {
   def getMatchingSynonyms(word: String, sentence: List[String]): Set[Synonym] = {
     synonyms.filter { s =>
-      sentence.contains(s.definition.word) && sentence.exists(w => s.contextWords.exists(ww => ww.matches(w)))
+      sentence.contains(s.definition.word) || sentence.exists(w => s.contextWords.exists(ww => ww.matches(w)))
     }
   }
 
@@ -36,9 +36,9 @@ object Definition {
     definitions exists (_.word.word == word)
 
 
-  def addDefinitions(word:        Definition,
-                     definitions: Set[Synonym]): Definition =
-    word.copy(synonyms = word.synonyms ++ definitions)
+  def addSynonyms(word:     Definition,
+                  synonyms: Set[Synonym]): Definition =
+    word.copy(synonyms = word.synonyms ++ synonyms)
 }
 
 case class AcceptableForm(word: String)

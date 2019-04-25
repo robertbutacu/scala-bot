@@ -2,7 +2,7 @@ package bot.memory
 
 import bot.memory.definition.{Definition, Synonym, Word}
 
-protected[memory] object Utils {
+object Utils {
   def findReplacements(word:       String,
                        sentence:   List[String],
                        dictionary: Set[Definition]): Set[Word] = {
