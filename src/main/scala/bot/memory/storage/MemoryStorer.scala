@@ -34,7 +34,7 @@ object MemoryStorer {
 
           next match {
             case None =>
-              val newTrie = go(Trie(currWord, dictionary), words.tail)
+              val newTrie = go(Trie(currWord, message, dictionary), words.tail)
               curr.copy(children = curr.children + newTrie)
             case Some(t) =>
               val updatedTrie = go(t, words.tail)

@@ -21,9 +21,9 @@ case class Trie(information: NodeInformation,
                 replies:     Set[PossibleReply] = Set.empty)
 
 object Trie {
-  def apply(node: PartOfSentence, dictionary: Set[Definition]): Trie = {
-    Trie(NodeInformation(node, dictionary))
-  }
+  def apply(node:       PartOfSentence,
+            sentence:   List[PartOfSentence],
+            dictionary: Set[Definition]): Trie = Trie(NodeInformation(node, sentence, dictionary))
 
   def empty: Trie = Trie(NodeSimpleWord("".r))
 }

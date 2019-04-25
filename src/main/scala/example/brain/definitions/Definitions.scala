@@ -19,7 +19,7 @@ object Definitions {
     val minor:      Definition = Definition(Word("minor", Set("Minor", "mic")))
     val adolescent: Definition = Definition(Word("adolescent"))
 
-    val old:    Definition = Definition(Word("age"))
+    val old:    Definition = Definition(Word("old"))
     val ageOld: Definition = Definition(Word("age-old"), Set(old))
 
     val passionate: Definition = Definition(Word("passionate"))
@@ -34,7 +34,7 @@ object Definitions {
     Set(Definition.addSynonyms(underage, Set(Synonym(minor,    Set(old, ageOld)))),
       Definition.addSynonyms(minor,      Set(Synonym(underage, Set(old, ageOld)))),
       Definition.addSynonyms(adolescent, Set(Synonym(underage, Set(old, ageOld)))),
-      Definition.addSynonyms(old,        Set(ageOld)),
+      Definition.addSynonyms(old,        Set(Synonym(ageOld, Set(Word("years"))))),
       Definition.addSynonyms(ageOld,     Set(old)),
       Definition.addSynonyms(passionate, Set(ardent, keen)),
       Definition.addSynonyms(ardent,     Set(passionate, keen)),

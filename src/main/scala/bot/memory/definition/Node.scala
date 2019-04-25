@@ -1,6 +1,7 @@
 package bot.memory.definition
 
 import bot.connections.Attribute
+import bot.memory.Utils
 import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
 
 import scala.util.matching.Regex
@@ -16,26 +17,37 @@ sealed trait NodeInformation {
 }
 
 object NodeInformation {
-  def apply(p: PartOfSentence, dictionary: Set[Definition]): NodeInformation = {
+  def apply(p: PartOfSentence, sentence: List[PartOfSentence], dictionary: Set[Definition]): NodeInformation = {
+    def constructSimpleNode(): NodeSimpleWord = {
+      val word = p.word
+      val otherAcceptableForms = dictionary.find(_.word.matches(p.word.toString())).fold(Set.empty[AcceptableForm])(w => w.word.otherAcceptableForms)
+      // TODO inconsistency between List[PartOfSentence] and findReplacements
+      val synonyms = Utils.findReplacements(p.word.toString(), sentence.map(_.word.toString()), dictionary)
+
+      NodeSimpleWord(word, otherAcceptableForms, Irrelevant, synonyms)
+    }
+
     p.attribute match {
-      case None    => NodeSimpleWord(p.word)
+      case None    => constructSimpleNode()
       case Some(a) => NodeUserInformation(p.word, a)
     }
   }
 }
 
-case class NodeSimpleWord(word:                 Regex        = "".r,
-                          otherAcceptableForms: Set[Regex]   = Set.empty,
-                          partOfSpeech:         PartOfSpeech = Irrelevant,
-                          synonyms:             Set[Regex]   = Set.empty
+
+//TODO maybe word and otherAcceptableForms should be regexes??? More flexibility
+case class NodeSimpleWord(word:                 Regex               = "".r,
+                          otherAcceptableForms: Set[AcceptableForm] = Set.empty,
+                          partOfSpeech:         PartOfSpeech        = Irrelevant,
+                          synonyms:             Set[Word]           = Set.empty
                          )
   extends NodeInformation {
   override def informationMatches(p: PartOfSentence): Boolean = {
-    def anyMatch(): Boolean =
-      this.word.toString() == p.word.toString() || otherAcceptableForms.contains(p.word) || synonyms.contains(p.word)
+    def anyMatch(word: String): Boolean =
+      this.word.toString() == word || otherAcceptableForms.contains(AcceptableForm(word)) || synonyms.exists(w => w.matches(word))
 
     p.attribute match {
-      case None    => anyMatch()
+      case None    => anyMatch(p.word.toString())
       case Some(_) => false
     }
   }
