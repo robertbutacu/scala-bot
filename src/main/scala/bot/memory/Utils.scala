@@ -14,11 +14,13 @@ object Utils {
 
     def contextCountForSynonym(synonym: Synonym): Int             = cleanedSentence.count(s => synonym.contextWords.exists(w => w.matches(s)))
     def findMatchingDefinition:                   Set[Definition] = dictionary.filter(d => d.matches(word))
+    def wordAsSynonym:                            Set[Word]       = dictionary.withFilter(d => d.isSynonym(word, sentence)).map(_.word)
 
-    val synonyms = findMatchingDefinition.flatMap(d => d.getMatchingSynonyms(word, sentence))
-
-    //TODO this is pretty dummy, as any synonym with at least 1 context word gets picked up
-    synonyms.withFilter(s => contextCountForSynonym(s) > 0)
+    //TODO this is pretty dumb, as any synonym with at least 1 context word gets picked up
+    val allSynonyms = findMatchingDefinition.flatMap(d => d.getMatchingSynonyms(word, sentence))
+      .withFilter(s => contextCountForSynonym(s) > 0)
       .map(_.definition)
+
+    allSynonyms ++ wordAsSynonym
   }
 }

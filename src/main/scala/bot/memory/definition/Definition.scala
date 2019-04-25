@@ -4,6 +4,18 @@ import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
 
 case class Definition(word:     Word,
                       synonyms: Set[Synonym] = Set.empty) {
+  // Inverse relationship where the word is found as a synonym for the current definition,
+  // and thus the current definition for the word is valid
+  def isSynonym(word: String, sentence: List[String]): Boolean = {
+    val matchingSynonyms = synonyms.filter(s => s.definition.word == word)
+
+    matchingSynonyms.exists {
+      s =>
+        s.contextWords.count(w => sentence.exists(s => w.matches(s))) > 0
+    }
+  }
+
+  // Direct relationship where the synonyms from a definition are extracted using the current word and the context
   def getMatchingSynonyms(word: String, sentence: List[String]): Set[Synonym] = {
     synonyms.filter { s =>
       sentence.contains(s.definition.word) || sentence.exists(w => s.contextWords.exists(ww => ww.matches(w)))
