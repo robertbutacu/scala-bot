@@ -19,5 +19,5 @@ protected[this] case class AppliedFunctions(previousBotMsgs:  Set[String],
 
 object AppliedFunctions {
   def toAppliedFunctions(p: PossibleReply) =
-    AppliedFunctions(p.previousBotMessage.map(_()).toSet.flatten, p.possibleReply.flatMap(_()))
+    AppliedFunctions(p.previousBotMessage.map(_.provideReply()).toSet.flatten, p.possibleReply.flatMap(_.provideReply()))
 }

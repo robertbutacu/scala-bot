@@ -1,13 +1,11 @@
 package bot.learn
 
-import bot.learn.RepliesLearner.Responses
-
 /**
   * @param previousBotReply - an optional function that returns a set of strings =>
   *                             possible previous messages from the bot
   * @param message          - human's actual message, composed of multiple words/regexes.
   */
-case class HumanMessage(previousBotReply: Option[() => Set[String]],
+case class HumanMessage(previousBotReply: Option[BotReply],
                         message:          List[Message])
 
 
@@ -17,4 +15,4 @@ case class HumanMessage(previousBotReply: Option[() => Set[String]],
   * @param botReplies   - a set of functions which return a string
   */
 case class MessageTemplate(humanMessage: HumanMessage,
-                           botReplies:   Responses)
+                           botReplies:   Set[BotReply])

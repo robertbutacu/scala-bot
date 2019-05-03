@@ -20,7 +20,7 @@ trait Age extends BrainFunctions with Attributes {
       Set(passionReply)
     ),
     MessageTemplate(
-      HumanMessage(Some(passionReply _),
+      HumanMessage(Some(passionReply),
         List(Message("What am i passionate about".r, None))),
       Set(passionReplies)
     )

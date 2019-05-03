@@ -1,13 +1,16 @@
 package example.brain
 
 import bot.handler.MessageHandler
+import bot.learn.BotReply
 import example.brain.modules.Attributes
 
 trait BrainFunctions extends MessageHandler with Attributes {
-  def ageReply(): Set[String] = {
-    getAttribute(age) match {
-      case None    => Set("Unknown age", "You havent told me your age")
-      case Some(a) => provideReplies(a.toInt)
+  def ageReply(): BotReply = new BotReply {
+    override def provideReply(): Set[String] = {
+      getAttribute(age) match {
+        case None    => Set("Unknown age", "You havent told me your age")
+        case Some(a) => provideReplies(a.toInt)
+      }
     }
   }
 
@@ -21,16 +24,21 @@ trait BrainFunctions extends MessageHandler with Attributes {
       case _             => Set("got me there", "lost")
     }
 
-  def passionReply(): Set[String] = {
-    getAttribute(passion) match {
-      case None      => Set("No passions")
-      case Some(pas) => Set(s"""Passionate about $pas""")
+  def passionReply(): BotReply = new BotReply {
+    override def provideReply(): Set[String] = {
+      getAttribute(passion) match {
+        case None      => Set("No passions")
+        case Some(pas) => Set(s"""Passionate about $pas""")
+      }
     }
   }
 
-  def passionReplies(): Set[String] =
-    getAttribute(passion) match {
-      case None    => Set("You're not passionate about anything")
-      case Some(p) => Set(s"""You're passionate about $p""")
+  def passionReplies(): BotReply = new BotReply {
+    override def provideReply(): Set[String] = {
+      getAttribute(passion) match {
+        case None    => Set("You're not passionate about anything")
+        case Some(p) => Set(s"""You're passionate about $p""")
+      }
     }
+  }
 }
