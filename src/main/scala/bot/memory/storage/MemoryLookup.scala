@@ -3,8 +3,6 @@ package bot.memory.storage
 import bot.connections.Attribute
 import bot.learn.SearchResponses
 import bot.memory.Trie
-import bot.memory.definition.PartOfSentence
-
 import scala.annotation.tailrec
 
 trait MemoryLookup {

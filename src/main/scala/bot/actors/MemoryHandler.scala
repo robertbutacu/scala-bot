@@ -18,21 +18,16 @@ object MemoryHandler {
   case class Load(file: String)
 
 
-  case class Forget(people: List[Map[Attribute, String]],
-                    person: Map[Attribute, String])
+  case class Forget(person: Map[Attribute, String])
 
-  case class Add(people: List[Map[Attribute, String]],
-                 person: Map[Attribute, String])
+  case class Add(person: Map[Attribute, String])
 
-  case class TryAndMatch(people:       List[Map[Attribute, String]],
-                         person:       List[(Attribute, String)],
+  case class TryAndMatch(person:       List[(Attribute, String)],
                          minThreshold: Int)
 
   case class LoadedPeople(people: Try[List[List[(String, String, String)]]])
 
   case class PossibleMatches(people: List[Map[Attribute, String]])
-
-  case class RetrievePeople(people:  List[Map[Attribute, String]])
 
 }
 
@@ -42,11 +37,11 @@ class MemoryHandler() extends Actor {
 
     case Save(file, people)     => Acquaintances.xmlStorage(file).persist(people)
 
-    case Forget(people, person) => sender() ! RetrievePeople(Acquaintances.xmlStorage("").forget(people, person))
+    case Forget(person) => sender() ! Acquaintances.xmlStorage("").forget(person)
 
-    case Add(people, person)    => sender() ! RetrievePeople(Acquaintances.xmlStorage("").add(people, person))
+    case Add(person)    => sender() ! Acquaintances.xmlStorage("").add(person)
 
-    case TryAndMatch(people, person, minThreshold) =>
-      sender() ! PossibleMatches(Acquaintances.xmlStorage("").tryMatch(people, person, minThreshold))
+    case TryAndMatch(person, minThreshold) =>
+      sender() ! PossibleMatches(Acquaintances.xmlStorage("").tryMatch(person, minThreshold))
   }
 }

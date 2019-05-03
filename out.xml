@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <people>
-      <person>
+          <person>
       <attribute type="PassionAttr" weight="15">guitar</attribute><attribute type="AgeAttr" weight="10">20</attribute>
     </person><person>
       <attribute type="AgeAttr" weight="10">40</attribute>
@@ -26,5 +26,7 @@
       
     </person><person>
       <attribute type="PassionAttr" weight="15">refactoring</attribute><attribute type="AgeAttr" weight="10">20</attribute>
+    </person><person>
+      <attribute type="PassionAttr" weight="15">guitarAndSports</attribute><attribute type="AgeAttr" weight="10">50</attribute>
     </person>
-    </people>
+        </people>
