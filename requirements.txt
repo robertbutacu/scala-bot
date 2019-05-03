@@ -61,7 +61,7 @@ Stages of development for ScalaBot:
 
     7. maybe implement a whole actor system to make everything concurrent - DOING
 
-    8. Definitions - add definitions to words and create the trie upon that - DOING
+    8. Definitions - add definitions to words and create the trie upon that - DONE
                    - the ideal case would be to store in the trie ONLY the possible definitions from which to choose from
                             - think its done... ?
 
