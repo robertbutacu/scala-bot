@@ -8,7 +8,6 @@ package bot.learn
 case class HumanMessage(previousBotReply: Option[BotReply],
                         message:          List[Message])
 
-
 /**
   *
   * @param humanMessage - last message sent by the human, restricted by the last message sent by the bot possibly.

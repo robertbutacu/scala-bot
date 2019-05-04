@@ -14,8 +14,7 @@ trait MessageHandler {
 
   def handle(trie:     Trie,
              msg:      String,
-             humanLog: List[String],
-             botLog:   List[String]): String = {
+             sessionInformation: SessionInformation): String = {
     val response = trie.search(msg)
 
     if (response.possibleReplies.isEmpty) {
@@ -25,10 +24,7 @@ trait MessageHandler {
       currentSessionInformation ++= response.attributesFound
 
       //just in case it's the first message and there are no previous bot messages
-      val lastBotMessage = botLog.lastOption match {
-        case Some(last) => last
-        case None       => ""
-      }
+      val lastBotMessage = sessionInformation.lastBotMessage.fold("")(_.message)
 
       provideResponse(response.possibleReplies, lastBotMessage)
     }
@@ -61,10 +57,9 @@ trait MessageHandler {
       .withFilter(_.hasNoPreviousBotMessage)
       .flatMap(_.appliedFunctions)
 
-    appliedFunctions find (_.isAnswerToPreviousBotMessage(lastBotMsg)) match {
-      case None        => provideReply(noPreviousBotMessageMatches)
-      case Some(reply) => provideReply(reply.appliedFunctions)
-    }
+    appliedFunctions
+      .find(_.isAnswerToPreviousBotMessage(lastBotMsg))
+      .fold(provideReply(noPreviousBotMessageMatches))(reply => provideReply(reply.appliedFunctions))
   }
 
   def getAttribute(attribute: Attribute): Option[String] = currentSessionInformation.get(attribute)

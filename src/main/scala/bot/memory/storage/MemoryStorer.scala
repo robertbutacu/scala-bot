@@ -26,20 +26,23 @@ object MemoryStorer {
                            replies:    PossibleReply,
                            dictionary: Set[Definition]): Trie = {
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
+        def ifEmpty(currWord: PartOfSentence): Trie = {
+          val newTrie = go(Trie(currWord, message, dictionary), words.tail)
+          curr.copy(children = curr.children + newTrie)
+        }
+
+        def addToExisting(trie: Trie, rest: List[PartOfSentence]): Trie = {
+          val updatedTrie = go(trie, words.tail)
+          curr.copy(children = curr.children - trie + updatedTrie)
+        }
+
         if (words.isEmpty)
           this.addReplies(curr, replies)
         else {
           val currWord = words.head
           val next     = curr.children.find(t => t.information.informationMatches(currWord))
 
-          next match {
-            case None =>
-              val newTrie = go(Trie(currWord, message, dictionary), words.tail)
-              curr.copy(children = curr.children + newTrie)
-            case Some(t) =>
-              val updatedTrie = go(t, words.tail)
-              curr.copy(children = curr.children - t + updatedTrie)
-          }
+          next.fold(ifEmpty(currWord))(t => addToExisting(t, words.tail))
         }
       }
 
@@ -58,10 +61,9 @@ object MemoryStorer {
       *             they are registered as new replies with their attribute.
       */
     private def addReplies(trie: Trie, replies: PossibleReply): Trie =
-      trie.replies.find(_.previousBotMessage == replies.previousBotMessage) match {
-        case None      => trie.copy(replies = trie.replies + replies)
-        case Some(rep) => updateReplies(trie, rep, replies)
-      }
+      trie.replies
+        .find(_.previousBotMessage == replies.previousBotMessage)
+        .fold(trie.copy(replies = trie.replies + replies))(rep => updateReplies(trie, rep, replies))
 
     private def updateReplies(trie:       Trie,
                               to:         PossibleReply,
