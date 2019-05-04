@@ -3,7 +3,7 @@ package bot.handler
 import bot.connections.Attribute
 import bot.learn.PossibleReply
 import bot.memory.Trie
-import bot.memory.storage.MemoryLookup.TrieLookup
+import bot.memory.storage.MemoryLookup
 
 import scala.collection.mutable
 import scala.util.Random
@@ -14,8 +14,8 @@ trait MessageHandler {
 
   def handle(trie:     Trie,
              msg:      String,
-             sessionInformation: SessionInformation): String = {
-    val response = trie.search(msg)
+             sessionInformation: SessionInformation)(implicit lookup: MemoryLookup[Trie]): String = {
+    val response = lookup.search(trie, msg)
 
     if (response.possibleReplies.isEmpty) {
       provideReply(sessionInformation.unknownMessages)

@@ -5,13 +5,12 @@ import bot.learn.SearchResponses
 import bot.memory.Trie
 import scala.annotation.tailrec
 
-trait MemoryLookup {
-  def search(message: String): SearchResponses
+trait MemoryLookup[T] {
+  def search(storage: T, message: String): SearchResponses
 }
 
 object MemoryLookup {
-
-  implicit class TrieLookup(trie: Trie) extends MemoryLookup {
+  implicit def trieLookup: MemoryLookup[Trie] = new MemoryLookup[Trie] {
     /**
       * The algorithm describes the search of a message in a trie, by parsing every word and matching it,
       * thus returning a Set of possible replies depending on bot's previous replies.
@@ -20,7 +19,7 @@ object MemoryLookup {
       * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
       *         from which another algorithm will pick the best choice.
       */
-    override def search(message: String): SearchResponses = {
+    override def search(storage: Trie, message: String): SearchResponses = {
       @tailrec
       def go(message:    List[String],
              trie:       Trie,
@@ -37,12 +36,11 @@ object MemoryLookup {
         }
       }
 
-      go(toPartsOfSentence(message), trie, Map[Attribute, String]().empty)
+      go(toPartsOfSentence(message), storage, Map[Attribute, String]().empty)
     }
 
     private def toPartsOfSentence(msg: String): List[String] =
       msg.split(' ')
         .toList
-        .filter(!_.isEmpty)
-  }
+        .filter(!_.isEmpty)  }
 }
