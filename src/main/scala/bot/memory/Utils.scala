@@ -9,7 +9,6 @@ object Utils {
     // For the input word, find out how many synonyms there are by:
     // checking for each synonym how many context words there are
     // a synonym can go either way: definition => synonym, as well as synonym => definition
-    // TODO implement the other way around, where `Word` is as a synonym for a `Definition`
     val cleanedSentence = sentence.filterNot(_ == word)
 
     def contextCountForSynonym(synonym: Synonym): Int             = cleanedSentence.count(s => synonym.contextWords.exists(w => w.matches(s)))
