@@ -1,9 +1,5 @@
-import bot.memory.Utils
-import cats.Id
 import example.Bot
 import cats.instances.all._
-import example.brain.definitions.Definitions
-import bot.memory.storage.Printer.TriePrinter
 import scala.util.Try
 
 object Main extends App {
