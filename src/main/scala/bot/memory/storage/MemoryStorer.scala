@@ -4,25 +4,21 @@ import bot.learn.PossibleReply
 import bot.memory.Trie
 import bot.memory.definition.{Definition, PartOfSentence}
 
-trait MemoryStorer {
-  def add(message: List[PartOfSentence], replies: PossibleReply, dictionary: Set[Definition]): Trie
+trait MemoryStorer[T] {
+  def add(storage: T, message: List[PartOfSentence], replies: PossibleReply, dictionary: Set[Definition]): T
 }
 
 object MemoryStorer {
-
-  implicit class TrieMemoryStorer(trie: Trie) extends MemoryStorer {
+  implicit def trieStorer: MemoryStorer[Trie] = new MemoryStorer[Trie] {
     /**
       * For a current Trie, the algorithm returns another trie with the message added.
       * The pattern matching does the following:
       *   1. in case of None => current word isn't in the set => add it, and call the function with the same node
       *   2. in case of Some(next) => next node has been found => remove it from the Set, since its gonna be different 
       * it would double stack otherwise
-      *
-      * @param message - list of words to be added into the trie
-      * @param replies - a set of functions which return a set of possible replies
-      * @return - a new trie with the new message included
       */
-    override final def add(message:    List[PartOfSentence],
+    override final def add(storage: Trie,
+                           message:    List[PartOfSentence],
                            replies:    PossibleReply,
                            dictionary: Set[Definition]): Trie = {
       def go(curr: Trie, words: List[PartOfSentence]): Trie = {
@@ -46,7 +42,7 @@ object MemoryStorer {
         }
       }
 
-      go(trie, message)
+      go(storage, message)
     }
 
     /**

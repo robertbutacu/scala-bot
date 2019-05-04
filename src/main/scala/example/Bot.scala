@@ -10,52 +10,50 @@ import scala.annotation.tailrec
 import scala.language.higherKinds
 
 case class Bot[F[_]](minKnowledgeThreshold: Int) extends Manager with MessageHandler {
-  type Matcher = (Option[Map[Attribute, String]], List[String], List[String])
+  type Matcher = (Option[Map[Attribute, String]], SessionInformation)
 
   implicit def acquaintances(implicit M: Monad[F]): Acquaintances[F] = Acquaintances.xmlStorage[F]("out.xml")
 
   def startDemo(implicit M: Monad[F]): Unit = {
-    def go(botLog:   List[String] = List.empty,
-           humanLog: List[String] = List.empty): Unit = {
+    def go(sessionInformation: SessionInformation): Unit = {
       val message = scala.io.StdIn.readLine()
       if (message == "QUIT") acquaintances.add(currentSessionInformation.toMap)
       else {
-        val updatedHumanLog = humanLog :+ message
+        val updatedHumanLog = sessionInformation.addHumanMessage(message)
 
         if (message == "Do you remember me?") {
           val possibleMatches = acquaintances.tryMatch(currentSessionInformation.toList, minKnowledgeThreshold)
 
           possibleMatches
-            .map(pm => matcher(pm, humanLog, botLog))
+            .map(pm => matcher(pm, sessionInformation))
             .map {
-              case (None, bL, hL)    => go(bL, hL)
-              case (Some(p), bL, hL) =>
+              case (None, si)    => go(si)
+              case (Some(p), si) =>
                 currentSessionInformation = currentSessionInformation.empty ++ p
-                acquaintances.forget(p).map(_ => go(bL, hL))
+                acquaintances.forget(p).map(_ => go(si))
             }
         }
 
         else {
-          val updatedBotLog = botLog :+ handle(masterBrain, message, updatedHumanLog, botLog)
-          println(updatedBotLog.last)
+          val updatedSessionInformation = sessionInformation.addBotMessage(handle(masterBrain, message, updatedHumanLog))
+          updatedSessionInformation.lastBotMessage.foreach(cl => println(cl.message))
 
-          go(updatedBotLog, humanLog)
+          go(updatedSessionInformation)
         }
       }
     }
 
-    go()
+    go(sessionInformation)
   }
 
   //TODO this is rather tricky - have maybe a separate brain module which deals with remembering people ...? More generic this way
   @tailrec
   final def matcher(people:   List[Map[Attribute, String]],
-                    humanLog: List[String],
-                    botLog:   List[String]): Matcher = {
+                    sessionInformation: SessionInformation): Matcher = {
     if (people.isEmpty) {
       val response = "Sorry, I do not seem to remember you."
       println(response)
-      (None, humanLog, botLog :+ response)
+      (None, sessionInformation.addBotMessage(response))
     }
     else {
       val botMsg = "Does this represent you: " + people.head
@@ -67,16 +65,13 @@ case class Bot[F[_]](minKnowledgeThreshold: Int) extends Manager with MessageHan
 
       if (userMsg == "Yes") {
         println("Ah, welcome back!")
-        (Some(people.head), humanLog :+ userMsg, botLog :+ botMsg)
+        (Some(people.head), sessionInformation.addHumanMessage(userMsg).addBotMessage(botMsg))
       }
       else
-        matcher(people.tail, humanLog :+ userMsg, botLog :+ botMsg)
+        matcher(people.tail, sessionInformation.addHumanMessage(userMsg).addBotMessage(botMsg))
     }
   }
-/*
-  override def disapprovalMessages:  Set[String] = Set("", "", "Changed the subject...")
 
-  override def unknownHumanMessages: Set[String] = Set("Not familiar with this")*/
   override def sessionInformation: SessionInformation =
     SessionInformation(masterBrain,
       Set("Not familiar with this"),

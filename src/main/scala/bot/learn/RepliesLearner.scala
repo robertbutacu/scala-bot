@@ -2,11 +2,13 @@ package bot.learn
 
 import bot.memory.Trie
 import bot.memory.definition.{Definition, PartOfSentence}
-import bot.memory.storage.MemoryStorer.TrieMemoryStorer
+import bot.memory.storage.MemoryStorer
 
 object RepliesLearner {
-  def learn(trie: Trie, acquired: List[MessageTemplate], dictionary: Set[Definition]): Trie = {
-    acquired.foldLeft(trie)((t, w) => t.add(toWords(w.humanMessage.message), PossibleReply(w), dictionary))
+  def learn(trie:       Trie,
+            acquired:   List[MessageTemplate],
+            dictionary: Set[Definition])(implicit storer: MemoryStorer[Trie]): Trie = {
+    acquired.foldLeft(trie)((t, w) => storer.add(t, toWords(w.humanMessage.message), PossibleReply(w), dictionary))
   }
 
   /**

@@ -7,7 +7,6 @@ import bot.memory.Trie
 import bot.memory.storage.Printer.TriePrinter
 import bot.memory.storage.MemoryLookup.TrieLookup
 import bot.memory.definition.{Definition, NodeSimpleWord, PartOfSentence}
-import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 
 object TrieCreator {
   def props() = Props(new TrieCreator)
@@ -36,8 +35,8 @@ object TrieCreator {
 class TrieCreator() extends Actor {
   override def receive: Actor.Receive = {
     case Print(trie: Trie)                    => trie.print()
-    case CreateTrie(msg, replies, dictionary) => sender() ! TrieResponse(Trie(NodeSimpleWord("".r)).add(msg, replies, dictionary))
-    case Search(msg, trie)                    => sender() ! SearchReturnMessage(trie.search(msg))
-    case Add(msg, replies, trie, dictionary)  => sender() ! TrieResponse(trie.add(msg, replies, dictionary))
+    case CreateTrie(msg, replies, dictionary) => sender() ! ??? //TrieResponse(Trie(NodeSimpleWord("".r)).add(msg, replies, dictionary))
+    case Search(msg, trie)                    => sender() ! ??? //SearchReturnMessage(trie.search(msg))
+    case Add(msg, replies, trie, dictionary)  => sender() ! ??? //TrieResponse(trie.add(msg, replies, dictionary))
   }
 }
