@@ -1,7 +1,7 @@
 package bot.memory
 
 import bot.learn.PossibleReply
-import bot.memory.definition.{Definition, NodeInformation, NodeSimpleWord, PartOfSentence}
+import bot.memory.definition.{Definition, Node, PartOfSentence, SimpleWord}
 
 /**
   *
@@ -16,15 +16,15 @@ import bot.memory.definition.{Definition, NodeInformation, NodeSimpleWord, PartO
   *                    => It is done that way so that the replies are generated dynamically,
   *                    depending on the already existing/non-existing attributes.
   **/
-case class Trie(information: NodeInformation,
+case class Trie(information: Node,
                 children:    Set[Trie]          = Set.empty,
                 replies:     Set[PossibleReply] = Set.empty)
 
 object Trie {
   def apply(node:       PartOfSentence,
             sentence:   List[PartOfSentence],
-            dictionary: Set[Definition]): Trie = Trie(NodeInformation(node, sentence, dictionary))
+            dictionary: Set[Definition]): Trie = Trie(Node(node, sentence, dictionary))
 
-  def empty: Trie = Trie(NodeSimpleWord("".r))
+  def empty: Trie = Trie(SimpleWord("".r))
 }
 

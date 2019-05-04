@@ -1,13 +1,12 @@
 package bot.memory.definition
 
 import bot.connections.Attribute
-import bot.memory.Utils
 import bot.memory.part.of.speech.{Irrelevant, PartOfSpeech}
+import bot.memory.{Utils, definition}
 
 import scala.util.matching.Regex
 
-
-sealed trait NodeInformation {
+sealed trait Node {
   def informationMatches(p: PartOfSentence): Boolean
 
   def wordMatches(w: String): Boolean
@@ -16,32 +15,30 @@ sealed trait NodeInformation {
                       information: Map[Attribute, String]): Map[Attribute, String]
 }
 
-object NodeInformation {
-  def apply(p: PartOfSentence, sentence: List[PartOfSentence], dictionary: Set[Definition]): NodeInformation = {
-    def constructSimpleNode(): NodeSimpleWord = {
+object Node {
+  def apply(p: PartOfSentence, sentence: List[PartOfSentence], dictionary: Set[Definition]): Node = {
+    def constructSimpleNode(): SimpleWord = {
       val word = p.word
       val otherAcceptableForms = dictionary.find(_.word.matches(p.word.toString())).fold(Set.empty[AcceptableForm])(w => w.word.otherAcceptableForms)
       // TODO inconsistency between List[PartOfSentence] and findReplacements
       val synonyms = Utils.findReplacements(p.word.toString(), sentence.map(_.word.toString()), dictionary)
 
-      NodeSimpleWord(word, otherAcceptableForms, Irrelevant, synonyms)
+      definition.SimpleWord(word, otherAcceptableForms, Irrelevant, synonyms)
     }
 
     p.attribute match {
       case None    => constructSimpleNode()
-      case Some(a) => NodeUserInformation(p.word, a)
+      case Some(a) => WithAttributeInformation(p.word, a)
     }
   }
 }
 
 
 //TODO maybe word and otherAcceptableForms should be regexes??? More flexibility
-case class NodeSimpleWord(word:                 Regex               = "".r,
-                          otherAcceptableForms: Set[AcceptableForm] = Set.empty,
-                          partOfSpeech:         PartOfSpeech        = Irrelevant,
-                          synonyms:             Set[Word]           = Set.empty
-                         )
-  extends NodeInformation {
+case class SimpleWord(word:                 Regex               = "".r,
+                      otherAcceptableForms: Set[AcceptableForm] = Set.empty,
+                      partOfSpeech:         PartOfSpeech        = Irrelevant,
+                      synonyms:             Set[Word]           = Set.empty) extends Node {
   override def informationMatches(p: PartOfSentence): Boolean = {
     def anyMatch(word: String): Boolean =
       this.word.toString() == word || otherAcceptableForms.contains(AcceptableForm(word)) || synonyms.exists(w => w.matches(word))
@@ -52,18 +49,15 @@ case class NodeSimpleWord(word:                 Regex               = "".r,
     }
   }
 
-  override def addToAttributes(p:           String,
-                               information: Map[Attribute, String]): Map[Attribute, String] =
-    information
+  override def addToAttributes(p: String, information: Map[Attribute, String]): Map[Attribute, String] = information
 
   override def wordMatches(w: String): Boolean = {
     word.pattern.matcher(w).matches() || otherAcceptableForms.contains(AcceptableForm(w)) || synonyms.exists(s => s.matches(w))
   }
 }
 
-case class NodeUserInformation(word:      Regex = "".r,
-                               attribute: Attribute)
-  extends NodeInformation {
+case class WithAttributeInformation(word:      Regex = "".r,
+                                    attribute: Attribute) extends Node {
   override def informationMatches(p: PartOfSentence): Boolean = {
     p.attribute match {
       case None       => false
