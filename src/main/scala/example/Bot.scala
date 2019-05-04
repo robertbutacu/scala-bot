@@ -1,11 +1,11 @@
 package example
 
-import bot.connections.{Acquaintances, Attribute, Person}
-import bot.handler.MessageHandler
-import bot.memory.Trie
+import bot.connections.{Acquaintances, Attribute}
+import bot.handler.{MessageHandler, SessionInformation}
 import cats.Monad
-import example.brain.Manager
 import cats.syntax.all._
+import example.brain.Manager
+
 import scala.annotation.tailrec
 import scala.language.higherKinds
 
@@ -73,12 +73,12 @@ case class Bot[F[_]](minKnowledgeThreshold: Int) extends Manager with MessageHan
         matcher(people.tail, humanLog :+ userMsg, botLog :+ botMsg)
     }
   }
-
+/*
   override def disapprovalMessages:  Set[String] = Set("", "", "Changed the subject...")
 
-  override def unknownHumanMessages: Set[String] = Set("Not familiar with this")
-
-  override def disapprovalTrie:   Trie = ???
-  override def unknownHumanTrie:  Trie = ???
-  override def peopleMatcherTrie: Trie = ???
+  override def unknownHumanMessages: Set[String] = Set("Not familiar with this")*/
+  override def sessionInformation: SessionInformation =
+    SessionInformation(masterBrain,
+      Set("Not familiar with this"),
+      Set("", "", "Changed the subject..."))
 }

@@ -9,13 +9,7 @@ import scala.collection.mutable
 import scala.util.Random
 
 trait MessageHandler {
-  def disapprovalTrie:   Trie
-  def unknownHumanTrie:  Trie
-  def peopleMatcherTrie: Trie
-
-  def disapprovalMessages:  Set[String] = Set("")
-  def unknownHumanMessages: Set[String] = Set("")
-
+  def sessionInformation: SessionInformation
   var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
   def handle(trie:     Trie,
@@ -25,7 +19,7 @@ trait MessageHandler {
     val response = trie.search(msg)
 
     if (response.possibleReplies.isEmpty) {
-      provideReply(unknownHumanMessages)
+      provideReply(sessionInformation.unknownMessages)
     }
     else {
       currentSessionInformation ++= response.attributesFound
@@ -76,7 +70,7 @@ trait MessageHandler {
   def getAttribute(attribute: Attribute): Option[String] = currentSessionInformation.get(attribute)
 
   private def provideReply(replies: Set[String]): String =
-    if (replies.isEmpty) provideReply(unknownHumanMessages)
+    if (replies.isEmpty) provideReply(sessionInformation.unknownMessages)
     else                 Random.shuffle(replies).head
 
 }

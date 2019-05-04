@@ -2,7 +2,7 @@ package bot.actors
 
 import akka.actor.{Actor, Props}
 import bot.actors.Handler._
-import bot.handler.MessageHandler
+import bot.handler.{MessageHandler, SessionInformation}
 import bot.memory.Trie
 
 object Handler {
@@ -31,7 +31,5 @@ class Handler() extends Actor with MessageHandler {
     case Handle(trie, msg, humanLog, botLog) => sender() ! BotResponse(handle(trie, msg, humanLog, botLog))
   }
 
-  override def disapprovalTrie:   Trie = ???
-  override def unknownHumanTrie:  Trie = ???
-  override def peopleMatcherTrie: Trie = ???
+  override def sessionInformation: SessionInformation = ???
 }

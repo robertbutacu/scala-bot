@@ -12,13 +12,6 @@
       <attribute type="PassionAttr" weight="15">programming</attribute><attribute type="AgeAttr" weight="10">20</attribute>
     </person><person>
       <attribute type="PassionAttr" weight="15">scala</attribute><attribute type="AgeAttr" weight="10">20</attribute>
-    </person><person>
-      
-    </person><person>
-      
-    </person><person>
-      
-    </person><person>
       <attribute type="PassionAttr" weight="15">scala</attribute><attribute type="AgeAttr" weight="10">20</attribute>
     </person><person>
       <attribute type="PassionAttr" weight="15">thesky</attribute><attribute type="AgeAttr" weight="10">20</attribute>
@@ -28,5 +21,7 @@
       <attribute type="PassionAttr" weight="15">refactoring</attribute><attribute type="AgeAttr" weight="10">20</attribute>
     </person><person>
       <attribute type="PassionAttr" weight="15">guitarAndSports</attribute><attribute type="AgeAttr" weight="10">50</attribute>
+    </person><person>
+      <attribute type="AgeAttr" weight="10">22</attribute>
     </person>
         </people>
