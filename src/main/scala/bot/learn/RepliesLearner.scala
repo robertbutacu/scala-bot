@@ -5,7 +5,7 @@ import bot.memory.definition.{Definition, PartOfSentence}
 import bot.memory.storage.MemoryStorer.TrieMemoryStorer
 
 object RepliesLearner {
-  def learn[A](trie: Trie, acquired: List[MessageTemplate], dictionary: Set[Definition]): Trie = {
+  def learn(trie: Trie, acquired: List[MessageTemplate], dictionary: Set[Definition]): Trie = {
     acquired.foldLeft(trie)((t, w) => t.add(toWords(w.humanMessage.message), PossibleReply(w), dictionary))
   }
 
