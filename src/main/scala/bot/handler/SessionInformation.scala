@@ -13,11 +13,11 @@ case class SessionInformation(brain:                Trie,
   def lastBotMessage:   Option[ConversationLine] = log.find(_.source == Bot)
 
   def addBotMessage(message: String): SessionInformation = {
-    this.copy(log = this.log :+ ConversationLine(message, Bot))
+    this.copy(log = this.log.+:(ConversationLine(message, Bot)))
   }
 
   def addHumanMessage(message: String): SessionInformation = {
-    this.copy(log = this.log :+ ConversationLine(message, Human))
+    this.copy(log = this.log.+:(ConversationLine(message, Human)))
   }
 }
 

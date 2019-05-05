@@ -3,6 +3,7 @@ package example
 import bot.connections.{Acquaintances, Attribute}
 import bot.handler.{MessageHandler, SessionInformation}
 import cats.Monad
+import cats.effect.IO
 import cats.syntax.all._
 import example.brain.Manager
 
@@ -17,29 +18,27 @@ case class Bot[F[_]](minKnowledgeThreshold: Int) extends Manager with MessageHan
   def startDemo(implicit M: Monad[F]): Unit = {
     def go(sessionInformation: SessionInformation): Unit = {
       val message = scala.io.StdIn.readLine()
-      if (message == "QUIT") acquaintances.add(currentSessionInformation.toMap)
-      else {
-        val updatedHumanLog = sessionInformation.addHumanMessage(message)
 
-        if (message == "Do you remember me?") {
+      val sessionInformationWithHumanMessage = sessionInformation.addHumanMessage(message)
+
+      message match {
+        case "QUIT"                => acquaintances.add(currentSessionInformation.toMap)
+        case "Do you remember me?" =>
           val possibleMatches = acquaintances.tryMatch(currentSessionInformation.toList, minKnowledgeThreshold)
 
           possibleMatches
-            .map(pm => matcher(pm, sessionInformation))
+            .map(pm => matcher(pm, sessionInformationWithHumanMessage))
             .map {
               case (None, si)    => go(si)
               case (Some(p), si) =>
                 currentSessionInformation = currentSessionInformation.empty ++ p
                 acquaintances.forget(p).map(_ => go(si))
             }
-        }
-
-        else {
-          val updatedSessionInformation = sessionInformation.addBotMessage(handle(masterBrain, message, updatedHumanLog))
+        case _                      =>
+          val updatedSessionInformation = sessionInformation.addBotMessage(handle(masterBrain, message, sessionInformationWithHumanMessage))
           updatedSessionInformation.lastBotMessage.foreach(cl => println(cl.message))
 
           go(updatedSessionInformation)
-        }
       }
     }
 
