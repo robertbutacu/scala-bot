@@ -12,13 +12,13 @@ trait MessageHandler {
   def sessionInformation: SessionInformation
   var currentSessionInformation: mutable.Map[Attribute, String] = mutable.Map[Attribute, String]()
 
-  def handle(trie:     Trie,
-             msg:      String,
-             sessionInformation: SessionInformation)(implicit lookup: BotStorage[Trie]): String = {
-    val response = lookup.search(trie, msg)
+  def handle[T](storage:         T,
+             msg:                String,
+             sessionInformation: SessionInformation)(implicit lookup: BotStorage[T]): String = {
+    val response = lookup.search(storage, msg)
 
     if (response.possibleReplies.isEmpty) {
-      provideReply(sessionInformation.unknownMessages)
+      sessionInformation.randomUnknownMessageReply
     }
     else {
       currentSessionInformation ++= response.attributesFound
@@ -65,7 +65,7 @@ trait MessageHandler {
   def getAttribute(attribute: Attribute): Option[String] = currentSessionInformation.get(attribute)
 
   private def provideReply(replies: Set[String]): String =
-    if (replies.isEmpty) provideReply(sessionInformation.unknownMessages)
+    if (replies.isEmpty) sessionInformation.randomUnknownMessageReply
     else                 Random.shuffle(replies).head
 
 }

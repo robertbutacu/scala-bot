@@ -3,6 +3,7 @@ package example
 import bot.connections.{Acquaintances, Attribute}
 import bot.handler.{MessageHandler, SessionInformation}
 import cats.Monad
+import cats.data.NonEmptyList
 import cats.effect.IO
 import cats.syntax.all._
 import example.brain.Manager
@@ -73,6 +74,6 @@ case class Bot[F[_]](minKnowledgeThreshold: Int) extends Manager with MessageHan
 
   override def sessionInformation: SessionInformation =
     SessionInformation(masterBrain,
-      Set("Not familiar with this"),
+      NonEmptyList("Not familiar with this", List.empty),
       Set("", "", "Changed the subject..."))
 }
