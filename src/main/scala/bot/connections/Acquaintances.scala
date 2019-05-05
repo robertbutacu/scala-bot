@@ -27,8 +27,7 @@ trait Acquaintances[M[_]] {
 }
 
 object Acquaintances {
-
-  implicit class xmlStorage[F[_]](filename: String)(implicit M: Monad[F]) extends Acquaintances[F] {
+  implicit def xmlStorage[F[_]](filename: String)(implicit M: Monad[F]): Acquaintances[F] = new Acquaintances[F] {
     /** Receiving a list of people traits and a filename, it will store all the information about them in an XML file.
       *
       * @param people - all the people from all convo that have been persisted previously +- current session
