@@ -1,15 +1,47 @@
 package bot.memory.storage
 
-import bot.learn.PossibleReply
+import bot.connections.Attribute
+import bot.learn.{PossibleReply, SearchResponses}
 import bot.memory.Trie
 import bot.memory.definition.{Definition, PartOfSentence}
 
-trait MemoryStorer[T] {
+import scala.annotation.tailrec
+
+trait BotStorage[T] {
+  def search(storage: T, message: String): SearchResponses
   def add(storage: T, message: List[PartOfSentence], replies: PossibleReply, dictionary: Set[Definition]): T
 }
 
-object MemoryStorer {
-  implicit def trieStorer: MemoryStorer[Trie] = new MemoryStorer[Trie] {
+object BotStorage {
+  implicit def trieLookup: BotStorage[Trie] = new BotStorage[Trie] {
+    /**
+      * The algorithm describes the search of a message in a trie, by parsing every word and matching it,
+      * thus returning a Set of possible replies depending on bot's previous replies.
+      *
+      * @param message - the sentence that is to be found, or not
+      * @return - returns a Set of (previousMessageFromBot, Set[functions returning possible replies]),
+      *         from which another algorithm will pick the best choice.
+      */
+    override def search(storage: Trie, message: String): SearchResponses = {
+      @tailrec
+      def go(message:    List[String],
+             trie:       Trie,
+             attributes: Map[Attribute, String]): SearchResponses = {
+        if (message.isEmpty)
+          SearchResponses(attributes, trie.replies) //completely ran over all the words
+        else {
+          val head = message.head
+
+          trie.children.find(t => t.information.wordMatches(head)) match {
+            case None           => SearchResponses(attributes) //word wasn't found in the trie
+            case Some(nextNode) => go(message.tail, nextNode, nextNode.information.addToAttributes(head, attributes))
+          }
+        }
+      }
+
+      go(toPartsOfSentence(message), storage, Map[Attribute, String]().empty)
+    }
+
     /**
       * For a current Trie, the algorithm returns another trie with the message added.
       * The pattern matching does the following:
@@ -65,5 +97,9 @@ object MemoryStorer {
                               to:         PossibleReply,
                               newReplies: PossibleReply): Trie =
       trie.copy(replies = trie.replies - to + to.copy(possibleReply = to.possibleReply ++ newReplies.possibleReply))
-  }
+
+    private def toPartsOfSentence(msg: String): List[String] =
+      msg.split(' ')
+        .toList
+        .filter(!_.isEmpty)  }
 }
